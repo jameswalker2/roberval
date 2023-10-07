@@ -3,6 +3,9 @@
   width: 1050px;
   height: 700px;
   overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   //box-shadow: 0px 0px 04px rgba(255, 0, 0, 0.47);
   .container_img {
     position: absolute;
@@ -89,22 +92,28 @@
           input:focus~#inline {
             width: 100%;
           }
-        #link {
+        button {
           padding: 10px 50px;
           border-radius: 50px;
           border: none;
-          margin: 120px;
+          margin: 10px 120px;
           background-color: #FFA901;
           font-size: 25px;
           color: #f3f3f3;
           font-weight: 600;
           text-decoration: none;
+          cursor: pointer;
           }
-          .button:hover {
-            background-color: red;
+          button:hover {
+            background-color: white;
             color: #FFA901;
           }
     }
+  }
+  #validation {
+    color: #ff2e2e;
+    font-size: 20px;
+    margin: -30px 0 30px auto;
   }
 }
 
