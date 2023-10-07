@@ -1,5 +1,7 @@
-import './App.css'
+import './App.scss'
 import {Login} from "./components/login/Login.jsx";
+import {Route, Routes} from "react-router-dom";
+import {NavBar} from "./components/header/NavBar.jsx";
 
 
 function App() {
@@ -8,7 +10,10 @@ function App() {
 
   return (
     <>
-      <Login/>
+        <Routes>
+            <Route path="/" element={<Login/>} />
+            <Route path="/navbar" element={<NavBar/>} />
+        </Routes>
     </>
   )
 }

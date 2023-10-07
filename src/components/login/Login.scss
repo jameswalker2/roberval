@@ -1,17 +1,111 @@
-//.container {
-//  max-width: 612px;
-//  max-height: 852px;
-//  background-color: red;
-//}
+.container {
+  position: relative;
+  width: 1050px;
+  height: 700px;
+  overflow: hidden;
+  //box-shadow: 0px 0px 04px rgba(255, 0, 0, 0.47);
   .container_img {
-    height: 400px;
-    width: 300px;
-    background-color: #FFA901;
-    border-radius: 15px ;
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    border-radius: 30px 0 0 30px;
+    background-color: #FFA901   ;
+      #img_roberval {
+        display: block;
+        margin: 50px auto;
+    }
   }
 
-#img_roberval {
-  width: 500px;
-  height: auto;
-  justify-content: center;
+  .container_form {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: #5800ff;
+    width: 50%;
+    height: 100%;
+    margin-left: 50%;
+    border-radius: 0 30px 30px 0;
+      .container_form_title {
+        text-align: center;
+        color: white;
+        text-transform: uppercase;
+          #h1_ir {
+            margin: 50px 0 0 0;
+            font-size: 48px;
+            height: 210px;
+            span {
+              font-weight: 900;
+              font-size: 69px;
+            }
+          }
+          #h3_i{
+            text-transform: uppercase;
+            font-weight: 600;
+            height: 100px;
+          }
+          #h2_s {
+            color: #FFA901 ;
+            font-size: 20px;
+          }
+    }
+    form {
+      padding: 0 30px;
+        .infield {
+          position: relative;
+          margin: 40px auto;
+          width: 100%;
+          svg{
+            position: relative;
+            top: 41px;
+            left: 10px;
+          }
+        input{
+          width: 100%;
+          padding: 15px 60px;
+          background-color: #f3f3f3;
+          border: none;
+          border-radius: 5px;
+          outline: none;
+          font-size: 20px;
+        }
+      #email,#password {
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        margin: -30px;
+      }
+        }
+        #inline {
+          position: absolute;
+          left: 50%;
+          top: 99.9%;
+          transform: translate(-50%);
+          width: 0;
+          height: 4px;
+          background: #FFA901;
+          transition: 0.3s;
+        }
+          input:focus~#inline {
+            width: 100%;
+          }
+        #link {
+          padding: 10px 50px;
+          border-radius: 50px;
+          border: none;
+          margin: 120px;
+          background-color: #FFA901;
+          font-size: 25px;
+          color: #f3f3f3;
+          font-weight: 600;
+          text-decoration: none;
+          }
+          .button:hover {
+            background-color: red;
+            color: #FFA901;
+          }
+    }
+  }
 }
+
+
