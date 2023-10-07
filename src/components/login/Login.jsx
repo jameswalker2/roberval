@@ -14,24 +14,21 @@ export function Login() {
     const inputs = useRef([])
     const navigate = useNavigate();
     const formRef = useRef()
+    const [validation, setValidation] = useState('')
+    // const [loadingData, setLoadingData] = useState(true)
+
+
     const addInputs = el => {
         if(el && !inputs.current.includes(el)) {
             inputs.current.push(el)
         }
     }
 
-
-    const [validation, setValidation] = useState('')
-    // const [loadingData, setLoadingData] = useState(true)
-
-
     const connecter = (email, password) =>
         signInWithEmailAndPassword(auth, email, password)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
-
 
         try {
 
@@ -77,7 +74,7 @@ export function Login() {
                     <input
                         ref={addInputs}
                         type="email"
-                        placeholder="robertmeat56@gmail.com"
+                        placeholder="youremail@gmail.com"
                     />
                     <label id="inline"></label>
                </div>
