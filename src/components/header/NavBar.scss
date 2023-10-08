@@ -6,60 +6,37 @@ nav {
   overflow: hidden;
   background: linear-gradient(289deg, rgba(63,2,186,1) 0%, rgba(48,3,139,1) 100%);
   box-shadow:  0 0 20px -5px #000000;
-  width: 250px;
+  width: 230px;
   height: 100%;
         h1{
           color: white;
-          font-size: 45px;
-          margin-left: 20px;
+          font-size: 35px;
+          margin-left: 10px;
           margin-top: 20px;
 
         }
 }
 
 ul {
-  padding: 100px 0;
+  padding: 50px 0;
 }
 
-//div .hm,.pi,.pa,.ca {
-//  overflow: hidden;
-//  width: 500px;
-//  padding: 50px 0;
-//  color: red;
-//    .test {
-//      color: white;
-//      text-decoration: none;
-//      font-size: 35px;
-//    }
-//  .hm {
-//
-//  }
-//}
 
-//.hm, .pi  {
-//  }
-//
-//.hm .test:focus, .pa:focus, .pi:hover, .ca:hover {
-//}
-.hm:hover {
-    background-color: #5800ff;
-}
-.hm #test2:focus {
-    background-color: #5800ff;
-  }
 
-.hm, .pa, .pi, .ca {
-    color: white;
-    //width: 500px;
-    margin: 0 0 10px;
-    padding: 50px;
-  cursor: pointer;
   .test {
-          color: white;
-          text-decoration: none;
-          font-size: 35px;
-          margin-left: 10px;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 30px;
+    margin: 30px 0;
+    padding: 30px 0;
+    height: 130px;
+    width: 250px;
+    img {
+      padding: 30px 10px;
+    }
         }
 
-}
+
 

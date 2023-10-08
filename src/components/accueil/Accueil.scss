@@ -1,0 +1,24 @@
+.hd-dash {
+  position: absolute;
+  //display: flex;
+  color: white;
+  font-size: 20px;
+  width: 1475px;
+  height: 100%;
+  //margin: 100px;
+  padding: 70px 20px;
+  left: 13.5%;
+  //top: 80px;
+
+  #ct-el ,#ct-st ,#ct-pf{
+    background-color: #f3f3f3;
+    width: 400px;
+    height: 150px;
+    border-radius: 15px;
+    margin-left: 50px;
+    margin-top: 50px;
+    h2 {
+      color: #30038B
+    }
+  }
+}
