@@ -4,6 +4,8 @@ import dashboard from '../assets/dashboard.svg'
 import paiement from '../assets/paiement.svg'
 import payroll from '../assets/payroll.svg'
 import caisse from '../assets/caisse.svg'
+// import {BiSolidDashboard} from 'react-icons/fa'
+
 export function NavBar() {
 
     const activeStyle = ({isActive})  => ({
@@ -23,7 +25,9 @@ export function NavBar() {
                                 className='test'
                                 to={'/accueil'}>
                                 <img src={dashboard} alt=""/>
+                                {/*<BiSolidDashboard/>*/}
                                 Dashboard
+
                             </NavLink>
                         </div>
                     </div>
