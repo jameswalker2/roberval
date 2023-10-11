@@ -1,24 +1,92 @@
-.hd-dash {
-  position: absolute;
-  //display: flex;
+.dashboard {
+  //background-color: #FFA901;
+  position: relative;
+  display: flex;
   color: white;
   font-size: 20px;
-  width: 1475px;
-  height: 100%;
-  //margin: 100px;
-  padding: 70px 20px;
-  left: 13.5%;
-  //top: 80px;
+  width: 1300px;
+  //height: 100%;
+  left: 14.5%;
+  top: 10%;
+}
 
-  #ct-el ,#ct-st ,#ct-pf{
+.content-dash {
+  position: absolute;
+  display: flex;
+  margin: 30px;
+
+  #ct-el, #ct-st, #ct-pf {
     background-color: #f3f3f3;
+    box-shadow:  0 0 8px 1px #f3f3f3;
     width: 400px;
     height: 150px;
-    border-radius: 15px;
-    margin-left: 50px;
-    margin-top: 50px;
-    h2 {
-      color: #30038B
-    }
+    border-radius: 5px;
+    margin-left: 90px;
+    margin-top: 40px;
+    padding: 20px;
+    text-decoration: none;
   }
+}
+    .title {
+      display: flex;
+      align-items: center;
+      margin: 0 0 30px;
+      h2 {
+      padding-left: 12rem;
+        font-size: 35px;
+      }
+    }
+
+    .revenu {
+          position: absolute;
+          left: 14.5%;
+          margin: 60px 0;
+          width: 1390px;
+          top: 300px;
+      #rev-h1 {
+        color: #f3f3f3;
+        font-size: 35px;
+        margin-bottom: 40px;
+      }
+          .bar-income {
+            margin: 30px;
+            width: 1300px;
+            display: flex;
+            justify-content: center;
+          }
+        }
+
+    #revenu-bar {
+    //
+      background-color: #f3f3f3;
+      border-radius: 15px;
+      margin-left: 80px ;
+    //
+    }
+
+.depense {
+  position: absolute;
+  left: 14.5%;
+  margin: 60px 0;
+  width: 1390px;
+  top: 1100px;
+    #dep-h1 {
+    color: #f3f3f3;
+    font-size: 35px;
+    margin-bottom: 40px;
+  }
+  .bar-expense {
+    margin: 30px;
+    width: 1300px;
+    //display: flex;
+    //justify-content: center;
+  }
+}
+
+#depense-bar {
+  //
+  background-color: #f3f3f3;
+  border-radius: 15px;
+  margin-left: 80px ;
+  //
 }

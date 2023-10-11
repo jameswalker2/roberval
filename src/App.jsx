@@ -12,7 +12,6 @@ import {Caisse} from "./components/pages/Caisse.jsx";
 function App() {
 
 
-
   return (
     <>
         <Routes>
@@ -22,6 +21,7 @@ function App() {
             <Route path="/payroll" element={<Payroll/>} />
             <Route path="/caisse" element={<Caisse/>} />
         </Routes>
+
     </>
   )
 }
