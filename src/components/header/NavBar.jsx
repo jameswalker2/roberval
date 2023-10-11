@@ -4,7 +4,11 @@ import dashboard from '../assets/dashboard.svg'
 import paiement from '../assets/paiement.svg'
 import payroll from '../assets/payroll.svg'
 import caisse from '../assets/caisse.svg'
-// import {BiSolidDashboard} from 'react-icons/fa'
+import {BiSolidDashboard} from 'react-icons/bi'
+import {BsCashCoin} from 'react-icons/bs'
+import {FaUsersCog} from 'react-icons/fa'
+import {IoSchoolSharp} from 'react-icons/io5'
+import {MdAccountBalance} from 'react-icons/md'
 
 export function NavBar() {
 
@@ -16,7 +20,7 @@ export function NavBar() {
     return (
         <>
             <nav>
-                    <h1>Roberval</h1>
+                <IoSchoolSharp className="h1"/>
                 <ul className="home">
                     <div className="hm">
                         <div>
@@ -24,10 +28,8 @@ export function NavBar() {
                                 style={activeStyle}
                                 className='test'
                                 to={'/accueil'}>
-                                <img src={dashboard} alt=""/>
-                                {/*<BiSolidDashboard/>*/}
+                                <BiSolidDashboard className="img"/>
                                 Dashboard
-
                             </NavLink>
                         </div>
                     </div>
@@ -37,7 +39,7 @@ export function NavBar() {
                                 style={activeStyle}
                                 className="test"
                                 to={'/paiement'}>
-                                <img src={paiement} alt=""/>
+                                <BsCashCoin className="img" />
                                 Paiement
                             </NavLink>
                         </div>
@@ -48,7 +50,7 @@ export function NavBar() {
                                 style={activeStyle}
                                 className="test"
                                 to={'/payroll'}>
-                                <img src={payroll} alt=""/>
+                                <FaUsersCog className="img" />
                                 Payroll
                             </NavLink>
                         </div>
@@ -59,7 +61,7 @@ export function NavBar() {
                                 style={activeStyle}
                                 className="test"
                                 to={'/caisse'}>
-                                <img src={caisse} alt=""/>
+                                <MdAccountBalance className="img"/>
                                 Caisse
                             </NavLink>
                         </div>

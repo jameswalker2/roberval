@@ -1,0 +1,115 @@
+.container-inscription {
+  position: relative;
+  margin: 50px;
+  overflow: hidden;
+  legend {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 20px;
+  }
+  button {
+    width: 200px;
+    height: 30px;
+    border-radius: 15px;
+    border: none;
+    background-color: #f3f3f3;
+    color: #5800ff;
+    font-size: 17px;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-left: 1200px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #ffa901;
+    color: #f3f3f3;
+  }
+}
+
+#form-info {
+  position: relative;
+  display: inline-block;
+  padding: 20px 10px;
+    #gender {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      margin-top: -60px;
+      margin-left: 930px;
+      legend {
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 20px;
+      }
+    }
+
+    #gender input {
+      width: 20px;
+      height: 20px;
+      margin: 10px;
+    }
+    #gender label {
+      color: #f3f3f3;
+      font-size: 20px;
+      margin: 0 10px;
+    }
+
+
+    label {
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 50px ;
+    }
+    .info1 input{
+      padding: 0 20px;
+      margin: 20px 50px;
+      width: 350px;
+      height: 40px;
+      background-color: #f3f3f3;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      font-size: 20px;
+    }
+}
+
+.parent-info {
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+  input {
+    padding: 0 20px;
+    margin: 20px 50px;
+    width: 350px;
+    height: 40px;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 20px;
+  }
+}
+
+.form-urgent {
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+  input {
+    padding: 0 20px;
+    margin: 20px 50px;
+    width: 350px;
+    height: 40px;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 20px;
+  }
+}

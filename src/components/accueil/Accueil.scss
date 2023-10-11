@@ -1,92 +1,90 @@
 .dashboard {
-  //background-color: #FFA901;
   position: relative;
   display: flex;
   color: white;
-  font-size: 20px;
-  width: 1300px;
-  //height: 100%;
-  left: 14.5%;
+  font-size: 15px;
+  width: 80%;
+  height: 100%;
+  left: 16%;
   top: 10%;
 }
 
 .content-dash {
   position: absolute;
   display: flex;
-  margin: 30px;
+  margin: 50px 0;
 
-  #ct-el, #ct-st, #ct-pf {
+  #ct {
     background-color: #f3f3f3;
     box-shadow:  0 0 8px 1px #f3f3f3;
-    width: 400px;
-    height: 150px;
+    width: 280px;
+    height: 120px;
     border-radius: 5px;
-    margin-left: 90px;
-    margin-top: 40px;
-    padding: 20px;
+    margin: 10px 20px;
+    padding: 20px ;
     text-decoration: none;
   }
+}
+
+#ct:hover {
+  background-color: #ffa901;
+  color: white;
 }
     .title {
       display: flex;
       align-items: center;
       margin: 0 0 30px;
       h2 {
-      padding-left: 12rem;
-        font-size: 35px;
+      padding-left: 8rem;
+        font-size: 25px;
       }
     }
 
     .revenu {
           position: absolute;
-          left: 14.5%;
+          left: 16%;
           margin: 60px 0;
-          width: 1390px;
           top: 300px;
       #rev-h1 {
         color: #f3f3f3;
-        font-size: 35px;
+        font-size: 20px;
         margin-bottom: 40px;
       }
           .bar-income {
             margin: 30px;
-            width: 1300px;
+            width: 1180px;
+            height: 550px;
             display: flex;
             justify-content: center;
           }
         }
 
     #revenu-bar {
-    //
       background-color: #f3f3f3;
       border-radius: 15px;
-      margin-left: 80px ;
-    //
+      margin:  0  0  0 20px;
     }
 
 .depense {
   position: absolute;
-  left: 14.5%;
-  margin: 60px 0;
-  width: 1390px;
-  top: 1100px;
+  left: 16%;
+  margin: 60px 0px;
+  top: 1000px;
     #dep-h1 {
     color: #f3f3f3;
-    font-size: 35px;
-    margin-bottom: 40px;
+    font-size: 20px;
   }
   .bar-expense {
     margin: 30px;
-    width: 1300px;
-    //display: flex;
-    //justify-content: center;
+    width: 1180px;
+    height: 550px;
+    display: flex;
+    justify-content: center;
   }
 }
 
 #depense-bar {
-  //
   background-color: #f3f3f3;
   border-radius: 15px;
-  margin-left: 80px ;
-  //
+  margin:  0  0  0 20px   ;
 }

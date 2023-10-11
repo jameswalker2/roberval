@@ -1,11 +1,11 @@
-import {NavBar} from "../header/NavBar.jsx";
-import './Accueil.scss'
-import {NavLink} from "react-router-dom";
-import {ChartIncome} from "./ChartIncome.jsx";
-import {ChartExpense} from './ChartExpense.jsx'
 import {useState} from "react";
+import {NavBar} from "../header/NavBar.jsx";
+import {NavLink} from "react-router-dom";
 import {DataIncome} from "./DataIncome.jsx";
 import {DataExpense} from './DataExpense.jsx'
+import {ChartIncome} from "./ChartIncome.jsx";
+import {ChartExpense} from './ChartExpense.jsx'
+import './Accueil.scss'
 export function Accueil() {
 
     const [dataIncome, setDataIncome] = useState({
@@ -46,14 +46,14 @@ export function Accueil() {
             <section className="dashboard">
                 <h2>Dashboard</h2>
                 <section className="content-dash">
-                    <NavLink  to={'/eleves'} id="ct-el">
+                    <NavLink  to={'/eleves'} id="ct">
                         <div className="title">
                             <h3>Elève</h3>
                             <h2>20.000</h2>
                         </div>
                         <p>Total élèves</p>
                     </NavLink>
-                    <NavLink id="ct-st">
+                    <NavLink to={'/staffs'} id="ct">
                         <div className="title">
                             <h3>Staff</h3>
                             <h2>500</h2>
@@ -61,10 +61,17 @@ export function Accueil() {
 
                         <p>Total staffs</p>
                     </NavLink>
-                    <NavLink id="ct-pf">
+                    <NavLink to={'/profs'} id="ct">
                         <div className="title">
                             <h3>Prof</h3>
                             <h2>100</h2>
+                        </div>
+                        <p>Total professeurs</p>
+                    </NavLink>
+                    <NavLink to={'/inscription'} id="ct">
+                        <div className="title">
+                            <h3>Incription</h3>
+                            <h2>10</h2>
                         </div>
                         <p>Total professeurs</p>
                     </NavLink>

@@ -31,12 +31,10 @@ export function Login() {
         e.preventDefault()
 
         try {
-
-             const cred = await connecter(
+              await connecter(
                 inputs.current[0].value,
                 inputs.current[1].value
             )
-            console.log(cred)
                 formRef.current.reset();
                 setValidation('')
                 // setLoadingData(false)
@@ -90,7 +88,7 @@ export function Login() {
                     <label id="inline" ></label>
                </div>
                    <p id="validation">{validation}</p>
-                    <button   type="submit">  Connecter </button>
+                    <button   type="submit"> Connecter </button>
                 </form>
         </div>
     </div>
