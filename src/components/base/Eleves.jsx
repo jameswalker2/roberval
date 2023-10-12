@@ -1,24 +1,20 @@
-import {useEffect} from "react";
-import { collection, getDocs } from "firebase/firestore";
-import {db} from '../login/FirebaseConfig.jsx'
+// import {useEffect, useState} from "react";
+// import {db} from '../login/FirebaseConfig.jsx'
+// import { collection, getDocs } from "firebase/firestore";
+// import {useState} from "react";
+
+
 
 
 export function Eleves() {
 
-const elevesRef = collection(db, "inscription");
-
-    useEffect(() => {
-        const getInfo = async () => {
-            const data = await getDocs(elevesRef);
-            console.log(data);
-        };
-        getInfo();
-    }, []);
 
 
     return (
         <>
-        {/*<h1>{props.title}</h1>*/}
+        <div>
+
+        </div>
         </>
     )
 }
