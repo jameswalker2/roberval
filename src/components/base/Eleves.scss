@@ -1,0 +1,56 @@
+  #back {
+    margin: 20px;
+    color: white;
+    width: 40px;
+    height: 30px;
+  }
+
+
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.search_bar {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 0 30px;
+  padding: 0 20px;
+  left: 50%;
+  translate: (-50%);
+    #search_bar {
+      appearance: none;
+      padding: 10px 30px;
+      width: 900px;
+      background-color: white;
+      border-radius: 5px;
+      border: none;
+      font-size: 19px;
+      margin: 0 50px;
+    }
+  #icon_search {
+    position: relative;
+    width: 40px;
+    height: 30px;
+    color: #5800ff;
+    left: 930px;
+  }
+
+  button {
+    padding: 10px;
+    border: none;
+    background-color: white;
+    color: #5800ff;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 30px 0 20px;
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+
+}
+
