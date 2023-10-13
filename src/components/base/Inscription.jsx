@@ -26,9 +26,14 @@ export function Inscription() {
         const [adresseUU, setAdresseUU] = useState('');
         const [phoneUU, setPhoneUU] = useState('')
         const [classe, setClasse] = useState('')
+        const [gender, setGender] = useState('');
 
     const handleAdd = async (e) => {
         e.preventDefault();
+
+        // if(!nom || !prenom || !date || !lieu || !adresse) {
+        //     console.log('test')
+        // }
 
         const studentsCollRef = collection(db, 'inscription')
         addDoc(studentsCollRef, {
@@ -38,6 +43,7 @@ export function Inscription() {
             lieu,
             adresse,
             classe,
+            gender,
             nomPere,
             professionPere,
             phonePere,
@@ -56,12 +62,14 @@ export function Inscription() {
             console.log(error.message)
         })
 
+
         setNom('')
         setPrenom('')
         setDate('')
         setLieu('')
         setAdresse('')
         setClasse('')
+        setGender('')
         setNomPere('')
         setProfessionPere('')
         setPhonePere('')
@@ -77,9 +85,6 @@ export function Inscription() {
 
     };
 
-    const test1 = () => {
-
-    }
 
 
 
@@ -128,28 +133,33 @@ export function Inscription() {
                     value={adresse}
                     onChange={e => setAdresse(e.target.value)}
                     placeholder="Adresse"/>
-                        <select id="classe" name="classe">
-                            <option value={classe}> 1e Année Kind</option>
-                            <option value={classe}> 2e Année Kind</option>
-                            <option value={classe}> 3e Année Kind</option>
-                            <option value={classe}> 1e Année Fond</option>
-                            <option value={classe}> 2e Année Fond</option>
-                            <option value={classe}> 3e Année Fond</option>
-                            <option value={classe}> 7e Année Fond</option>
-                            <option value={classe}> 8e Année Fond</option>
-                            <option value={classe}> 9e Année Fond</option>
-                            <option value={classe}> NS I</option>
-                            <option value={classe}> NS II</option>
-                            <option value={classe}> NS III</option>
-                            <option value={classe}> NS IV</option>
+                        <select id="classe" name="classe" onChange={e => setClasse(e.target.value)}>
+                            <option value='1e Année Kind'> 1e Année Kind</option>
+                            <option value='2e Année Kind'> 2e Année Kind</option>
+                            <option value='3e Année Kind'> 3e Année Kind</option>
+                            <option value='1e Année Fond'> 1e Année Fond</option>
+                            <option value='2e Année Fond'> 2e Année Fond</option>
+                            <option value='3e Année Fond'> 3e Année Fond</option>
+                            <option value='7e Année Fond'> 7e Année Fond</option>
+                            <option value='8e Année Fond'> 8e Année Fond</option>
+                            <option value='9e Année Fond'> 9e Année Fond</option>
+                            <option value='NS I<'> NS I</option>
+                            <option value='NS II'> NS II</option>
+                            <option value='NS III'> NS III</option>
+                            <option value='NS IV'> NS IV</option>
                         </select>
                         <IoMdArrowDropdown id="icon-down"/>
                      <div id="gender">
                         <legend>Sexe:</legend>
                         <label htmlFor="male">M</label>
-                        <input onChange={test1} type="radio" name="male" id="male"  checked />
+                        <input onChange={(e) => setGender(e.target.value)}
+                               value="Male"
+                               type="radio"
+                               name="gender" id="male"/>
                         <label htmlFor="female">F</label>
-                        <input onChange={test1} type="radio" name="female" id="female" />
+                        <input onChange={(e) => setGender(e.target.value)}
+                               value="Female"
+                               type="radio" name="gender" id="female" />
                         </div>
                     </div>
                 </div>

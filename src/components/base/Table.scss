@@ -21,7 +21,7 @@
   }
 
   th, td {
-    padding: 0.8rem;
+    padding: 0.9rem;
   }
 
   td {
@@ -43,5 +43,10 @@
   display: flex;
   justify-content: space-around;
   cursor: pointer;
+  color: #ff2e2e;
+  #nav {
+    color: #5800ff;
+  }
 }
+
 

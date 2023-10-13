@@ -5,12 +5,11 @@ import {Paiement} from "./components/pages/Paiement.jsx";
 import {Payroll} from "./components/pages/Payroll.jsx";
 import {Caisse} from "./components/pages/Caisse.jsx";
 import {Inscription} from "./components/base/Inscription.jsx";
-import './App.scss'
 import {Staffs} from "./components/base/Staffs.jsx";
 import {Profs} from "./components/base/Profs.jsx";
 import {Eleves} from "./components/base/Eleves.jsx";
-// import {NavBar} from "./components/header/NavBar.jsx";
-// import {NavBar} from "./components/header/NavBar.jsx";
+import {Edit} from "./components/base/Edit.jsx";
+import './App.scss'
 
 
 function App() {
@@ -28,6 +27,7 @@ function App() {
             <Route path="/staffs" element={<Staffs/>} />
             <Route path="/profs" element={<Profs/>} />
             <Route path="/eleves" element={<Eleves/>} />
+            <Route path="/edit/:id" element={<Edit/>} />
         </Routes>
     </>
   )
