@@ -27,7 +27,8 @@ export function Inscription() {
         const [phoneUU, setPhoneUU] = useState('')
         const [classe, setClasse] = useState('')
         const [gender, setGender] = useState('');
-
+        const [statut, setStatut] = useState('');
+        const [key, setKey] = useState('')
     const handleAdd = async (e) => {
         e.preventDefault();
 
@@ -55,7 +56,9 @@ export function Inscription() {
             phoneU,
             nomUU,
             adresseUU,
-            phoneUU
+            phoneUU,
+            statut: 'non-payé',
+            key,
         }).then(response => {
             console.log(response)
         }).catch(error => {
@@ -82,6 +85,8 @@ export function Inscription() {
         setNomUU('')
         setAdresseUU('')
         setPhoneUU('')
+        setStatut('')
+        setKey(key + 1)
 
     };
 

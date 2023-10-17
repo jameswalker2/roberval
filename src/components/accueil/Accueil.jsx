@@ -44,7 +44,7 @@ export function Accueil() {
 
             <NavBar/>
             <section className="dashboard">
-                <h2>Dashboard</h2>
+                <h1>Dashboard</h1>
                 <section className="content-dash">
                     <NavLink  to={'/eleves'} id="ct">
                         <div className="title">
