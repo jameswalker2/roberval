@@ -5,48 +5,86 @@
     height: 30px;
   }
 
-
 .container {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  left: 50%;
+  top: 50%;
+  margin: 50px 0;
 }
+  .container_link {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    margin-bottom: 80px;
+    border-radius: 15px;
+    padding: 0 50px 0 20px;
+  }
+  .link {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 17px;
+    color: #330096;
+    &:hover {
+      color: #4d00e4;
+    }
+  }
+    span {
+      margin: 20px;
+      color: #4d00e4;
+    }
+  #container_h1 {
+    color: #5800ff;
+    font-size: 25px;
+    padding: 20px;
+  }
+
 
 .search_bar {
   position: relative;
   display: inline-flex;
-  justify-content: center;
+  //justify-content: center;
   align-items: center;
-  margin: 50px 0 30px;
-  left: 43%;
-  translate: (-50%);
+  margin:  0 0 40px;
+  border-radius: 15px;
+  background-color: white;
+  height: 80px;
+  width: 100%;
     #search_bar {
-      appearance: none;
-      padding: 10px 70px;
-      width: 900px;
       background-color: white;
-      border-radius: 5px;
+      box-shadow: 0 0 20px -10px #000000;
+      padding: 10px 60px 10px 10px ;
+      width: 500px;
+      margin:  0 500px 0 0;
+      border-radius: 100px;
+      appearance: none;
       border: none;
       font-size: 19px;
-      margin: 0 50px;
+      outline: none;
     }
+  #search_bar[type="search"]::-webkit-search-cancel-button {
+    display: none;
+  }
   #icon_search {
     position: relative;
     width: 40px;
     height: 30px;
     color: #5800ff;
-    left: 100px;
+    left: 390px;
   }
 
   button {
-    padding: 10px;
     border: none;
-    background-color: white;
-    color: #5800ff;
+    background-color: #5800ff;
+    color: white;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 700;
-    margin: 0 30px 0 20px;
+    height: 40px;
+    width: 100px;
+    margin: 0 50px 0 80px;
     text-transform: capitalize;
     cursor: pointer;
   }

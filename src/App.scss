@@ -6,9 +6,9 @@
 }
 
 body {
-  background: linear-gradient(289deg, rgba(63,2,186,1) 0%, rgba(48,3,139,1) 100%);
-  height: 100vh;
+  background-image: linear-gradient(to right bottom, #a274ff, #9764ff, #8a54ff, #7d43ff, #6e2fff, #6323f6, #5915ed, #4d00e4, #4600d0, #4000bd, #3900aa, #330098);
   display: grid;
+  height: 109em;
 }
 
 body::-webkit-scrollbar {

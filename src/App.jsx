@@ -2,7 +2,7 @@ import {Route, Routes} from "react-router-dom";
 import {Login} from "./components/login/Login.jsx";
 import {Accueil} from "./components/accueil/Accueil.jsx";
 import {Paiement} from "./components/pages/Paiement.jsx";
-import {Payroll} from "./components/pages/Payroll.jsx";
+import {Payroll} from "./components/pages/Pay/Payroll.jsx";
 import {Caisse} from "./components/pages/Caisse.jsx";
 import {Inscription} from "./components/base/Inscription.jsx";
 import {Staffs} from "./components/base/Staffs.jsx";

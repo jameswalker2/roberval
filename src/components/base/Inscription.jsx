@@ -57,7 +57,7 @@ export function Inscription() {
             nomUU,
             adresseUU,
             phoneUU,
-            statut: 'non-payé',
+            statut: 'non payé',
             key,
         }).then(response => {
             console.log(response)

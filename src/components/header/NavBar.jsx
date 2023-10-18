@@ -1,9 +1,5 @@
 import {NavLink} from "react-router-dom";
 import './NavBar.scss'
-import dashboard from '../assets/dashboard.svg'
-import paiement from '../assets/paiement.svg'
-import payroll from '../assets/payroll.svg'
-import caisse from '../assets/caisse.svg'
 import {BiSolidDashboard} from 'react-icons/bi'
 import {BsCashCoin} from 'react-icons/bs'
 import {FaUsersCog} from 'react-icons/fa'
@@ -14,7 +10,7 @@ export function NavBar() {
 
     const activeStyle = ({isActive})  => ({
         color: isActive ? '#fff' : '',
-        background: isActive ? '#30038B' : ''
+        background: isActive ? '#7331f3' : ''
     })
 
     return (
