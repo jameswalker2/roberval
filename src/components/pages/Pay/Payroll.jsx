@@ -85,9 +85,9 @@ export function Payroll() {
                   {/*<h3>Total <span>$10,000 </span></h3>*/}
               </div>
               
-              <div className="table_pay">
+              <div className="container_table_pay">
                   <table className="table_pay">
-                      <thead key='thead'>
+                      <thead id="thead" key='thead'>
                       <tr>
                           <th>CODE</th>
                           <th className="expand_bar" >Nom Complet</th>

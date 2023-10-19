@@ -1,8 +1,8 @@
 import {NavLink} from "react-router-dom";
-import {db} from "../login/FirebaseConfig.jsx";
+import {db} from "../../login/FirebaseConfig.jsx";
 import { useState, useEffect } from "react";
 import {collection, onSnapshot} from "firebase/firestore";
-import {NavBar} from "../header/NavBar.jsx";
+import {NavBar} from "../../header/NavBar.jsx";
 import {FiSearch} from "react-icons/fi";
 import {FiMoreHorizontal} from 'react-icons/fi'
 import './Paiement.scss'

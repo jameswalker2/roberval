@@ -1,12 +1,12 @@
 import {useState} from "react";
-import {NavBar} from "../header/NavBar.jsx";
+import {NavBar} from "../../header/NavBar.jsx";
 import {NavLink} from "react-router-dom";
-import {DataIncome} from "./DataIncome.jsx";
-import {DataExpense} from './DataExpense.jsx'
-import {ChartIncome} from "./ChartIncome.jsx";
-import {ChartExpense} from './ChartExpense.jsx'
-import './Accueil.scss'
-export function Accueil() {
+import {DataIncome} from "../../accueil/DataIncome.jsx";
+import {DataExpense} from '../../accueil/DataExpense.jsx'
+import {ChartIncome} from "../../accueil/ChartIncome.jsx";
+import {ChartExpense} from '../../accueil/ChartExpense.jsx'
+import './Dashboard.scss'
+export function Dashboard() {
 
     const [dataIncome, setDataIncome] = useState({
         labels: DataIncome.map((data) => data.week),
@@ -43,6 +43,8 @@ export function Accueil() {
         <>
 
             <NavBar/>
+            <div className="container_dash">
+
             <section className="dashboard">
                 <h1>Dashboard</h1>
                 <section className="content-dash">
@@ -89,6 +91,7 @@ export function Accueil() {
                 <ChartExpense chartData={dataExpense}/>
                 </div>
             </section>
+            </div>
         </>
     )
 }

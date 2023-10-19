@@ -1,8 +1,9 @@
 .container_all {
   position: relative;
   width: 80%;
-  margin-left: 16%;
-  margin-top: 3%;
+  height: 65rem;
+  left: 16%;
+  padding-top: 50px;
 
   .container_link {
     display: flex;
@@ -147,7 +148,7 @@
 
     td {
       border-bottom: 2px solid #ffa901;
-      //overflow: hidden;
+      overflow: hidden;
       text-overflow: ellipsis;
     }
 
