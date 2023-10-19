@@ -9,6 +9,7 @@ import {Staffs} from "./components/base/Staffs.jsx";
 import {Profs} from "./components/base/Profs.jsx";
 import {Eleves} from "./components/base/Eleves.jsx";
 import {Edit} from "./components/base/Edit.jsx";
+import {AnimatePresence} from "framer-motion";
 import './App.scss'
 
 
@@ -17,7 +18,7 @@ function App() {
 
   return (
     <>
-     <div className="App">
+      <AnimatePresence mode="wait">
         <Routes>
             <Route path="/" element={<Login/>} />
             <Route path="/accueil" element={<Dashboard/>} />
@@ -30,7 +31,7 @@ function App() {
             <Route path="/eleves" element={<Eleves/>} />
             <Route path="/edit/:id" element={<Edit/>} />
         </Routes>
-     </div>
+      </AnimatePresence>
     </>
   )
 }

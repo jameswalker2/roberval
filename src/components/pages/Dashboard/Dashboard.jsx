@@ -5,9 +5,10 @@ import {DataIncome} from "../../accueil/DataIncome.jsx";
 import {DataExpense} from '../../accueil/DataExpense.jsx'
 import {ChartIncome} from "../../accueil/ChartIncome.jsx";
 import {ChartExpense} from '../../accueil/ChartExpense.jsx'
+import {motion} from "framer-motion";
 import './Dashboard.scss'
-export function Dashboard() {
-
+ export function  Dashboard() {
+    
     const [dataIncome, setDataIncome] = useState({
         labels: DataIncome.map((data) => data.week),
         datasets: [{
@@ -37,17 +38,20 @@ export function Dashboard() {
         },
         ],
     });
-
+   console.log(setDataIncome, setDataExpense)
 
     return (
         <>
-
             <NavBar/>
-            <div className="container_dash">
-
-            <section className="dashboard">
-                <h1>Dashboard</h1>
-                <section className="content-dash">
+            <motion.div
+              initial={{opacity: 0, scaleY: 0}}
+              animate={{opacity: 1, scaleY: 1}}
+              exit={{opacity: 0, scaleY: 0}}
+              transition={{duration: 0.5, easeinout: [0.22, 1, 0.36, 1]}}>
+              <div className="container_dash">
+                <section className="dashboard">
+                  <h1>Dashboard</h1>
+                  <section className="content-dash">
                     <NavLink  to={'/eleves'} id="ct">
                         <div className="title">
                             <h3>Elève</h3>
@@ -77,21 +81,22 @@ export function Dashboard() {
                         </div>
                         <p>Total professeurs</p>
                     </NavLink>
+                  </section>
                 </section>
-            </section>
-            <section className="revenu">
+                <section className="revenu">
                 <h1 id="rev-h1">Total revenu du mois Octobre</h1>
                 <div id="revenu-bar">
                 <ChartIncome chartData={dataIncome}/>
                 </div>
-            </section>
-            <section className="depense">
+                </section>
+                <section className="depense">
                 <h1 id="dep-h1">Total depense du mois Octobre</h1>
                 <div id="depense-bar">
                 <ChartExpense chartData={dataExpense}/>
                 </div>
-            </section>
-            </div>
+                </section>
+              </div>
+            </motion.div>
         </>
     )
 }

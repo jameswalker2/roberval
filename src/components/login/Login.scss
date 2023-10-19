@@ -1,32 +1,33 @@
-.container {
+.container_login {
   position: relative;
-  width: 1050px;
-  height: 700px;
+  width: 1000px;
+  height: 698px;
   overflow: hidden;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  //box-shadow: 0px 0px 04px rgba(255, 0, 0, 0.47);
+  left: 15%;
+  //transform: translate(-50%, -60%);
+  ////box-shadow: 0px 0px 04px rgba(255, 0, 0, 0.47);
   .container_img {
     position: absolute;
+    top: 10%;
     width: 50%;
-    height: 100%;
+    height: 80%;
     align-items: center;
     border-radius: 30px 0 0 30px;
     background-color: #FFA901   ;
       #img_roberval {
-        display: block;
-        margin: 50px auto;
+        //display: block;
+        //margin: 50px auto;
     }
   }
 
   .container_form {
     display: flex;
     flex-direction: column;
+    top: 10%;
     position: absolute;
     background-color: #5800ff;
     width: 50%;
-    height: 100%;
+    height: 80%;
     margin-left: 50%;
     border-radius: 0 30px 30px 0;
       .container_form_title {
@@ -34,13 +35,9 @@
         color: white;
         text-transform: uppercase;
           #h1_ir {
-            margin: 50px 0 0 0;
-            font-size: 48px;
-            height: 210px;
-            span {
-              font-weight: 900;
-              font-size: 69px;
-            }
+            margin: 20px 0 0 0;
+            font-size: 40px;
+            height: 150px;
           }
           #h3_i{
             text-transform: uppercase;
@@ -60,7 +57,7 @@
           width: 100%;
           svg{
             position: relative;
-            top: 41px;
+            top: 40px;
             left: 10px;
           }
         input{

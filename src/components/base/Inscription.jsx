@@ -5,6 +5,7 @@ import './Inscription.scss'
 import {IoMdArrowDropdown} from 'react-icons/io'
 import {BiArrowBack} from "react-icons/bi";
 import {NavLink} from "react-router-dom";
+import {BsPersonFillAdd} from 'react-icons/bs'
 
 export function Inscription() {
 
@@ -95,13 +96,13 @@ export function Inscription() {
 
     return (
         <>
-            <NavLink to={'/accueil'}>
+            <NavLink to={'/eleves'}>
 
                 <BiArrowBack  id="back"/>
             </NavLink>
             <div className="container-inscription">
             <form onSubmit={handleAdd}>
-                <button type="submit">+ Ajouter inscription</button>
+                <button type="submit"><BsPersonFillAdd id="btn_add"/> Ajouter</button>
                 <legend>Informations personnelles</legend>
                 <div id="form-info">
                     <div className="info1">

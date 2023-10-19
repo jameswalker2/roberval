@@ -5,6 +5,7 @@ import {collection, onSnapshot} from "firebase/firestore";
 import {NavBar} from "../../header/NavBar.jsx";
 import {FiSearch} from "react-icons/fi";
 import {FiMoreHorizontal} from 'react-icons/fi'
+import {motion} from "framer-motion";
 import './Payroll.scss'
 
 export function Payroll() {
@@ -31,15 +32,22 @@ export function Payroll() {
     return (
       <>
           <NavBar/>
-          <div className="container_all_pay">
-              <div className="container_link">
+              <div className="container_link_pay">
                   <h1 id="container_h1">Payroll</h1>
                   <div>
-                      <NavLink className="link"  to={'/accueil'}>Dashboard</NavLink>
+                      <NavLink className="link_pay"  to={'/accueil'}>Dashboard</NavLink>
                       <span>|</span>
-                      <NavLink className="link"  to={'/staffs'}>Staffs</NavLink>
+                      <NavLink className="link_pay"  to={'/staffs'}>Staffs</NavLink>
                   </div>
               </div>
+          <motion.div
+            initial={{opacity: 0, scaleY: 0, transformOrigin: "center"}}
+            animate={{opacity: 1, scaleY: 1, transformOrigin: "bottom"}}
+            exit={{opacity: 0, scaleY: 0}}
+            transition={{duration: 0.5, easeinout: [0.22, 1, 0.36, 1]}}
+          >
+          
+          <div className="container_all_pay">
               <div className="container_search_pay">
                   <h2 style={{color: '#5800ff'}}>Selectionner les critères</h2>
                   <select id="fonction" name="fonction">
@@ -120,6 +128,7 @@ export function Payroll() {
                   </table>
               </div>
           </div>
+          </motion.div>
       </>
     )
 }

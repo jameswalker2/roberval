@@ -9,8 +9,11 @@
     margin: 0 20px;
   }
   button {
-    width: 200px;
-    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 35px;
     border-radius: 15px;
     border: none;
     background-color: #f3f3f3;
@@ -20,6 +23,11 @@
     text-transform: capitalize;
     margin-left: 1200px;
     cursor: pointer;
+    #btn_add {
+      width: 30px;
+      height: 20px;
+      //margin: 5px;
+    }
   }
   button:hover {
     background-color: #ffa901;

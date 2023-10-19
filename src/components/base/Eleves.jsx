@@ -6,6 +6,7 @@ import {FaRegTrashAlt} from "react-icons/fa";
 import {useEffect, useState} from "react";
 import {collection, deleteDoc, doc, onSnapshot} from "firebase/firestore";
 import {db} from "../login/FirebaseConfig.jsx";
+import {BsPersonFillAdd} from "react-icons/bs";
 
 
 
@@ -33,33 +34,33 @@ export function Eleves() {
                 <NavLink to={'/accueil'}>
                     <BiArrowBack  id="back"/>
                 </NavLink>
-            <div className="container">
-            <div className="container_link">
+            <div className="container_link_el">
                 <h1 id="container_h1">Eleves</h1>
                 <div>
-                    <NavLink className="link"  to={'/accueil'}>Dashboard </NavLink>
+                    <NavLink className="link_el"  to={'/accueil'}>Dashboard </NavLink>
                     <span>|</span>
-                    <NavLink className="link"  to={'/paiement'}>Paiement</NavLink>
+                    <NavLink className="link_el"  to={'/paiement'}>Paiement</NavLink>
                 </div>
             </div>
+            <div className="container">
                 <div className="search_bar">
                     <FiSearch id="icon_search"/>
                     <input
                         // onChange={e => setSearch(e.target.value)}
                         type="search" id="search_bar" placeholder="Cherchez un élève..."/>
-                    <NavLink to={'/inscription'}><button>+ Ajouter</button></NavLink>
+                    <NavLink id="button_add_el" to={'/inscription'}><BsPersonFillAdd id="btn_add_el"/> Ajouter</NavLink>
                 </div>
                 <h2 style={{color: 'white', margin: '20px 0'}} >Liste des élèves</h2>
                 <div>
-                    <table   className="table">
+                    <table className="table_el">
                         <thead key='thead'>
                         <tr >
                             <th>Nom</th>
-                            <th className="expand">Prénom</th>
-                            <th>Date de naissance</th>
-                            <th>Lieu de naissance</th>
+                            <th className="expand_el">Prénom</th>
+                            <th className="expand_el">Date de naissance</th>
+                            <th className="expand_el">Lieu de naissance</th>
                             <th>Sexe</th>
-                            <th>classe</th>
+                            <th className="expand_el">classe</th>
                             <th>Adresse</th>
                             <th>Téléphone</th>
                             <th>Actions</th>

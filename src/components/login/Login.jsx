@@ -48,10 +48,10 @@ export function Login() {
 
     return (
     <>
-    <div className="container">
+    <div className="container_login">
         <div className="container_img">
             <img
-                width="530"
+                width="500"
                 src={imageRoberval}
                 alt="svg"
                 id="img_roberval"/>
@@ -61,7 +61,7 @@ export function Login() {
                     ref={formRef}
                     onSubmit={handleSubmit}>
                <div className="container_form_title">
-                    <h1 id="h1_ir">institution mixte <span>Roberval</span> </h1>
+                    <h1 id="h1_ir">institution mixte Roberval </h1>
                     <h2 id="h2_s">Se connecter à votre compte !</h2>
                </div>
                <div className="infield">
