@@ -37,29 +37,29 @@ export function Inscription() {
         //     console.log('test')
         // }
 
-        const studentsCollRef = collection(db, 'inscription')
+        const studentsCollRef = collection(db, "inscription")
         addDoc(studentsCollRef, {
-            nom,
-            prenom,
-            date,
-            lieu,
-            adresse,
-            classe,
-            gender,
-            nomPere,
-            professionPere,
-            phonePere,
-            nomMere,
-            professionMere,
-            phoneMere,
-            nomU,
-            adresseU,
-            phoneU,
-            nomUU,
-            adresseUU,
-            phoneUU,
-            statut: 'non payé',
-            key,
+          nom,
+          prenom,
+          date,
+          lieu,
+          adresse,
+          classe,
+          gender,
+          nomPere,
+          professionPere,
+          phonePere,
+          nomMere,
+          professionMere,
+          phoneMere,
+          nomU,
+          adresseU,
+          phoneU,
+          nomUU,
+          adresseUU,
+          phoneUU,
+          statut: 'non payé',
+          key,
         }).then(response => {
             console.log(response)
         }).catch(error => {
@@ -67,27 +67,8 @@ export function Inscription() {
         })
 
 
-        setNom('')
-        setPrenom('')
-        setDate('')
-        setLieu('')
-        setAdresse('')
-        setClasse('')
-        setGender('')
-        setNomPere('')
-        setProfessionPere('')
-        setPhonePere('')
-        setNomMere('')
-        setProfessionMere('')
-        setPhoneMere('')
-        setNomU('')
-        setAdresseU('')
-        setPhoneU('')
-        setNomUU('')
-        setAdresseUU('')
-        setPhoneUU('')
-        setStatut('')
-        setKey(key + 1)
+        //
+      e.target.reset(setNom(''))
 
     };
 

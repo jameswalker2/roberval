@@ -11,6 +11,7 @@ import {Eleves} from "./components/base/Eleves.jsx";
 import {Edit} from "./components/base/Edit.jsx";
 import {AnimatePresence} from "framer-motion";
 import './App.scss'
+import {TestSubcollection} from "./components/TestSubcollection.jsx";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/profs" element={<Profs/>} />
             <Route path="/eleves" element={<Eleves/>} />
             <Route path="/edit/:id" element={<Edit/>} />
+            <Route path="/testsubcollection" element={<TestSubcollection/>}/>
         </Routes>
       </AnimatePresence>
     </>

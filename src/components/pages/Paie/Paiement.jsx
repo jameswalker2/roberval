@@ -8,11 +8,30 @@ import {FiMoreHorizontal} from 'react-icons/fi'
 import {motion} from "framer-motion";
 import './Paiement.scss'
 
+// const classeSelect = {
+// <option value="0">Classe</option>
+// <option value='1e Année Kind'> 1e Année Kind</option>
+// <option value='2e Année Kind'> 2e Année Kind</option>
+// <option value='3e Année Kind'> 3e Année Kind</option>
+// <option value='1e Année Fond'> 1e Année Fond</option>
+// <option value='2e Année Fond'> 2e Année Fond</option>
+// <option value='3e Année Fond'> 3e Année Fond</option>
+// <option value='7e Année Fond'> 7e Année Fond</option>
+// <option value='8e Année Fond'> 8e Année Fond</option>
+// <option value='9e Année Fond'> 9e Année Fond</option>
+// <option value='NS I<'> NS I</option>
+// <option value='NS II'> NS II</option>
+// <option value='NS III'> NS III</option>
+// <option value='NS IV'> NS IV</option>
+// }
+//
+
 export function Paiement() {
 	
-	const studentPaiementRef = collection(db, 'staffs')
-	console.log(studentPaiementRef)
+	const studentPaiementRef = collection(db, 'inscription')
 	const [studentsP, setStudentsP] = useState([])
+	const [select, setSelect] = useState('')
+	// console.log(test)
 
 
 
@@ -24,30 +43,8 @@ export function Paiement() {
 			getStudentsPaie()
 		}
 	}, [])
-
-
-	// const classeSelect = {
-	// <option value="0">Classe</option>
-	// <option value='1e Année Kind'> 1e Année Kind</option>
-	// <option value='2e Année Kind'> 2e Année Kind</option>
-	// <option value='3e Année Kind'> 3e Année Kind</option>
-	// <option value='1e Année Fond'> 1e Année Fond</option>
-	// <option value='2e Année Fond'> 2e Année Fond</option>
-	// <option value='3e Année Fond'> 3e Année Fond</option>
-	// <option value='7e Année Fond'> 7e Année Fond</option>
-	// <option value='8e Année Fond'> 8e Année Fond</option>
-	// <option value='9e Année Fond'> 9e Année Fond</option>
-	// <option value='NS I<'> NS I</option>
-	// <option value='NS II'> NS II</option>
-	// <option value='NS III'> NS III</option>
-	// <option value='NS IV'> NS IV</option>
-	// }
-	//
 	
-	const handleClasse = (e) => {
-		const getClasse = e.target.value
-		console.log(getClasse)
-	}
+	console.log(select)
 	
 	
 	
@@ -75,13 +72,13 @@ export function Paiement() {
 					<select
 						id="classe"
 						name="classe"
-						onChange={e => handleClasse(e)}
+						onChange={e => setSelect(e.target.value)}
 					>
 						<option>Classe</option>
 						{
-							studentsP.map((student, index) => (
-								<option value={student} key={index}>
-									{student.id}
+							studentsP.map((student) => (
+								<option value={student.data.classe}  key={student.id}>
+									{student.data.nom}
 								</option>
 							))
 						}
@@ -117,7 +114,7 @@ export function Paiement() {
 						{/*{studentsP.map((student) =>*/}
 							<tbody key='tbody' className="scroll">
 							<tr>
-								<td>MW001</td>
+								<td></td>
 								<td>NS III</td>
 								<td className="expand_bar">Méat Wood Bert James</td>
 								<td>$2000</td>
