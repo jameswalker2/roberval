@@ -29,6 +29,7 @@ import './Paiement.scss'
 export function Paiement() {
 	
 	const studentPaiementRef = collection(db, 'classes')
+
 	const [studentsP, setStudentsP] = useState([])
 	const [select, setSelect] = useState('')
 	// console.log(test)
@@ -44,7 +45,22 @@ export function Paiement() {
 		}
 	}, [studentPaiementRef])
 	
-	console.log(select)
+	// console.log(select)
+	
+	const handleSearch = (e) => {
+		e.preventDefault()
+		
+		switch (studentsP) {
+			case "1e annee kind" :
+				console.log(`It's working !`)
+				break;
+
+		}
+		
+		
+		
+		// e.target.reset(setSelect(''))
+	}
 	
 	
 	
@@ -77,7 +93,7 @@ export function Paiement() {
 						<option>Classe</option>
 						{
 							studentsP.map((student) => (
-								<option value={student.data.classe}  key={student.id}>
+								<option value={student.data.tag}  key={student.id}>
 									{student.data.name}
 								</option>
 							))
@@ -92,7 +108,7 @@ export function Paiement() {
 					</select>
 					<FiSearch id="icn_search"/>
 					<input id="search" type="search" placeholder="Entrez le nom..." autoFocus required/>
-					<button type="submit">
+					<button onClick={handleSearch}>
 						<FiSearch id="button_icn"/> Cherchez
 					</button>
 					{/*<h3>Total <span>$10,000 </span></h3>*/}

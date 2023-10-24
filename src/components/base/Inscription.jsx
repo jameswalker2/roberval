@@ -172,7 +172,7 @@ export function Inscription() {
         setNomUU(''),
         setAdresseUU(''),
         setPhoneUU(''),
-        setKey(key +1),
+        setKey(key+1),
         setStatut(statut = `non-paye`)
         )
     }
