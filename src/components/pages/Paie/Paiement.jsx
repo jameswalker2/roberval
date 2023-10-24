@@ -122,7 +122,7 @@ export function Paiement() {
 								<td id="non" style={{color: 'red', fontWeight: '700', textTransform: 'uppercase'}}>Non Payé</td>
 								<td>
                       <span className="actions">
-                        <NavLink id="nav">
+                        <NavLink to="test" id="nav">
                             <FiMoreHorizontal/>
                         </NavLink>
                       </span>
