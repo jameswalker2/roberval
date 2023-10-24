@@ -42,7 +42,7 @@ export function Paiement() {
 		return () => {
 			getStudentsPaie()
 		}
-	}, [])
+	}, [studentPaiementRef])
 	
 	console.log(select)
 	

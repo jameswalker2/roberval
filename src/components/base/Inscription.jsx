@@ -28,8 +28,8 @@ export function Inscription() {
         const [phoneUU, setPhoneUU] = useState('')
         const [classe, setClasse] = useState('')
         const [gender, setGender] = useState('');
-        const [statut, setStatut] = useState('');
-        const [key, setKey] = useState('')
+        let   [statut, setStatut] = useState('');
+        let   [key, setKey] = useState('')
 
 
     const students1CollRef = collection(db, "classes/cl001/students-001")
@@ -62,7 +62,7 @@ export function Inscription() {
         nomUU,
         adresseUU,
         phoneUU,
-        statut: 'test',
+        statut,
         key,
     }
 
@@ -172,8 +172,8 @@ export function Inscription() {
         setNomUU(''),
         setAdresseUU(''),
         setPhoneUU(''),
-        setStatut(''),
-        setKey(key + 1)
+        setKey(key +1),
+        setStatut(statut = `non-paye`)
         )
     }
 
