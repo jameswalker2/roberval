@@ -28,7 +28,7 @@ import './Paiement.scss'
 
 export function Paiement() {
 	
-	const studentPaiementRef = collection(db, 'inscription')
+	const studentPaiementRef = collection(db, 'classes')
 	const [studentsP, setStudentsP] = useState([])
 	const [select, setSelect] = useState('')
 	// console.log(test)
@@ -78,7 +78,7 @@ export function Paiement() {
 						{
 							studentsP.map((student) => (
 								<option value={student.data.classe}  key={student.id}>
-									{student.data.nom}
+									{student.data.name}
 								</option>
 							))
 						}

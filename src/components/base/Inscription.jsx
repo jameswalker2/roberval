@@ -1,11 +1,11 @@
-import {useState} from "react";
-import { collection, addDoc } from 'firebase/firestore'
+import {NavLink} from "react-router-dom"
 import {db} from '../login/FirebaseConfig.jsx'
-import './Inscription.scss'
+import {useState} from "react"
+import {collection, addDoc} from 'firebase/firestore'
 import {IoMdArrowDropdown} from 'react-icons/io'
-import {BiArrowBack} from "react-icons/bi";
-import {NavLink} from "react-router-dom";
+import {BiArrowBack} from "react-icons/bi"
 import {BsPersonFillAdd} from 'react-icons/bs'
+import './Inscription.scss'
 
 export function Inscription() {
 
@@ -30,55 +30,156 @@ export function Inscription() {
         const [gender, setGender] = useState('');
         const [statut, setStatut] = useState('');
         const [key, setKey] = useState('')
-    const handleAdd = async (e) => {
+
+
+    const students1CollRef = collection(db, "classes/cl001/students-001")
+    const students2CollRef = collection(db, "classes/cl002/students-002")
+    const students3CollRef = collection(db, "classes/cl003/students-003")
+    const students4CollRef = collection(db, "classes/cl004/students-004")
+    const students5CollRef = collection(db, "classes/cl005/students-005")
+    const students6CollRef = collection(db, "classes/cl006/students-006")
+    const students7CollRef = collection(db, "classes/cl007/students-007")
+    const students8CollRef = collection(db, "classes/cl008/students-008")
+    const students9CollRef = collection(db, "classes/cl009/students-009")
+    const students10CollRef = collection(db, "classes/cl010/students-010")
+    const dataStudents = {
+        nom,
+        prenom,
+        date,
+        lieu,
+        adresse,
+        classe,
+        gender,
+        nomPere,
+        professionPere,
+        phonePere,
+        nomMere,
+        professionMere,
+        phoneMere,
+        nomU,
+        adresseU,
+        phoneU,
+        nomUU,
+        adresseUU,
+        phoneUU,
+        statut: 'test',
+        key,
+    }
+
+    const handleAdd = (e) => {
         e.preventDefault();
 
-        // if(!nom || !prenom || !date || !lieu || !adresse) {
-        //     console.log('test')
-        // }
+        switch (classe) {
+            case '1e Annee Kind' :
+                addDoc(students1CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '2e Annee Kind':
+                addDoc(students2CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '3e Annee Kind':
+                addDoc(students3CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '1e Annee Fond':
+                addDoc(students4CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '2e Annee Fond' :
+                addDoc(students5CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '3e Annee Fond' :
+                addDoc(students6CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '4e Annee Fond' :
+                addDoc(students7CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '5e Annee Fond' :
+                addDoc(students8CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '6e Annee Fond' :
+                addDoc(students9CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+            case '7e Annee Fond' :
+                addDoc(students10CollRef, {dataStudents})
+                    .then(response => {
+                        console.log(response)})
+                    .catch(error => {
+                        console.log(error.message)
+                    });
+                break;
+        }
 
-        const studentsCollRef = collection(db, "inscription")
-        addDoc(studentsCollRef, {
-          nom,
-          prenom,
-          date,
-          lieu,
-          adresse,
-          classe,
-          gender,
-          nomPere,
-          professionPere,
-          phonePere,
-          nomMere,
-          professionMere,
-          phoneMere,
-          nomU,
-          adresseU,
-          phoneU,
-          nomUU,
-          adresseUU,
-          phoneUU,
-          statut: 'non payé',
-          key,
-        }).then(response => {
-            console.log(response)
-        }).catch(error => {
-            console.log(error.message)
-        })
-
-
-        //
-      e.target.reset(setNom(''))
-
-    };
-
-
-
+        e.target.reset(
+        setNom(''),
+        setPrenom(''),
+        setDate(''),
+        setLieu(''),
+        setAdresse(''),
+        setClasse(''),
+        setGender(''),
+        setNomPere(''),
+        setProfessionPere(''),
+        setPhonePere(''),
+        setNomMere(''),
+        setProfessionMere(''),
+        setPhoneMere(''),
+        setNomU(''),
+        setAdresseU(''),
+        setPhoneU(''),
+        setNomUU(''),
+        setAdresseUU(''),
+        setPhoneUU(''),
+        setStatut(''),
+        setKey(key + 1)
+        )
+    }
 
     return (
         <>
             <NavLink to={'/eleves'}>
-
                 <BiArrowBack  id="back"/>
             </NavLink>
             <div className="container-inscription">
@@ -121,35 +222,45 @@ export function Inscription() {
                     onChange={e => setAdresse(e.target.value)}
                     placeholder="Adresse"/>
                         <select id="classe" name="classe" onChange={e => setClasse(e.target.value)}>
-                            <option value='1e Année Kind'> 1e Année Kind</option>
-                            <option value='2e Année Kind'> 2e Année Kind</option>
-                            <option value='3e Année Kind'> 3e Année Kind</option>
-                            <option value='1e Année Fond'> 1e Année Fond</option>
-                            <option value='2e Année Fond'> 2e Année Fond</option>
-                            <option value='3e Année Fond'> 3e Année Fond</option>
-                            <option value='7e Année Fond'> 7e Année Fond</option>
-                            <option value='8e Année Fond'> 8e Année Fond</option>
-                            <option value='9e Année Fond'> 9e Année Fond</option>
-                            <option value='NS I<'> NS I</option>
-                            <option value='NS II'> NS II</option>
-                            <option value='NS III'> NS III</option>
-                            <option value='NS IV'> NS IV</option>
+                            <option value='0'>Classe</option>
+                            <option value='1e Annee Kind'>1e Année Kind</option>
+                            <option value='2e Annee Kind'>2e Année Kind</option>
+                            <option value='3e Annee Kind'>3e Année Kind</option>
+                            <option value='1e Annee Fond'>1e Année Fond</option>
+                            <option value='2e Annee Fond'>2e Année Fond</option>
+                            <option value='3e Annee Fond'>3e Année Fond</option>
+                            <option value='4e Annee Fond'>4e Année Fond</option>
+                            <option value='5e Annee Fond'>5e Année Fond</option>
+                            <option value='6e Annee Fond'>6e Année Fond</option>
+                            <option value='7e Annee Fond'>7e Année Fond</option>
+                            <option value='8e Annee Fond'>8e Année Fond</option>
+                            <option value='9e Annee Fond'>9e Année Fond</option>
+                            <option value='NS I<'>NS I</option>
+                            <option value='NS II'>NS II</option>
+                            <option value='NS III'>NS III</option>
+                            <option value='NS IV'>NS IV</option>
                         </select>
                         <IoMdArrowDropdown id="icon-down"/>
-                     <div id="gender">
+                        <div id="gender">
                         <legend>Sexe:</legend>
                         <label htmlFor="male">M</label>
-                        <input onChange={(e) => setGender(e.target.value)}
-                               value="Male"
-                               type="radio"
-                               name="gender" id="male"/>
+                        <input
+                            onChange={(e) => setGender(e.target.value)}
+                            value="Male"
+                            type="radio"
+                            name="gender" id="male"/>
                         <label htmlFor="female">F</label>
-                        <input onChange={(e) => setGender(e.target.value)}
-                               value="Female"
-                               type="radio" name="gender" id="female" />
+                        <input
+                            onChange={(e) => setGender(e.target.value)}
+                            value="Female"
+                            type="radio" name="gender" id="female" />
                         </div>
                     </div>
                 </div>
+                {/**/}
+                {/**/}
+                {/**/}
+                {/**/}
                 <legend>Informations parents</legend>
                 <div className="form-parent">
                     <div className="parent-info">
@@ -191,6 +302,10 @@ export function Inscription() {
                             type="text" placeholder="Téléphone"/>
                     </div>
                 </div>
+                {/**/}
+                {/**/}
+                {/**/}
+                {/**/}
                 <legend>Personne en cas urgence</legend>
                 <div className="form-urgent">
                     <input
