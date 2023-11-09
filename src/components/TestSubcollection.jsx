@@ -1,67 +1,59 @@
-import {db} from './login/FirebaseConfig.jsx'
-import {useCollectionData} from "react-firebase-hooks/firestore";
-import {collection, addDoc} from "firebase/firestore";
-import {useState} from "react";
+// import {db} from './login/FirebaseConfig.jsx'
+// import {useCollectionData} from "react-firebase-hooks/firestore";
+// import {collection, addDoc} from "firebase/firestore";
+import {useEffect, useState} from "react";
+import {supabase} from "./login/SupabaseConfig.jsx";
 
 export function TestSubcollection() {
-	const [nom, setNom] = useState('')
-	const [classe, setClasse] = useState('')
+	// const [nom, setNom] = useState('')
+	const [students, setStudents] = useState([])
+	const [collection, setCollection] = useState([])
+	// const [classe, setClasse] = useState()
+	
+	
+	
+		useEffect(() => {
+			getStudents();
+		}, []);
+			const getStudents = async () => {
+				try {
+					// eslint-disable-next-line no-unused-vars
+					const { data, error } = await supabase
+						.from("students")
+						.select('*');
 
-
-	const cl001Ref = collection(db, "classes/cl001/students-001")
-
-	const [docs] = useCollectionData(cl001Ref)
-
-	function handleAdd(e) {
-		e.preventDefault()
-		switch (classe) {
-			case 'NS I':
-				console.log('test sur test')
-				addDoc(cl001Ref, {
-					nom
-				})
-				break;
-			case 'NS II':
-				console.log('test sur test II')
-				break;
-			case 'NS III':
-				console.log('test sur test III')
-		}
-
+					if (data) {
+						setStudents(data);
+						setCollection(
+							[... new Set(data.map((student) => student.class))
+							])
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			}
+	
+	// console.log(collection)
+	
+	const student_filter = (studentData) => {
+		const filterData = students.filter((student) => student.class === studentData);
+		setStudents(filterData)
 	}
-
-	// const test = (e) => {
-	//
-	// }
-
-
-	// console.log(testChange)
-
+	
 	return (
 		<>
-		<div>
-				<select
-					name="name_id"
-					id="ts"
-					onChange={e => setClasse(e.target.value)}>
-					<option value="0">Classe</option>
-					<option value="NS I">Test</option>
-					<option value="NS II">Test2</option>
-					<option value="NS III">Test3</option>
+			<div>
+				<select onSelect={student_filter}
+					name="" id="">
+					{collection.map((student) => (
+						<option value={student}>{student}</option>
+						))}
 				</select>
-				<input
-					value={nom}
-					onChange={e => setNom(e.target.value)}
-					type="text" placeholder="antre nom an..."/>
-				<button onClick={handleAdd}>Ajoute</button>
-		<ul>
-			{docs?.map((doc) =>
-				<div key={Math.random()}>
-					<li>{doc.nom}
-					</li>
-				</div>)}
-		</ul>
-		</div>
+				
+					{students.map((student) => (
+						<h1 key={student.id}>{student.firstName} {student.lastName}</h1>
+					))}
+			</div>
 		</>
 	)
 }

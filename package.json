@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@react-buddy/ide-toolbox": "^2.4.0",
+    "@supabase/auth-ui-react": "^0.4.6",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.38.4",
     "chart.js": "^4.4.0",
     "firebase": "^10.4.0",
     "framer-motion": "^10.16.4",
@@ -19,7 +22,8 @@
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-icons": "^4.11.0",
-    "styled-components": "^6.0.8"
+    "styled-components": "^6.0.8",
+    "supabase": "^1.106.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

@@ -1,12 +1,11 @@
 import {NavLink} from "react-router-dom";
-import {db} from "../../login/FirebaseConfig.jsx";
 import { useState, useEffect } from "react";
-import {collection, onSnapshot} from "firebase/firestore";
 import {NavBar} from "../../header/NavBar.jsx";
 import {FiSearch} from "react-icons/fi";
 import {FiMoreHorizontal} from 'react-icons/fi'
 import {motion} from "framer-motion";
 import './Paiement.scss'
+import {supabase} from "../../login/SupabaseConfig.jsx";
 
 // const classeSelect = {
 // <option value="0">Classe</option>
@@ -28,38 +27,34 @@ import './Paiement.scss'
 
 export function Paiement() {
 	
-	const studentPaiementRef = collection(db, 'classes')
 
 	const [studentsP, setStudentsP] = useState([])
-	const [select, setSelect] = useState('')
+	let [select, setSelect] = useState('')
 	// console.log(test)
-
-
-
+	
+	
+	
 	useEffect(() => {
-		const getStudentsPaie = onSnapshot(studentPaiementRef, snapshot => {
-			setStudentsP(snapshot.docs.map(doc => ({id: doc.id, data: doc.data()})))
-		})
-		return () => {
-			getStudentsPaie()
-		}
-	}, [studentPaiementRef])
+		getStudents();
+	}, []);
+	
+	async function getStudents() {
+		const { data } = await supabase
+			.from('distinct_student')
+			.select('*');
+		setStudentsP(data);
+	}
 	
 	// console.log(select)
 	
 	const handleSearch = (e) => {
 		e.preventDefault()
 		
-		switch (studentsP) {
-			case "1e annee kind" :
-				console.log(`It's working !`)
-				break;
-
-		}
+		// if(select === "NS I") {
+		// 	return setStudentsP()
+		// }
 		
-		
-		
-		// e.target.reset(setSelect(''))
+		e.target.reset(setSelect([]))
 	}
 	
 	
@@ -90,14 +85,16 @@ export function Paiement() {
 						name="classe"
 						onChange={e => setSelect(e.target.value)}
 					>
-						<option>Classe</option>
-						{
-							studentsP.map((student) => (
-								<option value={student.data.tag}  key={student.id}>
-									{student.data.name}
-								</option>
-							))
-						}
+						<option value='0'>Classe</option>
+						{studentsP.map((student) => (
+							<option key={student.class} value={student.class}>{student.class}</option>
+						))}
+						{/*{studentsP.map((student) => (*/}
+						{/*		<option value={student.class_name}  key={student.id}>*/}
+						{/*			{student.class_name}*/}
+						{/*		</option>*/}
+						{/*	))*/}
+						{/*}*/}
 					</select>
 					<select id="versement" name="versement">
 						<option value='0'>Versement</option>
@@ -127,12 +124,12 @@ export function Paiement() {
 							<th className="expand_bar_2" >Action</th>
 						</tr>
 						</thead>
-						{/*{studentsP.map((student) =>*/}
-							<tbody key='tbody' className="scroll">
+						{studentsP.map((student) =>
+							<tbody  className="scroll">
 							<tr>
-								<td></td>
-								<td>NS III</td>
-								<td className="expand_bar">Méat Wood Bert James</td>
+								<td>{student.id}</td>
+								<td>{student.class}</td>
+								<td className="expand_bar">{student.name}</td>
 								<td>$2000</td>
 								<td>$4000</td>
 								<td id="non" style={{color: 'red', fontWeight: '700', textTransform: 'uppercase'}}>Non Payé</td>
@@ -145,7 +142,8 @@ export function Paiement() {
 								</td>
 							</tr>
 							</tbody>
-						{/*)}*/}
+						)
+						}
 					</table>
 				</div>
 			</div>
