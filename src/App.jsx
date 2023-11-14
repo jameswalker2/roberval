@@ -10,8 +10,8 @@ import {Profs} from "./components/base/Profs.jsx";
 import {Eleves} from "./components/base/Eleves.jsx";
 import {Edit} from "./components/base/Edit.jsx";
 import {AnimatePresence} from "framer-motion";
-import './App.scss'
 import {TestSubcollection} from "./components/TestSubcollection.jsx";
+import './App.scss'
 
 
 function App() {
