@@ -49,20 +49,13 @@
   position: relative;
   display: inline-block;
   padding: 20px 10px 40px;
-  #handicap {
-    margin-left: 950px;
-    height: 40px;
-    width: 350px;
-  }
-    #gender-handicap {
+  
+    #gender{
       position: absolute;
       display: flex;
       align-items: center;
       margin: 5px 30px;
-      #handicap-title {
-        margin-left: 260px;
-        font-size: 19px;
-      }
+    
       legend {
         color: white;
         font-size: 20px;
@@ -71,17 +64,42 @@
       }
     }
 
-    #gender-handicap input {
+    #gender input {
       width: 20px;
       height: 20px;
       margin: 10px;
     }
-    #gender-handicap label {
+    #gender label {
       color: #f3f3f3;
       font-size: 20px;
       margin: 0 2px;
     }
 
+#handicap {
+  display: inline-flex;
+  margin: 5px 30px;
+  #handicap-title {
+    margin-left: 470px;
+    height: 40px;
+    width: 210px;
+  }
+  #handicap legend {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 20px;
+  }
+}
+#handicap input {
+  width: 20px;
+  height: 20px;
+  margin: 0 10px;
+}
+#handicap label {
+  color: #f3f3f3;
+  font-size: 20px;
+  margin: 0 2px;
+}
 
     label {
       color: white;
@@ -186,7 +204,7 @@
     outline: none;
     font-size: 20px;
 }
-  #statut {
+  #statut_mother_father {
     position: absolute;
     display: flex;
     align-items: center;
@@ -199,12 +217,12 @@
     }
   }
 
-  #statut input {
+  #statut_mother_father input {
     width: 20px;
     height: 20px;
     margin: 10px;
   }
-  #statut label {
+  #statut_mother_father label {
     color: #f3f3f3;
     font-size: 20px;
     margin: 0 2px;

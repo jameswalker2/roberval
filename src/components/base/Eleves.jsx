@@ -19,7 +19,7 @@ export function Eleves() {
                 const {data, error} = await supabase
                     .from('students')
                     .select('*')
-                    .textSearch('search_students', 'id')
+                    // .textSearch('search_students', 'id')
 
 
                 if (data) {
@@ -32,7 +32,7 @@ export function Eleves() {
             }
         }
 
-         allStudents()
+        allStudents()
     }, [])
 
     // const handleDelete = async (id) => {
@@ -77,12 +77,7 @@ export function Eleves() {
                             <th>Actions</th>
                         </tr>
                         </thead>
-                        {students.filter(student => {
-                            return search === 'students'
-                            ? student
-                            : student.firstName.toLowerCase().includes(search)
-
-                        }).map((student) => (
+                        {students.map((student) => (
                                 <tbody key={student.id} className="scroll">
                                 <tr>
                                     <td>{student.firstName}</td>
@@ -90,7 +85,7 @@ export function Eleves() {
                                     <td>{student.birth}</td>
                                     <td>{student.adressBirth}</td>
                                     <td>{student.gender}</td>
-                                    <td>{student.class}</td>
+                                    <td>{student.classe}</td>
                                     <td>{student.adress}</td>
                                     <td>{student.phone}</td>
                                     <td>

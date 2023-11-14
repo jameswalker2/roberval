@@ -1,7 +1,7 @@
 import {NavLink} from "react-router-dom"
 import {supabase} from "../login/SupabaseConfig.jsx"
 import {useState} from "react"
-import {IoMdArrowDropdown} from 'react-icons/io'
+// import {IoMdArrowDropdown} from 'react-icons/io'
 import {BiArrowBack} from "react-icons/bi"
 import {BsPersonFillAdd} from 'react-icons/bs'
 import './Inscription.scss'
@@ -48,36 +48,36 @@ export function Inscription() {
           const {data, error} = await supabase
             .from('students')
             .insert({
-              firstName       : firstName,
-              lastName        : lastName,
+              firstName,
+              lastName,
               birth,
-              gender          : gender,
-              departmentBirth : departmentBirth,
-              commonBirth     : commonBirth,
-              adressBirth     : adressBirth,
-              handicap        : handicap,
-              wtHandicap      : wtHandicap,
-              adress          : adress,
-              department      : department,
-              common          : common,
-              city            : city,
-              firstMother     : firstMother,
-              lastMother      : lastMother,
-              jobMother       : jobMother,
-              statutMother    : statutMother,
-              firstFather     : firstFather,
-              lastFather      : lastFather,
-              jobFather       : jobFather,
-              statutFather    : statutFather,
-              vacation        : vacation,
-              level           : level,
-              linkPerson      : linkPerson,
-              nif             : nif,
-              ninu            : ninu,
-              email           : email,
-              phone           : phone,
-              otherPhone      : otherPhone,
-              classe          : classe
+              gender,
+              departmentBirth,
+              commonBirth,
+              adressBirth,
+              handicap,
+              wtHandicap,
+              adress,        
+              department,      
+              common,      
+              city,       
+              firstMother,     
+              lastMother,
+              jobMother,
+              statutMother,
+              firstFather,
+              lastFather,
+              jobFather,
+              statutFather,
+              vacation,
+              level,
+              linkPerson,
+              nif,
+              ninu,
+              email,
+              phone,
+              otherPhone,
+              classe
             }).single()
           if (error) throw error;
           if (data) {
@@ -87,11 +87,6 @@ export function Inscription() {
           console.log(error)
         }
       
-        // switch (classe) {
-        //     case '1e Annee Kind' :
-        //         break;
-        // }
-
         e.target.reset(
           setFirstName(''),
           setLastName(''),
@@ -126,7 +121,9 @@ export function Inscription() {
         )
     }
   
-  
+  // console.log(gender);
+  // console.log(handicap);
+  // console.log(statutFather);
 
     return (
         <>
@@ -183,34 +180,37 @@ export function Inscription() {
                     onChange={e => setAdressBirth(e.target.value)}
                     type="text" placeholder="Lieu de naissance"/>
                 
-                        <div id="gender-handicap">
+                        <div id="gender">
                         <legend>Sexe:</legend>
-                        <label htmlFor="male">M</label>
-                        <input
-                            onChange={(e) => setGender(e.target.value)}
-                            value="Male"
-                            type="radio"
-                            name="gender" id="male"/>
-                        <label htmlFor="female">F</label>
-                        <input
-                            onChange={(e) => setGender(e.target.value)}
-                            value="Female"
-                            type="radio" name="gender" id="female" />
+                          <label htmlFor="male">M</label>
+                          <input
+                              onChange={(e) => setGender(e.target.value)}
+                              value="Male"
+                              type="radio"
+                              name="gender"/>
+                          <label htmlFor="female">F</label>
+                          <input
+                              onChange={(e) => setGender(e.target.value)}
+                              value="Female"
+                              type="radio" name="gender" />
+                        </div>
+                        {/*  */}
+                        <div id="handicap">
                         <legend id="handicap-title">Y a-t-il un handicap ?</legend>
-                          <label htmlFor="handicap">Oui</label>
-                          <input
-                            onChange={(e) => setGender(e.target.value)}
-                            value="Female"
-                            type="radio" name="handicap" />
-                          <label htmlFor="no-handicap">Non</label>
-                          <input
-                            onChange={(e) => setGender(e.target.value)}
-                            value="Female"
-                            type="radio" name="no-handicap"/>
+                              <label htmlFor="handicap">Oui</label>
+                              <input
+                                onChange={(e) => setHandicap(e.target.value)}
+                                value="Oui"
+                                type="radio" name="handicap"/>
+                              <label htmlFor="no-handicap">Non</label>
+                              <input
+                                onChange={(e) => setHandicap(e.target.value)}
+                                value="Non"
+                                type="radio" name="handicap" />
                         </div>
                       <select
                         onChange={(e) => setHandicap(e.target.value)}
-                        name="handicap" id="handicap">
+                        name="wtHandicap" id="wtHandicap">
                         <option value="0">Quel type handicap ?</option>
                         <option value="Moteur">Moteur</option>
                         <option value="Sensoriel">Sensoriel</option>
@@ -238,7 +238,7 @@ export function Inscription() {
                   type="text"
                   placeholder="Niveau d'enseignement"/>
                 <select id="classe" name="classe" onChange={e => setClasse(e.target.value)}>
-                  <option value='0'>Niveau d'études</option>
+                  <option value='0'>{`Niveau d'études`}</option>
                   <option value='1e Annee Kind'>1e Année Kind</option>
                   <option value='2e Annee Kind'>2e Année Kind</option>
                   <option value='3e Annee Kind'>3e Année Kind</option>
@@ -323,33 +323,35 @@ export function Inscription() {
                             id="jobMother"
                             name="jobMother"
                             type="text" placeholder="Profession"/>
-                      <div id="statut">
                         {/**/}
+                      <div id="statut_mother_father">
                         <legend>Statut de la mère:</legend>
+                        <div id="statut_mother">
                         <label htmlFor="dead_mother">Décédée</label>
-                        <input
+                          <input 
                           onChange={(e) => setStatutMother(e.target.value)}
-                          value="Décédée"
-                          type="radio"
-                          name="dead_mother" id="dead_mother"/>
+                          type="radio" name="statut_mother" value="Décédée" />
+
                         <label htmlFor="life_mother">Vivante</label>
-                        <input
-                          onChange={(e) => setStatutMother(e.target.value)}
-                          value="Vivante"
-                          type="radio" name="life_mother" id="life_mother" />
+                            <input
+                            onChange={(e) => setStatutMother(e.target.value)}
+                            type="radio" name="statut_mother" value="Vivante" />
+                        </div>
                         {/**/}
                         <legend>Statut du père:</legend>
+                        <div id="statut_father">
                         <label htmlFor="dead">Décédé</label>
                         <input
                           onChange={(e) => setStatutFather(e.target.value)}
                           value="Décédé"
                           type="radio"
-                          name="dead_father" id="dead_father"/>
+                          name="statut_father"/>
                         <label htmlFor="life">Vivant</label>
                         <input
                           onChange={(e) => setStatutFather(e.target.value)}
                           value="Vivant"
-                          type="radio" name="life_father" id="life_father" />
+                          type="radio" name="statut_father" />
+                        </div>
                       </div>
                     </div>
                 </div>

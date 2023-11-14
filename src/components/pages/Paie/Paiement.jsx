@@ -3,7 +3,6 @@ import {supabase} from "../../login/SupabaseConfig.jsx";
 import {motion} from "framer-motion";
 import {useState, useEffect} from "react";
 import {NavBar} from "../../header/NavBar.jsx";
-import {FiSearch} from "react-icons/fi";
 import {FiMoreHorizontal} from 'react-icons/fi'
 import Select from "react-select";
 import './Paiement.scss'
@@ -15,7 +14,7 @@ export function Paiement() {
 	const [classes, setClasses] = useState([])
 	const [selectedCategory, setSelectedCategory] = useState(false)
 
-
+	
 	useEffect(() => {
 		getStudents();
 	}, []);
@@ -37,7 +36,7 @@ export function Paiement() {
 		}
 	}
 
-
+	
 	const collectionOptions = classes.map((category) => ({
 		value: category,
 		label: category
@@ -54,8 +53,8 @@ export function Paiement() {
 			border: "none",
 			outline: '0',
 			font: 'inherit',
-			width: "15rem",
-			// maxWidth: '25rem',
+			width: "25rem",
+			maxWidth: '25rem',
 			height: "2.8rem",
 			padding: "0 20px",
 			margin: "0 25px",
@@ -64,17 +63,20 @@ export function Paiement() {
 		}),
 		option: (styles, {data}) => {
 			return {...styles,
-				width: data.width ? '111rem' : '10rem',
-				
+				width: data.width ? '20rem' : '28rem',
 				color: 'red'}
+			}
+			
 		}
+		
 
-	}
-	
-	
+		
+		
+		
 	return (
 		<>
 			<NavBar/>
+
 				<div className="container_link_paie">
 					<h1 id="container_h1">Paiement</h1>
 					<div>
@@ -91,7 +93,8 @@ export function Paiement() {
 			
 			<div className="container_all">
 				<div className="container_search">
-					<h2 style={{color: '#5800ff'}}>Selectionner les critères</h2>
+					<h2>Selectionner les critères</h2>
+					<p>Chercher par classe ou par nom directement</p>
 					<div id="form_search">
 						<Select
 							styles={colorStyles}
@@ -100,26 +103,10 @@ export function Paiement() {
 							onChange={(selectOption) =>setSelectedCategory(selectOption)}
 							value={selectedCategory}
 						/>
-						<Select
-							styles={colorStyles}
-							options={collectionOptions}
-							isClearable
-							placeholder="Classe"
-							onChange={(selectOption) =>setSelectedCategory(selectOption)}
-							value={selectedCategory}
-						/>
-					{/*<select id="versement" name="versement">*/}
-					{/*	<option value='0'>Versement</option>*/}
-					{/*	<option value='versement 1'> Versement 1</option>*/}
-					{/*	<option value='versement 2'> Versement 2</option>*/}
-					{/*	<option value='versement 3'> Versement 3</option>*/}
-					{/*	<option value='versement 4'> Versement 4</option>*/}
-					{/*</select>*/}
-					<FiSearch id="icn_search"/>
 					<input id="search" type="search" placeholder="Entrez le nom..." autoFocus required/>
-					<button>
-						<FiSearch id="button_icn"/> Cherchez
-					</button>
+					<NavLink className='button' to={'/addPaie'}>
+					+ Add a new
+					</NavLink>
 					</div>
 					{/*<h3>Total <span>$10,000 </span></h3>*/}
 				</div>
@@ -133,6 +120,7 @@ export function Paiement() {
 							<th className="expand_bar">Nom Complet</th>
 							<th className="expand_bar_2" >Valeur Avancée</th>
 							<th className="expand_bar_2" >Balance</th>
+							<th className="expand_bar_2">Versement</th>
 							<th className="expand_bar_2" >Statut</th>
 							<th className="expand_bar_2" >Action</th>
 						</tr>
@@ -141,11 +129,14 @@ export function Paiement() {
 							<tbody key={student.id}  className="scroll">
 							<tr>
 								<td>{student.id}</td>
-								<td>{student.class}</td>
+								<td>{student.classe}</td>
 								<td className="expand_bar">{student.firstName} {student.lastName}</td>
 								<td>$2000</td>
-								<td>$4000</td>
-								<td id="non" style={{color: 'red', fontWeight: '700', textTransform: 'uppercase'}}>Non Payé</td>
+								<td>$5000</td>
+								<td>Versement 1</td>
+								<td id="non" 
+								style={{fontWeight: '700', textTransform: 'uppercase', color: 'red'}}>
+									non-pay</td>
 								<td>
 									<span className="actions">
 										<NavLink to="test" id="nav">
