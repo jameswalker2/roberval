@@ -4,31 +4,42 @@ import './Eleves.scss'
 import {FiSearch} from "react-icons/fi";
 import {FaRegTrashAlt} from "react-icons/fa";
 import {useEffect, useState} from "react";
-import {collection, deleteDoc, doc, onSnapshot} from "firebase/firestore";
-import {db} from "../login/FirebaseConfig.jsx";
+import {supabase} from "../login/SupabaseConfig.jsx";
 import {BsPersonFillAdd} from "react-icons/bs";
 
 
 
 export function Eleves() {
-    // const studentCollectionRef = collection(db, 'inscription')
-    // const [students, setStudents] = useState([])
-    // const [search, setSearch] = useState('students')
-    //
-    // useEffect(() => {
-    //     const test = onSnapshot(studentCollectionRef, snapshot => {
-    //         setStudents(snapshot.docs.map(doc => ({id: doc.id, data: doc.data()})))
-    //     })
-    //     return () => {
-    //         test()
-    //     }
-    // }, [])
+    const [students, setStudents] = useState([])
+    const [search, setSearch] = useState('students')
+
+    useEffect(() => {
+        const allStudents = async () => {
+            try {
+                const {data, error} = await supabase
+                    .from('students')
+                    .select('*')
+                    .textSearch('search_students', 'id')
+
+
+                if (data) {
+                    setStudents(data)
+                    setSearch(data)
+                    console.log(error)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+         allStudents()
+    }, [])
 
     // const handleDelete = async (id) => {
     //     const value = doc(db, 'inscription', id)
     //     await deleteDoc(value)
     // }
-
+    console.log(search)
     return (
         <>
                 <NavLink to={'/accueil'}>
@@ -46,7 +57,7 @@ export function Eleves() {
                 <div className="search_bar">
                     <FiSearch id="icon_search"/>
                     <input
-                        // onChange={e => setSearch(e.target.value)}
+                        onChange={e => setSearch(e.target.value)}
                         type="search" id="search_bar" placeholder="Cherchez un élève..."/>
                     <NavLink id="button_add_el" to={'/inscription'}><BsPersonFillAdd id="btn_add_el"/> Ajouter</NavLink>
                 </div>
@@ -66,39 +77,38 @@ export function Eleves() {
                             <th>Actions</th>
                         </tr>
                         </thead>
-                        {/*{students.filter(student => {*/}
-                        {/*    return search.toLowerCase() === 'students'*/}
-                        {/*        ? student*/}
-                        {/*        : student.data.nom.toLowerCase().includes(search)*/}
-                        {/*        || student.data.prenom.toLowerCase().includes(search)*/}
-                        {/*}).map((student) =>*/}
-                        {/*        // eslint-disable-next-line react/jsx-key*/}
-                                <tbody key='t' className="scroll">
+                        {students.filter(student => {
+                            return search === 'students'
+                            ? student
+                            : student.firstName.toLowerCase().includes(search)
+
+                        }).map((student) => (
+                                <tbody key={student.id} className="scroll">
                                 <tr>
-                                    <td>Méat</td>
-                                    <td>Wood Bert James</td>
-                                    <td>12-05-2001</td>
-                                    <td>Saint-Marc</td>
-                                    <td>Male</td>
-                                    <td>7e Année Fond</td>
-                                    <td>Fleurenceau</td>
-                                    <td>3608-7475</td>
+                                    <td>{student.firstName}</td>
+                                    <td>{student.lastName}</td>
+                                    <td>{student.birth}</td>
+                                    <td>{student.adressBirth}</td>
+                                    <td>{student.gender}</td>
+                                    <td>{student.class}</td>
+                                    <td>{student.adress}</td>
+                                    <td>{student.phone}</td>
                                     <td>
-                        <span className="actions">
-                            <NavLink id="nav"
-                                     // to={`/edit/${student.id}`
-                                     to={`/edit/`
-                            }>
-                            <BiSolidPencil/>
-                            </NavLink>
-                            <FaRegTrashAlt
-                              // onClick={() => handleDelete(student.id)}
-                            />
-                        </span>
+                                        <span className="actions">
+                                            <NavLink id="nav"
+                                                     // to={`/edit/${student.id}`
+                                                    to={`/edit/`
+                                            }>
+                                            <BiSolidPencil/>
+                                            </NavLink>
+                                            <FaRegTrashAlt
+                                              // onClick={() => handleDelete(student.id)}
+                                            />
+                                        </span>
                                     </td>
                                 </tr>
                                 </tbody>
-                        {/*)}*/}
+                        ))}
                     </table>
                 </div>
             </div>

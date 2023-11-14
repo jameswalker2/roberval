@@ -1,13 +1,12 @@
-// import {db} from './login/FirebaseConfig.jsx'
-// import {useCollectionData} from "react-firebase-hooks/firestore";
-// import {collection, addDoc} from "firebase/firestore";
 import {useEffect, useState} from "react";
 import {supabase} from "./login/SupabaseConfig.jsx";
+import Select from 'react-select'
 
 export function TestSubcollection() {
 	// const [nom, setNom] = useState('')
 	const [students, setStudents] = useState([])
 	const [collection, setCollection] = useState([])
+	const [selectedCategory, setSelectedCategory] = useState(null)
 	// const [classe, setClasse] = useState()
 	
 	
@@ -33,26 +32,33 @@ export function TestSubcollection() {
 				}
 			}
 	
-	// console.log(collection)
-	
-	const student_filter = (studentData) => {
-		const filterData = students.filter((student) => student.class === studentData);
-		setStudents(filterData)
-	}
-	
+
+
+	const collectionOptions = collection.map((category) => ({
+		value: category,
+		label: category
+	}))
+
+	const filterStudents = selectedCategory ? students.filter((student) => student.class === selectedCategory.value):students
+
 	return (
 		<>
 			<div>
-				<select onSelect={student_filter}
-					name="" id="">
-					{collection.map((student) => (
-						<option value={student}>{student}</option>
-						))}
-				</select>
-				
-					{students.map((student) => (
-						<h1 key={student.id}>{student.firstName} {student.lastName}</h1>
-					))}
+				<div style={{width: '500px', height: '50px', padding: '20px'}}>
+				<Select
+					options={collectionOptions}
+					isClearable
+					placeholder="Classe"
+					onChange={(selectOption) =>setSelectedCategory(selectOption)}
+					value={selectedCategory}
+				/>
+				</div>
+
+						{
+							filterStudents.map((student) => (
+									<h1 key={student.id}>{student.firstName} {student.lastName}</h1>
+								))
+						}
 			</div>
 		</>
 	)

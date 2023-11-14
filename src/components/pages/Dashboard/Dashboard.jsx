@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {NavBar} from "../../header/NavBar.jsx";
 import {NavLink} from "react-router-dom";
 import {DataIncome} from "../../accueil/DataIncome.jsx";
@@ -6,9 +6,29 @@ import {DataExpense} from '../../accueil/DataExpense.jsx'
 import {ChartIncome} from "../../accueil/ChartIncome.jsx";
 import {ChartExpense} from '../../accueil/ChartExpense.jsx'
 import {motion} from "framer-motion";
+import {supabase} from '../../login/SupabaseConfig.jsx'
 import './Dashboard.scss'
  export function  Dashboard() {
-    
+
+    const [text, setText] = useState([])
+
+     useEffect(() => {
+
+         async function numStudents () {
+             const {data, error} = await supabase
+                 .from('students')
+                 .select("*")
+
+             if(data){
+                 setText(data)
+             }
+             if (error) throw error
+         }
+
+          numStudents()
+     }, []);
+
+
     const [dataIncome, setDataIncome] = useState({
         labels: DataIncome.map((data) => data.week),
         datasets: [{
@@ -38,7 +58,8 @@ import './Dashboard.scss'
         },
         ],
     });
-   console.log(setDataIncome, setDataExpense)
+   // console.log(setDataIncome, setDataExpense)
+
 
     return (
         <>
@@ -55,7 +76,7 @@ import './Dashboard.scss'
                     <NavLink  to={'/eleves'} id="ct">
                         <div className="title">
                             <h3>Elève</h3>
-                            <h2>20.000</h2>
+                            <h2>{text.length}</h2>
                         </div>
                         <p>Total élèves</p>
                     </NavLink>

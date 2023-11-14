@@ -1,3 +1,13 @@
+.container-title {
+  position: relative;
+  display: inline-grid;
+  justify-items: center;
+  text-transform: uppercase;
+  margin-left: 30%;
+  font-size: 20px;
+  color: #fafafa;
+
+}
 .container-inscription {
   position: relative;
   margin: 30px;
@@ -39,11 +49,20 @@
   position: relative;
   display: inline-block;
   padding: 20px 10px 40px;
-    #gender {
+  #handicap {
+    margin-left: 950px;
+    height: 40px;
+    width: 350px;
+  }
+    #gender-handicap {
       position: absolute;
       display: flex;
       align-items: center;
-      margin: -10px 30px;
+      margin: 5px 30px;
+      #handicap-title {
+        margin-left: 260px;
+        font-size: 19px;
+      }
       legend {
         color: white;
         font-size: 20px;
@@ -52,15 +71,15 @@
       }
     }
 
-    #gender input {
+    #gender-handicap input {
       width: 20px;
       height: 20px;
       margin: 10px;
     }
-    #gender label {
+    #gender-handicap label {
       color: #f3f3f3;
       font-size: 20px;
-      margin: 0 10px;
+      margin: 0 2px;
     }
 
 
@@ -109,12 +128,53 @@
     }
 }
 
-.parent-info {
+.form-school {
   position: relative;
   display: inline-block;
   align-items: center;
   justify-content: center;
   padding: 20px 10px;
+  input, select {
+    padding: 0 20px;
+    margin: 20px 50px;
+    width: 350px;
+    height: 40px;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 20px;
+  }
+}
+
+.adress {
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+    input:nth-child(1) {
+    width: 1250px;
+  }
+  input {
+    padding: 0 20px;
+    width: 350px;
+    margin: 20px 50px;
+    height: 40px;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 20px;
+  }
+}
+
+.parent-info {
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px 80px;
   input {
     padding: 0 20px;
     margin: 20px 50px;
@@ -125,6 +185,29 @@
     border-radius: 5px;
     outline: none;
     font-size: 20px;
+}
+  #statut {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    margin: 5px 30px;
+    legend {
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 20px;
+    }
+  }
+
+  #statut input {
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+  }
+  #statut label {
+    color: #f3f3f3;
+    font-size: 20px;
+    margin: 0 2px;
   }
 }
 
