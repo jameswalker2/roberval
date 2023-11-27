@@ -1,67 +1,36 @@
-import {useEffect, useState} from "react";
-import {supabase} from "./login/SupabaseConfig.jsx";
-import Select from 'react-select'
+import { useState } from "react";
+import { supabase } from "./login/SupabaseConfig";
+import { useParams } from "react-router-dom";
+import { BsTypeH2 } from "react-icons/bs";
 
 export function TestSubcollection() {
-	// const [nom, setNom] = useState('')
-	const [students, setStudents] = useState([])
-	const [collection, setCollection] = useState([])
-	const [selectedCategory, setSelectedCategory] = useState(null)
-	// const [classe, setClasse] = useState()
-	
-	
-	
-		useEffect(() => {
-			getStudents();
-		}, []);
-			const getStudents = async () => {
-				try {
-					// eslint-disable-next-line no-unused-vars
-					const { data, error } = await supabase
-						.from("students")
-						.select('*');
+  const { id } = useParams();
+  const [amount, setAmount] = useState();
+  const [te, setTe] = useState([]);
 
-					if (data) {
-						setStudents(data);
-						setCollection(
-							[... new Set(data.map((student) => student.class))
-							])
-					}
-				} catch (error) {
-					console.log(error)
-				}
-			}
-	
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    const { data, error } = await supabase
+      .from("paie")
+      .update({ amount: amount })
+      .eq("id", 26)
+      .select("id");
 
-	const collectionOptions = collection.map((category) => ({
-		value: category,
-		label: category
-	}))
-
-	const filterStudents = selectedCategory ? students.filter((student) => student.class === selectedCategory.value):students
-
-	return (
-		<>
-			<div>
-				<div style={{width: '500px', height: '50px', padding: '20px'}}>
-				<Select
-					options={collectionOptions}
-					isClearable
-					placeholder="Classe"
-					onChange={(selectOption) =>setSelectedCategory(selectOption)}
-					value={selectedCategory}
-				/>
-				</div>
-
-						{
-							filterStudents.map((student) => (
-									<h1 key={student.id}>{student.firstName} {student.lastName}</h1>
-								))
-						}
-			</div>
-		</>
-	)
+    if (data) {
+      console.log("Succes !");
+      setTe(data);
+    } else {
+      console.log(error.message);
+    }
+  };
+  return (
+    <div>
+      <input type="text" onChange={(e) => setAmount(e.target.value)} />
+      <button onClick={handleSubmit}>Mettre à jour </button>
+      {te.map((t) => (
+        <h2>{t.amount}</h2>
+      ))}
+    </div>
+  );
 }
-
-

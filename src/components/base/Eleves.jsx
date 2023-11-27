@@ -8,61 +8,36 @@ import { supabase } from "../login/SupabaseConfig.jsx";
 import { BsPersonFillAdd } from "react-icons/bs";
 
 export function Eleves() {
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [searchResults, setSearchResults] = useState([]);
-  // const [error, setError] = useState(null);
-
-  // const allStudents = async () => {
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from("students")
-  //       .select("*")
-  //       .textSearch("firstName", searchQuery);
-
-  //     if (error) {
-  //       setError(error.message);
-  //     } else {
-  //       setSearchResults(data);
-  //     }
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
-
   const [searchQuery, setSearchQuery] = useState("");
-  // const [searchResults, setSearchResults] = useState([]);
   const [allResults, setAllResults] = useState([]);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchAllResults();
-  }, []);
+    const fetchAllResults = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("students")
+          .select("*")
+          .textSearch(searchQuery);
 
-  const fetchAllResults = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .textSearch(searchQuery);
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setAllResults(data);
-        // setSearchQuery(data);
+        if (data) {
+          setAllResults(data);
+        } else {
+          console.log(error.message);
+        }
+      } catch (error) {
+        console.log(error.message);
       }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-  console.log(allResults);
+    };
+
+    fetchAllResults();
+  }, [searchQuery]);
+
   return (
     <>
-      <NavLink to={"/accueil"}>
-        <BiArrowBack id="back" />
-      </NavLink>
       <div className="container_link_el">
-        <h1 id="container_h1">Eleves</h1>
+        <NavLink to={"/accueil"}>
+          <BiArrowBack id="back" />
+        </NavLink>
         <div>
           <NavLink className="link_el" to={"/accueil"}>
             Dashboard{" "}
@@ -73,8 +48,25 @@ export function Eleves() {
           </NavLink>
         </div>
       </div>
+      <div className="container_class">
+        <div className="class_items">
+          <h2>Classe NS I</h2>
+          <h1>23</h1>
+        </div>
+        <div className="class_items">
+          <h2>Classe NS II</h2>
+          <h1>50</h1>
+        </div>
+        <div className="class_items">
+          <h2>Classe NS IV</h2>
+          <h1>12</h1>
+        </div>
+      </div>
       <div className="container">
         <div className="search_bar">
+          <h2 style={{ color: "#4d00e4", margin: "0px 0" }}>
+            Liste des élèves
+          </h2>
           <FiSearch id="icon_search" />
           <input
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -87,7 +79,6 @@ export function Eleves() {
             <BsPersonFillAdd id="btn_add_el" /> Ajouter
           </NavLink>
         </div>
-        <h2 style={{ color: "white", margin: "20px 0" }}>Liste des élèves</h2>
         <div>
           <table className="table_el">
             <thead key="thead">
