@@ -1,17 +1,18 @@
 import { NavBar } from "../../header/NavBar";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import { useState } from "react";
 import { supabase } from "../../login/SupabaseConfig";
-import "./AddPaie.scss";
+import "./AddPay.scss";
 
-export function AddPaie() {
+export function AddPay() {
+  const { id } = useParams();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState("");
-  const [versement, setversement] = useState("");
   const [statut, setStatut] = useState("");
   const [date, setDate] = useState(null);
   const [mode, setMode] = useState(null);
@@ -19,9 +20,9 @@ export function AddPaie() {
   const handleSearch = async () => {
     try {
       const { data, error } = await supabase
-        .from("students")
+        .from("staffs")
         .select()
-        .ilike("firstName", searchQuery);
+        .ilike("name", searchQuery);
 
       if (error) {
         throw error;
@@ -35,31 +36,20 @@ export function AddPaie() {
 
   const handleTransferData = async (e) => {
     e.preventDefault();
+
     try {
       for (const row of searchResults) {
-        const {
-          lastName,
-          firstName,
-          lastFather,
-          lastMother,
-          linkPerson,
-          phone,
-          classe: studentClass,
-        } = row;
+        const { lastName, role, name, phone } = row;
 
-        const { error } = await supabase.from("paie").insert([
+        const { error } = await supabase.from("pay").insert([
           {
+            name,
             lastName,
-            firstName,
-            classe: studentClass,
-            lastMother,
-            lastFather,
-            linkPerson,
             phone,
             amount,
             balance: 5000,
-            versement,
             statut,
+            role,
             date,
             mode,
           },
@@ -68,26 +58,26 @@ export function AddPaie() {
           throw error;
         }
       }
-      for (const row of searchResults) {
-        const { lastName, name, classe: studentClass } = row;
-        const { error } = await supabase.from("history").insert([
-          {
-            lastName,
-            name,
-            classe: studentClass,
-            // phone,
-            amount,
-            balance,
-            versement,
-            statut,
-            date,
-            mode,
-          },
-        ]);
-        if (error) {
-          throw error;
-        }
-      }
+      // for (const row of searchResults) {
+      //   const { lastName, name, classe: studentClass } = row;
+      //   const { error } = await supabase.from("history").insert([
+      //     {
+      //       lastName,
+      //       name,
+      //       classe: studentClass,
+      //       // phone,
+      //       amount,
+      //       balance,
+      //       versement,
+      //       statut,
+      //       date,
+      //       mode,
+      //     },
+      //   ]);
+      //   if (error) {
+      //     throw error;
+      //   }
+      // }
       console.log("Data transfer completed successfully!");
       setSearchResults([]);
     } catch (error) {
@@ -95,8 +85,6 @@ export function AddPaie() {
     }
     setSearchQuery("");
   };
-
-  balance === 5000;
 
   return (
     <>
@@ -107,26 +95,26 @@ export function AddPaie() {
         exit={{ opacity: 0, scaleY: 0 }}
         transition={{ duration: 0.5, easeinout: [0.22, 1, 0.36, 1] }}>
         {/*  */}
-        <div className="container_addPaie">
-          <div className="addPaie_header">
-            <NavLink to={"/paiement"}>
+        <div className="container_addPay">
+          <div className="addPay_header">
+            <NavLink to={"/payroll"}>
               <BiArrowBack id="back" />
             </NavLink>
             <div>
-              <NavLink className="link_Addpaie" to={"/accueil"}>
+              <NavLink className="link_Addpay" to={"/accueil"}>
                 Dashboard
               </NavLink>
               <span>|</span>
-              <NavLink className="link_Addpaie" to={"/eleves"}>
-                Eleves
+              <NavLink className="link_Addpay" to={"/staffs"}>
+                Staffs
               </NavLink>
               <span>|</span>
-              <NavLink className="link_Addpaie" to={""}>
-                Ajouter un paiement
+              <NavLink className="link_Addpay" to={""}>
+                Ajouter un payroll
               </NavLink>
             </div>
           </div>
-          <div className="addPaie_body">
+          <div className="addPay_body">
             <div className="body_add">
               <h2>Ajouter un nouveau paiement</h2>
               {/*  */}
@@ -136,7 +124,7 @@ export function AddPaie() {
                   id="sr"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher l'étudiant..."
+                  placeholder="Rechercher avec le nom..."
                 />
                 <button id="bt_sr" onClick={handleSearch}>
                   Rechercher
@@ -148,24 +136,22 @@ export function AddPaie() {
                     <thead key="thead">
                       <tr>
                         <th>ID</th>
-                        <th>Classe</th>
                         <th>Nom</th>
                         <th>Prénom</th>
-                        <th>Mère</th>
-                        <th>Père</th>
-                        <th>Phone</th>
+                        <th>Adresse</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
                       </tr>
                     </thead>
-                    {searchResults.map((student) => (
-                      <tbody key={student}>
+                    {searchResults.map((staff) => (
+                      <tbody key={staff.staffs_id}>
                         <tr>
-                          <td>{student.id}</td>
-                          <td>{student.classe}</td>
-                          <td>{student.firstName}</td>
-                          <td>{student.lastName}</td>
-                          <td>{student.firstMother}</td>
-                          <td>{student.firstMother}</td>
-                          <td>{student.phone}</td>
+                          <td>0{staff.id}</td>
+                          <td>{staff.name}</td>
+                          <td>{staff.lastName}</td>
+                          <td>{staff.adress}</td>
+                          <td>{staff.phone}</td>
+                          <td>{staff.email}</td>
                         </tr>
                       </tbody>
                     ))}
@@ -175,7 +161,7 @@ export function AddPaie() {
                     <input
                       type="text"
                       onChange={(e) => setAmount(e.target.value)}
-                      placeholder="Montant Avancé"
+                      placeholder="Montant Avancée"
                       id="ma"
                     />
                     <input
@@ -185,18 +171,6 @@ export function AddPaie() {
                       placeholder="Balance"
                       id="bl"
                     />
-                    <select
-                      onChange={(e) => setversement(e.target.value)}
-                      name="verse"
-                      id="vr">
-                      <option value="0">Versement</option>
-                      <option value="Versement 1">Versement 1</option>
-                      <option value="Versement 2">Versement 2</option>
-                      <option value="Versement 3">Versement 3</option>
-                      <option value="Versement arierer">
-                        Versement arierer
-                      </option>
-                    </select>
                     <select
                       onChange={(e) => setStatut(e.target.value)}
                       name="stat"

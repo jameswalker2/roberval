@@ -13,6 +13,8 @@ import { AnimatePresence } from "framer-motion";
 import { TestSubcollection } from "./components/TestSubcollection.jsx";
 import { AddPaie } from "./components/pages/Paie/AddPaie.jsx";
 import { UpdatePaie } from "./components/pages/Paie/UpdatePaie.jsx";
+import { AddPay } from "./components/pages/Pay/AddPay.jsx";
+import { UpdatePay } from "./components/pages/Pay/UpdatePay.jsx";
 import "./App.scss";
 
 function App() {
@@ -32,7 +34,9 @@ function App() {
           <Route path="/edit/:id" element={<Edit />} />
           <Route path="/testsubcollection" element={<TestSubcollection />} />
           <Route path="/addpaie" element={<AddPaie />} />
-          <Route path="/:id" element={<UpdatePaie />} />
+          <Route path="/update-paie/:id" element={<UpdatePaie />} />
+          <Route path="/addpay" element={<AddPay />} />
+          <Route path="/update-pay/:id" element={<UpdatePay />} />
         </Routes>
       </AnimatePresence>
     </>

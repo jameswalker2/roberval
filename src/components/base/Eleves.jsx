@@ -42,67 +42,76 @@ export function Eleves() {
           <NavLink className="link_el" to={"/accueil"}>
             Dashboard{" "}
           </NavLink>
-          <span>|</span>
+          <span id="span">|</span>
           <NavLink className="link_el" to={"/paiement"}>
             Paiement
           </NavLink>
         </div>
       </div>
-      <div className="container_class">
-        <div className="class_items">
-          <h2>Classe NS I</h2>
-          <h1>23</h1>
-        </div>
-        <div className="class_items">
-          <h2>Classe NS II</h2>
-          <h1>50</h1>
-        </div>
-        <div className="class_items">
-          <h2>Classe NS IV</h2>
-          <h1>12</h1>
-        </div>
-      </div>
+
       <div className="container">
+        {/* <div className="container_class">
+          <div className="class_items card card-compact w-80 p-10 h-36  shadow-xl">
+            <h2>Effectifs Classe NS I</h2>
+            <h1 className="font-semibold text-4xl">23</h1>
+          </div>
+          <div className="class_items">
+            <h2>Classe NS II</h2>
+            <h1>50</h1>
+          </div>
+          <div className="class_items">
+            <h2>Classe NS IV</h2>
+            <h1>12</h1>
+          </div>
+        </div> */}
         <div className="search_bar">
-          <h2 style={{ color: "#4d00e4", margin: "0px 0" }}>
-            Liste des élèves
-          </h2>
+          <h2 className="font-bold text-color1 uppercase">Liste des élèves</h2>
           <FiSearch id="icon_search" />
           <input
             onChange={(e) => setSearchQuery(e.target.value)}
             value={searchQuery}
+            className="input text-xl bg-white rounded-full h-9 w-[30rem] p-5 px-9"
             type="search"
             id="search_bar"
-            placeholder="Cherchez un élève..."
+            placeholder="Cherchez avec le nom de l'étudiant..."
           />
           <NavLink id="button_add_el" to={"/inscription"}>
-            <BsPersonFillAdd id="btn_add_el" /> Ajouter
+            <BsPersonFillAdd id="btn_add_el" /> ajouter un nouvel élève
           </NavLink>
         </div>
-        <div>
-          <table className="table_el">
-            <thead key="thead">
+        <div className="overflow-x-auto rounded-xl w-full h-[38rem] bg-white">
+          <table className="table table-xs">
+            <thead
+              key="thead"
+              id="thead"
+              className="text-[16px] text-white bg-color2">
               <tr>
+                <th>ID</th>
                 <th>Nom</th>
-                <th className="expand_el">Prénom</th>
-                <th className="expand_el">Date de naissance</th>
-                <th className="expand_el">Lieu de naissance</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Lieu de naissance</th>
                 <th>Sexe</th>
-                <th className="expand_el">classe</th>
+                <th>classe</th>
                 <th>Adresse</th>
                 <th>Téléphone</th>
                 <th>Actions</th>
               </tr>
             </thead>
             {allResults
-              .filter((result) =>
-                result.firstName
-                  .toLowerCase()
-                  .includes(searchQuery.toLowerCase())
+              .filter(
+                (result) =>
+                  result.firstName
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                  result.lastName
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase())
               )
               .map((student) => (
-                <tbody key={student.id} className="scroll">
+                <tbody key={student.student_id} className="text-2xl">
                   <tr>
+                    <td>0{student.id}</td>
                     <td>{student.firstName}</td>
                     <td>{student.lastName}</td>
                     <td>{student.birth}</td>

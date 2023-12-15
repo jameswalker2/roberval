@@ -5,10 +5,10 @@ import { BiArrowBack } from "react-icons/bi";
 import { FaUserGraduate } from "react-icons/fa6";
 import { supabase } from "../../login/SupabaseConfig";
 import { useEffect } from "react";
-import "./UpdatePaie.scss";
 import moment from "moment";
+import "./UpdatePay.scss";
 
-export function UpdatePaie() {
+export function UpdatePay() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -19,9 +19,6 @@ export function UpdatePaie() {
   const [date, setDate] = useState("");
   const [mode, setUpdateMode] = useState("");
   const [name, setName] = useState("");
-  const [fatherName, setfatherName] = useState("");
-  const [motherName, setmotherName] = useState("");
-  const [linkPerson, setLinkPerson] = useState("");
   const [phone, setPhone] = useState("");
   const [classe, setClasse] = useState("");
   const [created_at, setCreated_at] = useState("");
@@ -29,18 +26,15 @@ export function UpdatePaie() {
   // const [results, setResults] = useState([]);
 
   useEffect(() => {
-    const fetchStudent = async () => {
+    const fetchStaff = async () => {
       const { data, error } = await supabase
-        .from("paie")
+        .from("pay")
         .select()
         .eq("id", id)
         .single();
 
       if (data) {
         setName(data.firstName);
-        setfatherName(data.lastFather);
-        setmotherName(data.lastMother);
-        setLinkPerson(data.linkPerson);
         setPhone(data.phone);
         setClasse(data.classe);
         setAmount(data.amount);
@@ -52,20 +46,20 @@ export function UpdatePaie() {
         setUpdateMode(data.mode);
         setLastName(data.lastName);
       } else {
-        navigate("/paiement", { replace: true });
+        navigate("/payroll", { replace: true });
         console.log(error);
       }
     };
 
-    fetchStudent();
+    fetchStaff();
   }, [id, navigate]);
-  console.log(name);
-  const handleUpdateFees = async (e) => {
+
+  const handleUpdatePay = async (e) => {
     e.preventDefault();
 
     try {
       const { data, error } = await supabase
-        .from("paie")
+        .from("pay")
         .update({ amount, balance, versement, statut, mode, date })
         .eq("id", id)
         .select("id");
@@ -77,25 +71,6 @@ export function UpdatePaie() {
       }
     } catch (error) {
       console.log(error);
-    }
-
-    const { error } = await supabase.from("history").insert([
-      {
-        name,
-        lastName,
-        classe,
-        phone,
-        amount,
-        balance,
-        versement,
-        statut,
-        date,
-        mode,
-      },
-    ]);
-
-    if (error) {
-      throw error;
     }
   };
 
@@ -136,15 +111,12 @@ export function UpdatePaie() {
               </span>
               <span id="list_info">
                 <h3>Nom du Père</h3>
-                <p>{fatherName}</p>
               </span>
               <span id="list_info">
                 <h3>Nom de la mère</h3>
-                <p>{motherName}</p>
               </span>
               <span id="list_info">
                 <h3>Personne Responsable</h3>
-                <p>{linkPerson}</p>
               </span>
             </div>
             <div id="info">
@@ -165,7 +137,7 @@ export function UpdatePaie() {
         </div>
         <div id="fees_info">
           <h2>Paiement info</h2>
-          <form onSubmit={handleUpdateFees}>
+          <form onSubmit={handleUpdatePay}>
             <input
               type="text"
               value={amount}

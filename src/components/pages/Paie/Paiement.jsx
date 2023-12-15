@@ -3,10 +3,9 @@ import { NavLink } from "react-router-dom";
 import { supabase } from "../../login/SupabaseConfig.jsx";
 import { motion } from "framer-motion";
 import { NavBar } from "../../header/NavBar.jsx";
-import Select from "react-select";
 import { FiMoreHorizontal } from "react-icons/fi";
-import "./Paiement.scss";
 import moment from "moment/moment.js";
+import "./Paiement.scss";
 
 export function Paiement() {
   const [studentsP, setStudentsP] = useState([]);
@@ -40,37 +39,14 @@ export function Paiement() {
     value: category,
     label: category,
   }));
-
-  const colorStyles = {
-    control: (baseStyles, state) => ({
-      ...baseStyles,
-      color: "#ffffffff",
-      backgroundColor: state.isFocused && "white",
-      boxShadow: "0 0 5px 0 rgba(0,0,0,0.2)",
-      border: "none",
-      outline: "0",
-      font: "inherit",
-      width: "25rem",
-      maxWidth: "25rem",
-      height: "2.8rem",
-      padding: "0 20px",
-      margin: "0 25px",
-      fontSize: "19px",
-      borderRadius: "10px",
-    }),
-    option: (styles, { data }) => {
-      return { ...styles, width: data.width ? "20rem" : "28rem", color: "red" };
-    },
-  };
+  console.log(setSelectedCategory);
 
   const filterStudents = selectedCategory
-    ? studentsP.filter((student) => student.classe === selectedCategory.value)
+    ? studentsP.filter((student) => student.classe === selectedCategory)
     : studentsP;
-
   return (
     <>
       <NavBar />
-
       <div className="container_link_paie">
         <h1 id="container_h1">Paiement</h1>
         <div>
@@ -93,22 +69,35 @@ export function Paiement() {
             <h2>Selectionner les critères</h2>
             <p>Chercher par classe ou par nom directement</p>
             <div id="form_search">
-              <Select
-                isClearable
-                styles={colorStyles}
-                options={collectionOptions}
-                placeholder="Classe"
-                onChange={(selectOption) => setSelectedCategory(selectOption)}
-                value={selectedCategory}
-              />
+              <div className="mx-9 rounded-2xl w-96">
+                <select
+                  title="tes"
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="select bg-slate-50 shadow-md text-gray-400 text-[19px] select-bordered  w-full max-w-xs">
+                  <option
+                    className="text-color2 font-semibold text-[19px]"
+                    disabled
+                    selected>
+                    Selectionner par Classe
+                  </option>
+                  {collectionOptions.map((option) => (
+                    <option
+                      className="text-red-600"
+                      key={option.value}
+                      value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <input
-                placeholder="Entrez le nom de l'étudiant..."
+                placeholder="Rechercher avec le nom de l'étudiant..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 type="search"
                 id="search"
               />
-              <NavLink className="button" to={"/addPaie"}>
+              <NavLink className="button" to={"/addpaie"}>
                 + Add a new
               </NavLink>
             </div>
@@ -125,6 +114,7 @@ export function Paiement() {
                   <th className="expand_bar">Date de création</th>
                   <th className="expand_bar_2">Montant Avancée</th>
                   <th className="expand_bar_2">Balance</th>
+                  <th className="expand_bar_2">Date</th>
                   <th className="expand_bar_2">Versement</th>
                   <th className="expand_bar_2">Statut</th>
                   <th className="expand_bar_2">Action</th>
@@ -137,7 +127,7 @@ export function Paiement() {
                 .map((student) => (
                   <tbody key={student.id} className="scroll">
                     <tr>
-                      <td>{student.id}</td>
+                      <td>0{student.id}</td>
                       <td>{student.classe}</td>
                       <td className="expand_bar">
                         {student.firstName} {student.lastName}
@@ -145,6 +135,7 @@ export function Paiement() {
                       <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
                       <td>{student.amount}</td>
                       <td>{student.balance}</td>
+                      <td>{student.date}</td>
                       <td>{student.versement}</td>
                       <td
                         id="non"
@@ -162,7 +153,7 @@ export function Paiement() {
                       </td>
                       <td>
                         <span className="actions">
-                          <NavLink to={"/" + student.id}>
+                          <NavLink to={"/update-paie/" + student.id}>
                             <FiMoreHorizontal />
                           </NavLink>
                         </span>

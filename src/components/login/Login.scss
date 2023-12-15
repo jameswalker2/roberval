@@ -13,10 +13,10 @@
     height: 80%;
     align-items: center;
     border-radius: 30px 0 0 30px;
-    background-color: #FFA901   ;
-      #img_roberval {
-        //display: block;
-        //margin: 50px auto;
+    background-color: #ffa901;
+    #img_roberval {
+      //display: block;
+      //margin: 50px auto;
     }
   }
 
@@ -30,38 +30,35 @@
     height: 80%;
     margin-left: 50%;
     border-radius: 0 30px 30px 0;
-      .container_form_title {
-        text-align: center;
-        color: white;
-        text-transform: uppercase;
-          #h1_ir {
-            margin: 20px 0 0 0;
-            font-size: 40px;
-            height: 150px;
-          }
-          #h3_i{
-            text-transform: uppercase;
-            font-weight: 600;
-            height: 100px;
-          }
-          #h2_s {
-            color: #FFA901 ;
-            font-size: 20px;
-          }
+    .container_form_title {
+      text-align: center;
+      color: white;
+      text-transform: uppercase;
+      #h1_ir {
+        margin: 20px 0 0 0;
+        font-size: 35px;
+        font-weight: 800;
+        height: 150px;
+      }
+      #h2_s {
+        color: #ffd001;
+        // font-size: 20px;
+      }
     }
     form {
       padding: 0 30px;
-        .infield {
+      .infield {
+        position: relative;
+        margin: 20px auto;
+        width: 100%;
+        svg {
           position: relative;
-          margin: 40px auto;
+          top: 4.2rem;
+          left: 10px;
+        }
+        input {
           width: 100%;
-          svg{
-            position: relative;
-            top: 40px;
-            left: 10px;
-          }
-        input{
-          width: 100%;
+          height: 7vh;
           padding: 15px 60px;
           background-color: #f3f3f3;
           border: none;
@@ -69,49 +66,48 @@
           outline: none;
           font-size: 20px;
         }
-      #email,#password {
-        color: white;
-        font-size: 20px;
-        font-weight: 700;
-        margin: -30px;
+        #email,
+        #password {
+          color: white;
+          font-size: 20px;
+          font-weight: 00;
+        }
       }
-        }
-        #inline {
-          position: absolute;
-          left: 50%;
-          top: 99.9%;
-          transform: translate(-50%);
-          width: 0;
-          height: 4px;
-          background: #FFA901;
-          transition: 0.3s;
-        }
-          input:focus~#inline {
-            width: 100%;
-          }
-        button {
-          padding: 10px 50px;
-          border-radius: 50px;
-          border: none;
-          margin: 10px 120px;
-          background-color: #FFA901;
-          font-size: 25px;
-          color: #f3f3f3;
-          font-weight: 600;
-          text-decoration: none;
-          cursor: pointer;
-          }
-          button:hover {
-            background-color: white;
-            color: #FFA901;
-          }
+      #inline {
+        position: absolute;
+        left: 50%;
+        top: 99.9%;
+        transform: translate(-50%);
+        width: 0;
+        height: 4px;
+        background: #ffa901;
+        transition: 0.3s;
+      }
+      input:focus ~ #inline {
+        width: 100%;
+      }
+      button {
+        padding: 10px 50px;
+        border-radius: 50px;
+        border: none;
+        margin: 25px 9rem;
+        background-color: #ffa901;
+        font-size: 15px;
+        color: #f3f3f3;
+        font-weight: 600;
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: white;
+        color: #ffa901;
+      }
     }
   }
   #validation {
     color: #ff2e2e;
     font-size: 20px;
-    margin: -30px 0 10px auto;
+    margin: -10px auto;
   }
 }
-
-

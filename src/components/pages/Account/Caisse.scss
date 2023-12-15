@@ -1,7 +1,69 @@
 .container_caisse {
   position: relative;
   width: 80%;
-  height: 65rem;
-  left: 16%;
-  padding-top: 50px;
+  height: 43.5rem;
+  left: 15%;
+  // padding-top: 50px;
+
+  .card_normal {
+    padding: 50px 0px;
+    display: flex;
+    justify-content: center;
+    margin-left: 10px;
+    .card {
+      margin: auto 10px;
+    }
+  }
+  #expense {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.221),
+      rgba(255, 0, 0, 0.245)
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  #revenu {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.221),
+      rgba(0, 252, 67, 0.245)
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  #bank {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.127),
+      rgba(0, 0, 0, 0.245)
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .card_secondaire {
+    display: flex;
+    .card_chart {
+      background-color: #ffff;
+      margin-left: 20px;
+      border-radius: 15px;
+      padding: 10px;
+      width: 47.5rem;
+      height: 25rem;
+      padding: 20px;
+    }
+    .card_recent {
+      background-color: #ffff;
+      margin-left: 20px;
+      border-radius: 15px;
+      padding: 20px;
+      width: 23.5rem;
+      .content_recent div {
+        display: inline-flex;
+        // padding: 30px;
+        // margin: 30px;
+      }
+    }
+  }
 }

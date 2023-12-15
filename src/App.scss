@@ -2,16 +2,25 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Akshar', sans-serif;
+  font-family: "Akshar", sans-serif;
 }
 
 body {
-  background-image: linear-gradient(to right bottom, #a274ff, #9764ff, #8a54ff, #7d43ff, #6e2fff, #6323f6, #5915ed, #4d00e4, #4600d0, #4000bd, #3900aa, #330098);
+  background-image: linear-gradient(
+    to right bottom,
+    #a274ff,
+    #9764ff,
+    #8a54ff,
+    #7d43ff,
+    #6e2fff,
+    #6323f6,
+    #5915ed,
+    #4d00e4,
+    #4600d0,
+    #4000bd,
+    #3900aa,
+    #330098
+  );
   display: grid;
   overflow: auto;
 }
-
-
-
-
-
