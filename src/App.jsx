@@ -6,7 +6,6 @@ import { Payroll } from "./components/pages/Pay/Payroll.jsx";
 import { Caisse } from "./components/pages/Account/Caisse.jsx";
 import { Inscription } from "./components/base/Inscription.jsx";
 import { Staffs } from "./components/base/Staffs.jsx";
-import { Profs } from "./components/base/Profs.jsx";
 import { Eleves } from "./components/base/Eleves.jsx";
 import { Edit } from "./components/base/Edit.jsx";
 import { AnimatePresence } from "framer-motion";
@@ -29,7 +28,6 @@ function App() {
           <Route path="/caisse" element={<Caisse />} />
           <Route path="/inscription" element={<Inscription />} />
           <Route path="/staffs" element={<Staffs />} />
-          <Route path="/profs" element={<Profs />} />
           <Route path="/eleves" element={<Eleves />} />
           <Route path="/edit/:id" element={<Edit />} />
           <Route path="/testsubcollection" element={<TestSubcollection />} />
