@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { BiArrowBack, BiSolidPencil } from "react-icons/bi";
+import {NavLink, useParams} from "react-router-dom";
+import {BiArrowBack, BiSolidPencil} from "react-icons/bi";
 import "./Eleves.scss";
 import { FiSearch } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { supabase } from "../login/SupabaseConfig.jsx";
 import { BsPersonFillAdd } from "react-icons/bs";
 
 export function Eleves() {
+  const {id} = useParams()
   const [searchQuery, setSearchQuery] = useState("");
   const [allResults, setAllResults] = useState([]);
 
@@ -28,19 +29,27 @@ export function Eleves() {
         console.log(error.message);
       }
     };
-
+    
     fetchAllResults();
   }, [searchQuery]);
-
+  
+  const handleDelete = async () => {
+    const {error} = await supabase.from("students").delete().eq("id", id)
+    
+    if (error) {
+      console.log(error)
+    }
+  }
+  
   return (
-    <>
-      <div className="container_link_el">
-        <NavLink to={"/accueil"}>
-          <BiArrowBack id="back" />
-        </NavLink>
-        <div>
-          <NavLink className="link_el" to={"/accueil"}>
-            Dashboard{" "}
+      <>
+        <div className="container_link_el">
+          <NavLink to={"/accueil"}>
+            <BiArrowBack id="back"/>
+          </NavLink>
+          <div>
+            <NavLink className="link_el" to={"/accueil"}>
+              Dashboard{" "}
           </NavLink>
           <span id="span">|</span>
           <NavLink className="link_el" to={"/paiement"}>
@@ -80,63 +89,66 @@ export function Eleves() {
           </NavLink>
         </div>
         <div className="overflow-x-auto rounded-xl w-full h-[38rem] bg-white">
-          <table className="table table-xs">
-            <thead
-              key="thead"
-              id="thead"
-              className="text-[16px] text-white bg-color2">
-              <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Date de naissance</th>
-                <th>Lieu de naissance</th>
-                <th>Sexe</th>
-                <th>classe</th>
-                <th>Adresse</th>
-                <th>Téléphone</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            {allResults
-              .filter(
-                (result) =>
-                  result.firstName
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase()) ||
-                  result.lastName
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase())
-              )
-              .map((student) => (
-                <tbody key={student.student_id} className="text-2xl">
-                  <tr>
-                    <td>0{student.id}</td>
-                    <td>{student.firstName}</td>
-                    <td>{student.lastName}</td>
-                    <td>{student.birth}</td>
-                    <td>{student.adressBirth}</td>
-                    <td>{student.gender}</td>
-                    <td>{student.classe}</td>
-                    <td>{student.adress}</td>
-                    <td>{student.phone}</td>
-                    <td>
+          {allResults.length > 0 ? (
+              <table className="table table-xs">
+                <thead
+                    key="thead"
+                    id="thead"
+                    className="text-[16px] text-white bg-color2">
+                <tr>
+                  <th>ID</th>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Date de naissance</th>
+                  <th>Lieu de naissance</th>
+                  <th>Sexe</th>
+                  <th>classe</th>
+                  <th>Adresse</th>
+                  <th>Téléphone</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                {allResults
+                    .filter(
+                        (result) =>
+                            result.firstName
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()) ||
+                            result.lastName
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                    )
+                    .map((student) => (
+                        <tbody key={student.student_id} className="text-2xl">
+                        <tr>
+                          <td>0{student.id}</td>
+                          <td>{student.firstName}</td>
+                          <td>{student.lastName}</td>
+                          <td>{student.birth}</td>
+                          <td>{student.adressBirth}</td>
+                          <td>{student.gender}</td>
+                          <td>{student.classe}</td>
+                          <td>{student.adress}</td>
+                          <td>{student.phone}</td>
+                          <td>
                       <span className="actions">
                         <NavLink
-                          id="nav"
-                          // to={`/edit/${student.id}`
-                          to={`/edit/`}>
-                          <BiSolidPencil />
+                            id="nav"
+                            // to={`/edit/${student.id}`
+                            to={`/edit/`}>
+                          <BiSolidPencil/>
                         </NavLink>
                         <FaRegTrashAlt
-                        // onClick={() => handleDelete(student.id)}
+                            onClick={handleDelete}
                         />
                       </span>
-                    </td>
-                  </tr>
-                </tbody>
-              ))}
-          </table>
+                          </td>
+                        </tr>
+                        </tbody>
+                    ))}
+              </table>) : (
+              <p className="text-2xl flex justify-center mt-40">Aucune donnée trouvé</p>
+          )}
         </div>
       </div>
     </>

@@ -2,30 +2,46 @@ import { useState } from "react";
 import { supabase } from "./SupabaseConfig.jsx";
 import { useNavigate } from "react-router-dom";
 import imageRoberval from "../assets/welcom_to_roberval.svg";
+import * as Yup from 'yup';
 import "./Login.scss";
+import {toast, Toaster} from "react-hot-toast";
 
 export function Login() {
   let navigate = useNavigate();
-
+  
   const [validation, setValidation] = useState("");
   const [loadingData, setLoadingData] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
+  
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Adresse e-mail invalide').required('Champ e-mail requis'),
+    password: Yup.string().required('Champ password requis'),
+  });
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
+      await validationSchema.validate({email, password}, {abortEarly: false})
+      
       setLoadingData(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const {data, error} = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
-      if (error) throw error;
+      if (error) throw error
       navigate("/accueil");
       console.log(data);
     } catch (error) {
-      setValidation("Email ou Password est incorrect");
+      if (error.name === 'ValidationError') {
+        error.errors.forEach((validationError) => {
+          toast.error(validationError)
+        });
+      } else {
+        toast.error("Email ou Password est incorrect")
+      }
     } finally {
       setLoadingData(false);
     }
@@ -38,9 +54,7 @@ export function Login() {
           <img width="500" src={imageRoberval} alt="svg" id="img_roberval" />
         </div>
         <div className="container_form">
-          {loadingData ? (
-            ""
-          ) : (
+          {loadingData ? (<div className="loader"></div>) : (
             <form id="form" onSubmit={handleSubmit}>
               <div className="container_form_title">
                 <h1 id="h1_ir">institution mixte Roberval </h1>
@@ -90,10 +104,10 @@ export function Login() {
                 />
                 <label id="inline"></label>
               </div>
-              <p id="validation">{validation}</p>
               <button type="submit">Connecter</button>
             </form>
           )}
+          <Toaster position={"top-right"}/>
         </div>
       </div>
     </>
