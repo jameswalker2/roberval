@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { NavBar } from "../../header/NavBar";
+import { NavBar } from "./Navbar/NavBar.jsx";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
-import { FaUserGraduate } from "react-icons/fa6";
-import { supabase } from "../../login/SupabaseConfig";
+import { supabase } from "../Config/SupabaseConfig.jsx";
 import { useEffect } from "react";
 import moment from "moment";
 import "./UpdatePay.scss";
+import {FaRegUser} from "react-icons/fa";
+import {toast, Toaster} from "react-hot-toast";
 
 export function UpdatePay() {
   const { id } = useParams();
@@ -19,11 +20,12 @@ export function UpdatePay() {
   const [date, setDate] = useState("");
   const [mode, setUpdateMode] = useState("");
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [classe, setClasse] = useState("");
-  const [created_at, setCreated_at] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [results, setResults] = useState([]);
+  const [role, setRole] = useState("");
+  const [phone, setPhone] = useState("");
+  const [created_at, setCreated_at] = useState("");
+  const [nouveauMontant, setNouveauMontant] = useState(0)
+
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -34,9 +36,10 @@ export function UpdatePay() {
         .single();
 
       if (data) {
-        setName(data.firstName);
+        setName(data.name);
+        setLastName(data.lastName);
+        setRole(data.role);
         setPhone(data.phone);
-        setClasse(data.classe);
         setAmount(data.amount);
         setUpdateBalance(data.balance);
         setUpdateVersement(data.versement);
@@ -44,7 +47,6 @@ export function UpdatePay() {
         setDate(data.date);
         setCreated_at(data.created_at);
         setUpdateMode(data.mode);
-        setLastName(data.lastName);
       } else {
         navigate("/payroll", { replace: true });
         console.log(error);
@@ -58,43 +60,52 @@ export function UpdatePay() {
     e.preventDefault();
 
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("pay")
-        .update({ amount, balance, versement, statut, mode, date })
+        .update({ amount: montantTotal, balance: testAmount, versement, statut, mode, date })
         .eq("id", id)
         .select("id");
 
-      if (data) {
-        console.log(data);
-      } else {
-        console.log(error.message);
-      }
+     if (error) {
+       throw error;
+     } else {
+       toast.success("Payroll mise à jour avec success !")
+       window.scrollTo({ top: 0, behavior: "smooth" });
+     }
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(amount - 5000);
+
+  const handleNouveauMontantChange = (e) => {
+    setNouveauMontant(parseFloat(e.target.value) || 0);
+  };
+
+  let testAmount = balance - nouveauMontant;
+
+  let montantTotal = amount + nouveauMontant;
 
   return (
     <>
       <NavBar />
+      <Toaster position={"top-right"}/>
       <div className="container_edit">
-        <div className="edit_header">
-          <NavLink to={"/paiement"}>
-            <BiArrowBack id="back" />
+        <div className="flex w-[75.9rem] items-center justify-between h-11 mb-10 bg-white px-10 rounded-full">
+          <NavLink className="text-2xl text-color1" to={"/payroll"}>
+            <BiArrowBack />
           </NavLink>
           <div>
-            <NavLink className="link_Addpaie" to={"/accueil"}>
+            <NavLink className="font-medium text-color2 hover:text-color1" to={"/dashboard"}>
               Dashboard
             </NavLink>
-            <span>|</span>
-            <NavLink className="link_Addpaie" to={"/eleves"}>
-              Eleves
+            <span className="m-5">|</span>
+            <NavLink className="font-medium text-color2 hover:text-color1" to={"/staffs"}>
+              Staffs
             </NavLink>
-            <span>|</span>
-            <NavLink className="link_Addpaie" to={"/eleves"}>
-              Mettre à jour
+            <span className="m-5">|</span>
+            <NavLink className="font-medium text-color2 hover:text-color1" >
+              Mettre à Jour
             </NavLink>
           </div>
         </div>
@@ -102,35 +113,24 @@ export function UpdatePay() {
           <div id="stud_info">
             <h2>info de l&apos;édutiant</h2>
             <div id="icon_fees">
-              <FaUserGraduate id="icon" />
+              <FaRegUser className={"w-32 h-32 text-color1"}/>
             </div>
             <div id="info">
               <span id="list_info">
-                <h3>Nom Complet</h3>
+                <h3>Prénom</h3>
                 <p>{name}</p>
               </span>
               <span id="list_info">
-                <h3>Nom du Père</h3>
+                <h3>Nom</h3>
+                <p>{lastName}</p>
               </span>
               <span id="list_info">
-                <h3>Nom de la mère</h3>
+                <h3>Fonction</h3>
+                <p>{role}</p>
               </span>
               <span id="list_info">
-                <h3>Personne Responsable</h3>
-              </span>
-            </div>
-            <div id="info">
-              <span id="list_info">
-                <h3>Téléphone</h3>
+                <h3>Numéro</h3>
                 <p>{phone}</p>
-              </span>
-              <span id="list_info">
-                <h3>Classe</h3>
-                <p>{classe}</p>
-              </span>
-              <span id="list_info">
-                <h3>ID</h3>
-                <p>0{id}</p>
               </span>
             </div>
           </div>
@@ -139,80 +139,61 @@ export function UpdatePay() {
           <h2>Paiement info</h2>
           <form onSubmit={handleUpdatePay}>
             <input
-              type="text"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-              placeholder="Montant Avancé"
-              id="ma"
-            />
+                type="text" placeholder="Montant Avancé"
+                value={nouveauMontant}
+                onChange={handleNouveauMontantChange}
+                className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mt-10 mr-10 mb-10"/>
             <input
-              type="text"
-              value={balance}
-              onChange={(e) => setUpdateBalance(e.target.value)}
-              placeholder="Balance"
-              id="bl"
-            />
+                type="text"  placeholder="Balance"
+                value={testAmount}
+                onChange={(e) => setUpdateBalance(e.target.value)}
+                className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"/>
             <select
-              value={versement}
-              onChange={(e) => setUpdateVersement(e.target.value)}
-              id="vr_update">
-              <option value="">Versement</option>
-              <option value="Versement 1">Versement 1</option>
-              <option value="Versement 2">Versement 2</option>
-              <option value="Versement 3">Versement 3</option>
-              <option value="Versement arierer">Versement arierer</option>
-            </select>
-            <select
-              value={statut}
-              onChange={(e) => setUpdateStatut(e.target.value)}
-              id="st_update">
+                value={statut}
+                onChange={(e) => setUpdateStatut(e.target.value)}
+                className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs mr-10">
               <option value="">Statut</option>
               <option value="Non Payé">Non Payé</option>
               <option value="Avance">Avance</option>
               <option value="Payé">Payé</option>
             </select>
             <select
-              value={mode}
-              onChange={(e) => setUpdateMode(e.target.value)}
-              id="st_update">
+                value={mode}
+                onChange={(e) => setUpdateMode(e.target.value)}
+                className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs mr-10">
               <option value="">Mode de paiement</option>
               <option value="Cash">Cash</option>
               <option value="Banque">Banque</option>
               <option value="Chèque">Chèque</option>
             </select>
             <input
-              value={date}
-              type="date"
-              onChange={(e) => setDate(e.target.value)}
-            />
-            <button id="bt" type="submit">
-              Ajouter paiement
-            </button>
+                value={date} type="date"
+                className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"
+                onChange={(e) => setDate(e.target.value)}/>
+            <button className="btn bg-color2 text-white border-none mt-10 mb-10 hover:bg-color3" type="submit">Ajouter paiement</button>
           </form>
           {/*  */}
           <h2>Résultat</h2>
-          <table className="table_fees">
-            <thead key="thead">
-              <tr>
-                <th className="expand_bar">Versement</th>
-                <th className="expand_bar">Date de création</th>
-                <th className="expand_bar_2">Montant Avancée</th>
-                <th className="expand_bar_2">Balance</th>
-                <th className="expand_bar_2">Date</th>
-                <th className="expand_bar_2">Mode de paiement</th>
-                <th className="expand_bar_2">Statut</th>
-              </tr>
+          <table className="table">
+            <thead key="thead" className="text-color1">
+            <tr>
+              <th>Date de création</th>
+              <th>Montant Avancée</th>
+              <th>Balance</th>
+              <th>Date</th>
+              <th>Mode de paiement</th>
+              <th>Statut</th>
+            </tr>
             </thead>
             <tbody key="f" className="scroll">
-              <tr>
-                <td>{versement}</td>
-                <td>{moment(created_at).format("DD/MM/YYYY")}</td>
-                <td>{amount}</td>
-                <td>{balance}</td>
-                <td>{date}</td>
-                <td>{mode}</td>
-                <td>{statut}</td>
-              </tr>
+            <tr>
+              <td>{moment(created_at).format("DD/MM/YYYY")}</td>
+              <td>{montantTotal}</td>
+              <td>{testAmount}</td>
+              <td>{date}</td>
+              <td>{mode}</td>
+              <td>{statut}</td>
+            </tr>
             </tbody>
           </table>
         </div>

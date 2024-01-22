@@ -23,7 +23,7 @@ export function NavBar() {
                             <NavLink
                                 style={activeStyle}
                                 className='test'
-                                to={'/accueil'}>
+                                to={'/dashboard'}>
                                 <BiSolidDashboard className="img"/>
                                 Dashboard
                             </NavLink>

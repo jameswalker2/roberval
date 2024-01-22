@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { NavBar } from "../../header/NavBar";
+import { useState, useEffect } from "react";
+import { NavBar } from "./Navbar/NavBar.jsx";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../Config/SupabaseConfig.jsx";
 import { BiArrowBack } from "react-icons/bi";
 import { FaUserGraduate } from "react-icons/fa6";
-import { supabase } from "../../login/SupabaseConfig";
-import { useEffect } from "react";
-import "./UpdatePaie.scss";
 import moment from "moment";
+import "./UpdatePaie.scss";
+import {toast, Toaster} from "react-hot-toast";
 
 export function UpdatePaie() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [amount, setAmount] = useState([]);
+  const [amount, setAmount] = useState("");
   const [balance, setUpdateBalance] = useState("");
   const [versement, setUpdateVersement] = useState("");
   const [statut, setUpdateStatut] = useState("");
@@ -25,8 +25,8 @@ export function UpdatePaie() {
   const [phone, setPhone] = useState("");
   const [classe, setClasse] = useState("");
   const [created_at, setCreated_at] = useState("");
-  const [lastName, setLastName] = useState("");
-  // const [results, setResults] = useState([]);
+  const [lastName, setLastName] = useState("")
+  const [nouveauMontant, setNouveauMontant] = useState(0)
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -55,6 +55,7 @@ export function UpdatePaie() {
         navigate("/paiement", { replace: true });
         console.log(error);
       }
+
     };
 
     fetchStudent();
@@ -64,62 +65,53 @@ export function UpdatePaie() {
     e.preventDefault();
 
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("paie")
-        .update({ amount, balance, versement, statut, mode, date })
+        .update({ amount: montantTotal, balance: testAmount, versement, statut, mode, date })
         .eq("id", id)
         .select("id");
 
-      if (data) {
-        console.log(data);
+      if (error) {
+        throw error
       } else {
-        console.log(error.message);
+        toast.success("Paiement ajouter avec success !")
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (error) {
       console.log(error);
     }
-
-    const { error } = await supabase.from("history").insert([
-      {
-        name,
-        lastName,
-        classe,
-        phone,
-        amount,
-        balance,
-        versement,
-        statut,
-        date,
-        mode,
-      },
-    ]);
-
-    if (error) {
-      throw error;
     }
+
+  const handleNouveauMontantChange = (e) => {
+    setNouveauMontant(parseFloat(e.target.value) || 0);
   };
 
-  console.log(amount - 5000);
+  let testAmount = balance - nouveauMontant;
+
+  let montantTotal = amount + nouveauMontant;
+
+
 
   return (
     <>
       <NavBar />
+      <Toaster position={"top-right"}/>
       <div className="container_edit">
-        <div className="edit_header">
-          <NavLink to={"/paiement"}>
-            <BiArrowBack id="back" />
+        <div className="flex w-[75.9rem] items-center justify-between h-11 mb-10 bg-white px-10 rounded-full">
+          <NavLink className="text-2xl text-color1" to={"/paiement"}>
+            <BiArrowBack />
           </NavLink>
           <div>
-            <NavLink className="link_Addpaie" to={"/accueil"}>
+            <NavLink className="font-medium text-color2 hover:text-color1" to={"/dashboard"}>
               Dashboard
             </NavLink>
-            <span>|</span>
-            <NavLink className="link_Addpaie" to={"/eleves"}>
+            <span className="m-5">|</span>
+            <NavLink className="font-medium text-color2 hover:text-color1" to={"/eleves"}>
               Eleves
             </NavLink>
-            <span>|</span>
-            <NavLink className="link_Addpaie" to={"/eleves"}>
-              Mettre à jour
+            <span className="m-5">|</span>
+            <NavLink className="font-medium text-color2 hover:text-color1" to={"/paiement"}>
+              Paiement
             </NavLink>
           </div>
         </div>
@@ -131,33 +123,33 @@ export function UpdatePaie() {
             </div>
             <div id="info">
               <span id="list_info">
-                <h3>Nom Complet</h3>
+                <h3 className={"font-semibold"}>Nom Complet</h3>
                 <p>{name}</p>
               </span>
               <span id="list_info">
-                <h3>Nom du Père</h3>
+                <h3 className={"font-semibold"}>Nom du Père</h3>
                 <p>{fatherName}</p>
               </span>
               <span id="list_info">
-                <h3>Nom de la mère</h3>
+                <h3 className={"font-semibold"}>Nom de la mère</h3>
                 <p>{motherName}</p>
               </span>
               <span id="list_info">
-                <h3>Personne Responsable</h3>
+                <h3 className={"font-semibold"}>Personne Responsable</h3>
                 <p>{linkPerson}</p>
               </span>
             </div>
             <div id="info">
               <span id="list_info">
-                <h3>Téléphone</h3>
+                <h3 className={"font-semibold"}>Téléphone</h3>
                 <p>{phone}</p>
               </span>
               <span id="list_info">
-                <h3>Classe</h3>
+                <h3 className={"font-semibold"}>Classe</h3>
                 <p>{classe}</p>
               </span>
               <span id="list_info">
-                <h3>ID</h3>
+                <h3 className={"font-semibold"}>ID</h3>
                 <p>0{id}</p>
               </span>
             </div>
@@ -167,23 +159,18 @@ export function UpdatePaie() {
           <h2>Paiement info</h2>
           <form onSubmit={handleUpdateFees}>
             <input
-              type="text"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-              placeholder="Montant Avancé"
-              id="ma"
-            />
+              type="text" placeholder="Montant Avancé"
+              value={nouveauMontant}
+              onChange={handleNouveauMontantChange}
+              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mt-10 mr-10 mb-10"/>
             <input
-              type="text"
-              value={balance}
+              type="text" value={testAmount} placeholder="Balance"
               onChange={(e) => setUpdateBalance(e.target.value)}
-              placeholder="Balance"
-              id="bl"
-            />
+              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"/>
             <select
               value={versement}
-              onChange={(e) => setUpdateVersement(e.target.value)}
-              id="vr_update">
+              className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs mr-10"
+              onChange={(e) => setUpdateVersement(e.target.value)}>
               <option value="">Versement</option>
               <option value="Versement 1">Versement 1</option>
               <option value="Versement 2">Versement 2</option>
@@ -193,7 +180,7 @@ export function UpdatePaie() {
             <select
               value={statut}
               onChange={(e) => setUpdateStatut(e.target.value)}
-              id="st_update">
+              className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs mr-10">
               <option value="">Statut</option>
               <option value="Non Payé">Non Payé</option>
               <option value="Avance">Avance</option>
@@ -202,25 +189,22 @@ export function UpdatePaie() {
             <select
               value={mode}
               onChange={(e) => setUpdateMode(e.target.value)}
-              id="st_update">
+              className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs mr-10">
               <option value="">Mode de paiement</option>
               <option value="Cash">Cash</option>
               <option value="Banque">Banque</option>
               <option value="Chèque">Chèque</option>
             </select>
             <input
-              value={date}
-              type="date"
-              onChange={(e) => setDate(e.target.value)}
-            />
-            <button id="bt" type="submit">
-              Ajouter paiement
-            </button>
+              value={date} type="date"
+              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"
+              onChange={(e) => setDate(e.target.value)}/>
+            <button className="btn bg-color2 text-white border-none mt-10 mb-10 hover:bg-color3" type="submit">Ajouter paiement</button>
           </form>
           {/*  */}
           <h2>Résultat</h2>
-          <table className="table_fees">
-            <thead key="thead">
+          <table className="table">
+            <thead key="thead" className="text-color1">
               <tr>
                 <th className="expand_bar">Versement</th>
                 <th className="expand_bar">Date de création</th>
@@ -235,8 +219,8 @@ export function UpdatePaie() {
               <tr>
                 <td>{versement}</td>
                 <td>{moment(created_at).format("DD/MM/YYYY")}</td>
-                <td>{amount}</td>
-                <td>{balance}</td>
+                <td>{montantTotal}</td>
+                <td>{testAmount}</td>
                 <td>{date}</td>
                 <td>{mode}</td>
                 <td>{statut}</td>

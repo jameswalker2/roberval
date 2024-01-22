@@ -1,46 +1,50 @@
 import {NavLink} from "react-router-dom"
-import {supabase} from "../login/SupabaseConfig.jsx"
+import {supabase} from "../Config/SupabaseConfig.jsx"
 import {useEffect, useState} from "react"
 import {BiArrowBack} from "react-icons/bi"
 import {toast, Toaster} from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 
 export function Edit() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [birth, setBirth] = useState('')
-  const [gender, setGender] = useState('')
-  const [departmentBirth, setDepartmentBirth] = useState('')
-  const [commonBirth, setCommonBirth] = useState('')
-  const [adressBirth, setAdressBirth] = useState('')
-  const [handicap, setHandicap] = useState('')
-  const [wtHandicap, setWtHandicap] = useState('')
-  const [adress, setAdress] = useState('')
-  const [department, setDepartment] = useState('')
-  const [common, setCommon] = useState('')
-  const [city, setCity] = useState('')
-  const [firstMother, setFirstMother] = useState('')
-  const [lastMother, setLastMother] = useState('')
-  const [jobMother, setJobMother] = useState('')
-  const [statutMother, setStatutMother] = useState('')
-  const [firstFather, setFirstFather] = useState('')
-  const [lastFather, setLastFather] = useState('')
-  const [jobFather, setJobFather] = useState('')
-  const [statutFather, setStatutFather] = useState('')
-  const [vacation, setVacation] = useState('')
-  const [level, setLevel] = useState('')
-  const [classe, setClasse] = useState('')
-  const [linkPerson, setLinkPerson] = useState('')
-  const [nif, setNif] = useState('')
-  const [ninu, setNinu] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [otherPhone, setOtherPhone] = useState('')
-  const [loading, setLoading] = useState(false)
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [birth, setBirth] = useState('')
+    const [gender, setGender] = useState('')
+    const [departmentBirth, setDepartmentBirth] = useState('')
+    const [commonBirth, setCommonBirth] = useState('')
+    const [adressBirth, setAdressBirth] = useState('')
+    const [handicap, setHandicap] = useState('')
+    const [wtHandicap, setWtHandicap] = useState('')
+    const [adress, setAdress] = useState('')
+    const [department, setDepartment] = useState('')
+    const [common, setCommon] = useState('')
+    const [city, setCity] = useState('')
+    const [firstMother, setFirstMother] = useState('')
+    const [lastMother, setLastMother] = useState('')
+    const [jobMother, setJobMother] = useState('')
+    const [statutMother, setStatutMother] = useState('')
+    const [firstFather, setFirstFather] = useState('')
+    const [lastFather, setLastFather] = useState('')
+    const [jobFather, setJobFather] = useState('')
+    const [statutFather, setStatutFather] = useState('')
+    const [vacation, setVacation] = useState('')
+    const [level, setLevel] = useState('')
+    const [classe, setClasse] = useState('')
+    const [linkPerson, setLinkPerson] = useState('')
+    const [nif, setNif] = useState('')
+    const [ninu, setNinu] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [otherPhone, setOtherPhone] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [isHandicapEnabled, setIsHandicapEnabled] = useState(false)
+    const [availableClasses, setAvailableClasses] = useState([])
+
+
   
   // const validationSchema = Yup.object().shape({
   //   firstName: Yup.string().required('Le nom est requis'),
@@ -57,7 +61,7 @@ export function Edit() {
     const fetchStudent = async () => {
       const { data, error } = await supabase
         .from("students")
-        .select("")
+        .select("*")
         .eq("id", id)
         .single();
       
@@ -108,47 +112,77 @@ export function Edit() {
       const { error } = await supabase
         .from("students")
         .update({
-          firstName,
-          lastName,
-          birth,
-          departmentBirth,
-          commonBirth,
-          adressBirth,
-          vacation,
-          level,
-          classe,
-          adress,
-          department,
-          common,
-          city,
-          firstFather,
-          lastFather,
-          jobFather,
-          firstMother,
-          lastMother,
-          jobMother,
-          linkPerson,
-          nif,
-          ninu,
-          phone,
-          otherPhone,
-          email
+            firstName,
+            lastName,
+            birth,
+            gender,
+            departmentBirth,
+            commonBirth,
+            adressBirth,
+            vacation,
+            level,
+            classe,
+            adress,
+            department,
+            common,
+            city,
+            firstFather,
+            lastFather,
+            jobFather,
+            statutFather,
+            firstMother,
+            lastMother,
+            jobMother,
+            statutMother,
+            linkPerson,
+            nif,
+            ninu,
+            phone,
+            otherPhone,
+            email
         })
         .eq("id", id)
         .select("id");
       
-      toast.success("Formulaire mise à jour !")
-      if (error) throw error
+      if (error) {
+          throw error
+      } else {
+          toast.success("Formulaire mise à jour !")
+      }
     } catch (error) {
       toast.error(error.message)
     }
+      window.scrollTo({ top: 0, behavior: "smooth" });
   }
-  
+
+    useEffect(() => {
+        switch (level) {
+            case 'Prescolaire':
+                setAvailableClasses(["1e Annee Kind", "2e Annee Kind", "3e Annee Kind"]);
+                break
+            case 'Fondamental I':
+                setAvailableClasses(["1e Annee Fond", "2e Annee Fond", "3e Annee Fond", "4e Annee Fond"]);
+                break
+            case 'Fondamental II':
+                setAvailableClasses(["5e Annee Fond", "6e Annee Fond"]);
+                break
+            case 'Fondamental III':
+                setAvailableClasses(["7e Annee Fond", "8e Annee Fond", "9e Annee Fond"]);
+                break
+            case 'Secondaire':
+                setAvailableClasses(["NS I", "NS II", "NS III", "NS IV"]);
+                break
+            default:
+                setAvailableClasses([]);
+        }
+    },[level])
+
+
   return (
     <>
       <div className="relative w-full h-auto p-10">
-        <NavLink className="text-3xl absolute left-10 top-10" to={'/eleves'}>
-          <BiArrowBack id="back"/>
+        <NavLink className="text-3xl text-white absolute left-10 top-14" to={'/eleves'}>
+          <BiArrowBack />
         </NavLink>
         <h1 className="text-6xl text-white uppercase font-bold pl-[30%]">Page inscription</h1>
         <p></p>
@@ -176,32 +210,38 @@ export function Edit() {
                   type="text" value={commonBirth} placeholder="Commune de naissance" className="input w-[22rem] bg-gray-200 mr-20 mb-10"/>
                 <input
                   onChange={(e) => setAdressBirth(e.target.value)}
-                  type="text" value={adressBirth} placeholder="Lieu de naissance" className="input w-[22rem] bg-gray-200 mr-20 mb-10"/>
-                <div className="flex items-center font-semibold">
-                  <h2 className="mr-2">Sexe:</h2>
-                  <label htmlFor="Garçon" className="mr-2">Garçon</label>
-                  <input
-                    onChange={(e) => setGender(e.target.value)}
-                    type="checkbox" name="gender" disabled value={"Garçon"} className="checkbox border-color2 border-2 w-5 h-5"/>
-                  <label htmlFor={"Fille"} className="mx-2">Fille</label>
-                  <input
-                    onChange={(e) => setGender(e.target.value)}
-                    type="checkbox" name="gender" disabled value={"Fille"}  className="checkbox border-color2 border-2 w-5 h-5"/>
-                </div>
-                <div className="flex items-center font-semibold">
-                  <h2 className="ml-60 mr-2">{`Y a-t'il un handicap ? :`}</h2>
-                  <label htmlFor={"Oui"} className="mr-2">Oui</label>
-                  <input
-                    onChange={(e) => setHandicap(e.target.value)}
-                    type="checkbox" name="handicap" disabled value={"Oui"} className="checkbox border-color2 border-2 w-5 h-5"/>
-                  <label htmlFor={"Non"} className="mx-2">Non</label>
-                  <input
-                    onChange={(e) => setHandicap(e.target.value)}
-                    type="checkbox" name="handicap" disabled value={"Non"} className="checkbox border-color2 border-2 w-5 h-5"/>
-                </div>
+                  type="text" value={adressBirth} placeholder="Lieu de naissance" className="input w-[22rem] bg-gray-200 mr-20"/>
+                  <div className="flex items-center font-semibold ">
+                      <h2 className="mr-2">Sexe<span className="text-red-600">*</span>:</h2>
+                      <label htmlFor="Garçon" className="mr-2">Garçon</label>
+                      <input
+                          onChange={(e) => setGender(e.target.value)}
+                          type="radio" name="gender" value={"Garçon"} checked={gender === "Garçon"}  className="radio border-color2 border-2 w-5 h-5"/>
+                      <label htmlFor={"Fille"} className="mx-2">Fille</label>
+                      <input
+                          onChange={(e) => setGender(e.target.value)}
+                          type="radio" name="gender" value={"Fille"} checked={gender === "Fille"}  className="radio border-color2 border-2 w-5 h-5"/>
+                  </div>
+                  <div className="flex items-center font-semibold ">
+                      <h2 className="ml-52 mr-2">{`Y a-t'il un handicap ?`}</h2>
+                      <label htmlFor={"Oui"} className="mr-2">Oui</label>
+                      <input
+                          onChange={(e) => {
+                              setHandicap(e.target.value)
+                              setIsHandicapEnabled(e.target.value === "Oui")
+                          }}
+                          type="radio" name="handicap" value={"Oui"} checked={handicap === "Oui"} className="radio border-color2 border-2 w-5 h-5"/>
+                      <label htmlFor={"Non"} className="mx-2">Non</label>
+                      <input
+                          onChange={(e) => {
+                              setHandicap(e.target.value)
+                              setIsHandicapEnabled(e.target.value === "Oui")
+                          }}
+                          type="radio" name="handicap" value={"Non"} checked={handicap === "Non"} className="radio border-color2 border-2 w-5 h-5"/>
+                  </div>
                 <select
                   onChange={(e) => setWtHandicap(e.target.value)}
-                  name="wthandicap" defaultValue={"0"} value={wtHandicap} className="select w-[22rem] bg-gray-200 ml-[7.7rem] text-[18px]">
+                  name="wthandicap" defaultValue={"0"} value={wtHandicap} disabled={!isHandicapEnabled} className="select w-[22rem] bg-gray-200 ml-[9.9rem] text-[18px]">
                   <option value={"0"} className="text-gray-400">Quel type handicap ?</option>
                   <option value="Moteur">Moteur</option>
                   <option value="Sensoriel">Sensoriel</option>
@@ -231,27 +271,12 @@ export function Edit() {
                   <option value="Fondamental III">Fondamental III</option>
                   <option value="Secondaire">Secondaire</option>
                 </select>
-                <select
-                  onChange={(e) => setClasse(e.target.value)}
-                  name="Classe" value={classe} className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
-                  <option value={"0"} className="text-gray-400">{`Niveau d'études`}</option>
-                  <option value="1e Annee Kind">1e Année Kind</option>
-                  <option value="2e Annee Kind">2e Année Kind</option>
-                  <option value="3e Annee Kind">3e Année Kind</option>
-                  <option value="1e Annee Fond">1e Année Fond</option>
-                  <option value="2e Annee Fond">2e Année Fond</option>
-                  <option value="3e Annee Fond">3e Année Fond</option>
-                  <option value="4e Annee Fond">4e Année Fond</option>
-                  <option value="5e Annee Fond">5e Année Fond</option>
-                  <option value="6e Annee Fond">6e Année Fond</option>
-                  <option value="7e Annee Fond">7e Année Fond</option>
-                  <option value="8e Annee Fond">8e Année Fond</option>
-                  <option value="9e Annee Fond">9e Année Fond</option>
-                  <option value="NS I">NS I</option>
-                  <option value="NS II">NS II</option>
-                  <option value="NS III">NS III</option>
-                  <option value="NS IV">NS IV</option>
-                </select>
+                  <select
+                      onChange={(e) => setClasse(e.target.value)}
+                      name="Classe" value={classe} className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
+                      <option value={"0"} className="text-gray-400">{`Niveau d'études`}</option>
+                      {availableClasses.map((c) => (<option key={c} value={c}>{c}</option>))}
+                  </select>
               </div>
             </div>
             <div className="bg-gray-50 p-5 rounded mt-20">
@@ -290,11 +315,11 @@ export function Edit() {
                   <h2 className="mr-2">Décédé</h2>
                   <input
                     onChange={(e) => setStatutFather(e.target.value)}
-                    type="checkbox" name="3" disabled className="checkbox border-color2 border-2 w-5 h-5"/>
+                    type="radio" name="3" value={"Décédé"} checked={statutFather === "Décédé"} className="radio border-color2 border-2 w-5 h-5"/>
                   <h2 className="mx-2">Vivant</h2>
                   <input
                     onChange={(e) => setStatutFather(e.target.value)}
-                    type="checkbox" name="3" disabled className="checkbox border-color2 border-2 w-5 h-5 mr-[39rem]"/>
+                    type="radio" name="3" value={"Vivant"} checked={statutFather === "Vivant"} className="radio border-color2 border-2 w-5 h-5 mr-[39rem]"/>
                 </div>
                 <input
                   onChange={(e) => setFirstMother(e.target.value)}
@@ -310,11 +335,11 @@ export function Edit() {
                   <h2 className="mr-2">Décédée</h2>
                   <input
                     onChange={(e) => setStatutMother(e.target.value)}
-                    type="checkbox" disabled name="statutMother" className="checkbox border-color2 border-2 w-5 h-5"/>
+                    type="radio" name="statutMother" value={"Décédée"} checked={statutMother === "Décédée"} className="radio border-color2 border-2 w-5 h-5"/>
                   <h2 className="mx-2">Vivante</h2>
                   <input
                     onChange={(e) => setStatutMother(e.target.value)}
-                    type="checkbox" disabled name="4" className="checkbox border-color2 border-2 w-5 h-5"/>
+                    type="radio" name="4" value="Vivante" checked={statutMother === "Vivante"} className="radio border-color2 border-2 w-5 h-5"/>
                 </div>
               </div>
             </div>
@@ -343,8 +368,8 @@ export function Edit() {
               </div>
             </div>
             <button
-              className="btn ml-[70rem] mt-10 bg-color1 text-white hover:bg-color3 border-none w-56"
-              type="submit">Soumettre le formulaire
+              className="btn ml-[67rem] mt-10 bg-color1 text-white hover:bg-color3 border-none w-40"
+              type="submit">Mettre à Jour
             </button>
           </form>
         )}

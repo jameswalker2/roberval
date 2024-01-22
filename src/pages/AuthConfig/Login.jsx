@@ -1,15 +1,16 @@
+import { supabase } from "../../Config/SupabaseConfig.jsx";
 import { useState } from "react";
-import { supabase } from "../Config/SupabaseConfig.jsx";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from "@/pages/AuthConfig/AuthContext.jsx"
 import {toast, Toaster} from "react-hot-toast";
 import * as Yup from 'yup';
-import imageRoberval from "../assets/welcom_to_roberval.svg";
+import imageRoberval from "../../assets/welcom_to_roberval.svg";
 import "./Login.scss";
 
 export function Login() {
+  const { login } = useAuth();
   let navigate = useNavigate();
   
-  const [validation, setValidation] = useState("");
   const [loadingData, setLoadingData] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,25 +28,16 @@ export function Login() {
       await validationSchema.validate({email, password}, {abortEarly: false})
 
       setLoadingData(true);
+      await login(email, password)
+      navigate("/dashboard")
 
-      const {data, error} = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      if (error) {
-        console.log(error.message)
-        toast.error("Email ou Password est incorrect")
-
-      } else {
-        console.log(data)
-        navigate("/dashboard", { replace: true });
-      }
     } catch (error) {
       if (error.name === 'ValidationError') {
         error.errors.forEach((validationError) => {
           toast.error(validationError)
         });
+      } else {
+        toast.error("Email ou Password est incorrect")
       }
     }
     finally {

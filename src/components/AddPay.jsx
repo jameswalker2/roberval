@@ -1,13 +1,11 @@
-import { NavBar } from "../../header/NavBar";
-import { motion } from "framer-motion";
-import { NavLink, useParams } from "react-router-dom";
+import { NavBar } from "./Navbar/NavBar.jsx";
+import { NavLink} from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
-import { useState } from "react";
-import { supabase } from "../../login/SupabaseConfig";
+import { useState} from "react";
+import { supabase } from "../Config/SupabaseConfig.jsx";
 import "./AddPay.scss";
 
 export function AddPay() {
-  const { id } = useParams();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -17,22 +15,24 @@ export function AddPay() {
   const [date, setDate] = useState(null);
   const [mode, setMode] = useState(null);
 
+
   const handleSearch = async () => {
     try {
       const { data, error } = await supabase
-        .from("staffs")
-        .select()
-        .ilike("name", searchQuery);
+          .from("staffs")
+          .select()
+          .textSearch("lastName", searchQuery )
 
       if (error) {
         throw error;
-      }
-
+      } else {
       setSearchResults(data);
+      }
     } catch (error) {
-      console.error("An error occurred during the search:", error);
+      console.error(error.message);
     }
   };
+
 
   const handleTransferData = async (e) => {
     e.preventDefault();
@@ -47,7 +47,7 @@ export function AddPay() {
             lastName,
             phone,
             amount,
-            balance: 5000,
+            balance : testAmount,
             statut,
             role,
             date,
@@ -86,37 +86,40 @@ export function AddPay() {
     setSearchQuery("");
   };
 
+  let testAmount =  balance - amount;
+
+  console.log(testAmount)
+
+
   return (
     <>
       <NavBar />
-      <motion.div
-        initial={{ opacity: 0, scaleY: 0, transformOrigin: "center" }}
-        animate={{ opacity: 1, scaleY: 1, transformOrigin: "bottom" }}
-        exit={{ opacity: 0, scaleY: 0 }}
-        transition={{ duration: 0.5, easeinout: [0.22, 1, 0.36, 1] }}>
-        {/*  */}
         <div className="container_addPay">
           <div className="addPay_header">
-            <NavLink to={"/payroll"}>
-              <BiArrowBack id="back" />
+            <NavLink className="text-2xl text-color1" to={"/payroll"}>
+              <BiArrowBack />
             </NavLink>
             <div>
-              <NavLink className="link_Addpay" to={"/accueil"}>
+              <NavLink className="text-color2 hover:text-color1" to={"/dashboard"}>
                 Dashboard
               </NavLink>
-              <span>|</span>
-              <NavLink className="link_Addpay" to={"/staffs"}>
+              <span className="m-5" id="span">
+              |
+              </span>
+              <NavLink className="text-color2 hover:text-color1" to={"/staffs"}>
                 Staffs
               </NavLink>
-              <span>|</span>
-              <NavLink className="link_Addpay" to={""}>
+              <span className="m-5" id="span">
+              |
+              </span>
+              <NavLink className="text-color2 hover:text-color1" to={"/addpay"}>
                 Ajouter un payroll
               </NavLink>
             </div>
           </div>
           <div className="addPay_body">
             <div className="body_add">
-              <h2>Ajouter un nouveau paiement</h2>
+              <h2>Ajouter un nouveau payroll</h2>
               {/*  */}
               <div id="add_list">
                 <input
@@ -126,19 +129,20 @@ export function AddPay() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher avec le nom..."
                 />
-                <button id="bt_sr" onClick={handleSearch}>
+                <button className={"btn bg-color2 text-white border-none hover:bg-color3"} onClick={handleSearch}>
                   Rechercher
                 </button>
               </div>
               {searchResults.length > 0 && (
-                <div>
-                  <table className="table_list">
-                    <thead key="thead">
+                <div className="overflow-x-auto mt-10  rounded-2xl">
+                  <table className="table">
+                    <thead className="text-color1" key="thead">
                       <tr>
                         <th>ID</th>
                         <th>Nom</th>
                         <th>Prénom</th>
                         <th>Adresse</th>
+                        <th>Role</th>
                         <th>Téléphone</th>
                         <th>Email</th>
                       </tr>
@@ -150,6 +154,7 @@ export function AddPay() {
                           <td>{staff.name}</td>
                           <td>{staff.lastName}</td>
                           <td>{staff.adress}</td>
+                          <td>{staff.role}</td>
                           <td>{staff.phone}</td>
                           <td>{staff.email}</td>
                         </tr>
@@ -158,38 +163,40 @@ export function AddPay() {
                   </table>
                   {/*  */}
                   <form onSubmit={handleTransferData}>
+                    <div className="flex flex-wrap p-10">
                     <input
                       type="text"
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="Montant Avancée"
-                      id="ma"
+                      className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mt-10 mr-10 mb-10"
                     />
                     <input
                       type="text"
                       value={balance}
                       onChange={(e) => setBalance(e.target.value)}
                       placeholder="Balance"
-                      id="bl"
+                      className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mt-10 mr-10 mb-10"
                     />
                     <select
                       onChange={(e) => setStatut(e.target.value)}
                       name="stat"
-                      id="st">
+                      className="select select-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs  mt-10"
+                    >
                       <option value="0">Statut</option>
                       <option value="Non Payé">Non Payé</option>
                       <option value="Avance">Avance</option>
                       <option value="Payé">Payé</option>
                     </select>
-                    <button id="bt" type="submit">
+                    <button className={"btn bg-color2 text-white border-none hover:bg-color3 ml-[56rem]"} type="submit">
                       Ajouter paiement
                     </button>
+                    </div>
                   </form>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </motion.div>
     </>
   );
 }

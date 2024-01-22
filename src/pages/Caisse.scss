@@ -17,17 +17,17 @@
   #expense {
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.221),
-      rgba(255, 0, 0, 0.245)
+                    rgba(255, 255, 255, 0.127),
+                    rgba(0, 0, 0, 0.245)
     );
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
   #revenu {
     background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.221),
-      rgba(0, 252, 67, 0.245)
+                    135deg,
+                    rgba(255, 255, 255, 0.127),
+                    rgba(0, 0, 0, 0.245)
     );
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);

@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { supabase } from "../../login/SupabaseConfig.jsx";
-import { motion } from "framer-motion";
-import { NavBar } from "../../header/NavBar.jsx";
-import { FiMoreHorizontal } from "react-icons/fi";
+import { supabase } from "../Config/SupabaseConfig.jsx";
+import { NavBar } from "../components/Navbar/NavBar.jsx";
 import moment from "moment/moment.js";
 import "./Paiement.scss";
+import {BiArrowBack} from "react-icons/bi";
+import {toast, Toaster} from "react-hot-toast";
 
 export function Paiement() {
   const [studentsP, setStudentsP] = useState([]);
   const [classes, setClasses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(false);
   const [search, setSearch] = useState("");
+  const [selectedStudent, setSelectStudent] = useState(null)
 
   useEffect(() => {
     const getStudents = async () => {
@@ -39,132 +40,186 @@ export function Paiement() {
     value: category,
     label: category,
   }));
-  console.log(setSelectedCategory);
 
   const filterStudents = selectedCategory
     ? studentsP.filter((student) => student.classe === selectedCategory)
     : studentsP;
+
+  const handleDelete = async (paieId) => {
+
+    try {
+      const { error } = await supabase
+          .from('paie')
+          .delete()
+          .eq('id', paieId)
+
+      if (error) {
+        console.error(error);
+      } else {
+        document.getElementById('my_modal_1').close();
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  useEffect(() => {
+    const expenseChannel = supabase
+        .channel('custom-all-channel')
+        .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'paie' },
+            (payload) => {
+              const eventType = payload.eventType;
+              const changedData = payload.new;
+
+              switch (eventType) {
+                case "INSERT":
+                  setStudentsP((prevPaie) => [... prevPaie, changedData])
+                  break;
+                case "UPDATE":
+                  setStudentsP((prevPaie) => {
+                    return prevPaie.map((paie) => paie.id === changedData.id ? changedData : paie)})
+                  break;
+                case "DELETE":
+                  setStudentsP((prevPaie) =>
+                      prevPaie.filter((paie) => paie.id !== payload.old.id ))
+                  break;
+
+              }
+            }
+        ).subscribe();
+
+    return () => expenseChannel.unsubscribe();
+  }, [])
+
   return (
     <>
       <NavBar />
-      <div className="container_link_paie">
-        <h1 id="container_h1">Paiement</h1>
-        <div>
-          <NavLink className="link_paie" to={"/accueil"}>
-            Dashboard
-          </NavLink>
-          <span>|</span>
-          <NavLink className="link_paie" to={"/eleves"}>
-            Eleves
-          </NavLink>
+      <div className="h-[100vh]">
+        <div className="relative w-[75rem] h-[7vh]  bg-white top-10 left-[16%] rounded-full pl-5 pr-20 flex items-center
+        justify-between mb-[80px] ">
+          <h1 className="text-xl text-color1 font-semibold">Paiement</h1>
+          <div>
+            <NavLink className="text-color2 hover:text-color1" to={"/dashboard"}>
+              Dashboard
+            </NavLink>
+            <span className="m-5" id="span">
+              |
+            </span>
+            <NavLink className="text-color2 hover:text-color1" to={"/eleves"}>
+              Eleves
+            </NavLink>
+          </div>
         </div>
-      </div>
-      <motion.div
-        initial={{ opacity: 0, scaleY: 0, transformOrigin: "center" }}
-        animate={{ opacity: 1, scaleY: 1, transformOrigin: "bottom" }}
-        exit={{ opacity: 0, scaleY: 0 }}
-        transition={{ duration: 0.5, easeinout: [0.22, 1, 0.36, 1] }}>
-        <div className="container_all">
-          <div className="container_search">
-            <h2>Selectionner les critères</h2>
-            <p>Chercher par classe ou par nom directement</p>
-            <div id="form_search">
-              <div className="mx-9 rounded-2xl w-96">
-                <select
-                  title="tes"
+        <div className="flex justify-around items-center ml-[16%] bg-white w-[75rem] h-20 rounded-2xl">
+              <select
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="select bg-slate-50 shadow-md text-gray-400 text-[19px] select-bordered  w-full max-w-xs">
-                  <option
-                    className="text-color2 font-semibold text-[19px]"
-                    disabled
-                    selected>
-                    Selectionner par Classe
-                  </option>
-                  {collectionOptions.map((option) => (
+                  className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs">
+                <option value="" className="text-gray-300">Recherche par classe</option>
+                {collectionOptions.map((option) => (
                     <option
-                      className="text-red-600"
-                      key={option.value}
-                      value={option.value}>
+                        className="text-black"
+                        key={option.value}
+                        value={option.value}>
                       {option.label}
                     </option>
-                  ))}
-                </select>
-              </div>
-              <input
-                placeholder="Rechercher avec le nom de l'étudiant..."
+                ))}
+              </select>
+            <input
+                placeholder="Recherche par nom"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
                 type="search"
-                id="search"
-              />
-              <NavLink className="button" to={"/addpaie"}>
-                + Add a new
-              </NavLink>
-            </div>
-            {/*<h3>Total <span>$10,000 </span></h3>*/}
-          </div>
-
-          <div className="table_search_paiement">
-            <table className="table_paiement">
-              <thead key="thead">
-                <tr>
-                  <th>ID</th>
-                  <th>Classe</th>
-                  <th className="expand_bar">Nom Complet</th>
-                  <th className="expand_bar">Date de création</th>
-                  <th className="expand_bar_2">Montant Avancée</th>
-                  <th className="expand_bar_2">Balance</th>
-                  <th className="expand_bar_2">Date</th>
-                  <th className="expand_bar_2">Versement</th>
-                  <th className="expand_bar_2">Statut</th>
-                  <th className="expand_bar_2">Action</th>
-                </tr>
-              </thead>
-              {filterStudents
+            />
+            <NavLink className="btn bg-color2 text-white border-none hover:bg-color3" to={"/addpaie"}>
+              + Ajouter un nouveau paiement
+            </NavLink>
+          {/*<h3>Total <span>$10,000 </span></h3>*/}
+        </div>
+        <div className="overflow-x-auto mt-10 bg-white h-[26rem] rounded-2xl ml-[16%] w-[75rem]">
+          <table className="table">
+            <thead className="text-color1">
+            <tr>
+              <th>ID</th>
+              <th>Classe</th>
+              <th>Nom Complet</th>
+              <th>Date de création</th>
+              <th>Montant Avancée</th>
+              <th>Balance</th>
+              <th>Date</th>
+              <th>Versement</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            {filterStudents
                 .filter((resultL) =>
-                  resultL.firstName.toLowerCase().includes(search.toLowerCase())
-                )
-                .map((student) => (
-                  <tbody key={student.id} className="scroll">
+                    resultL.firstName.toLowerCase().includes(search.toLowerCase())
+                ).map((student) => (
+                    <tbody key={student.id} className="scroll">
                     <tr>
                       <td>0{student.id}</td>
                       <td>{student.classe}</td>
-                      <td className="expand_bar">
-                        {student.firstName} {student.lastName}
-                      </td>
+                      <td>{student.firstName} {student.lastName}</td>
                       <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
                       <td>{student.amount}</td>
                       <td>{student.balance}</td>
                       <td>{student.date}</td>
                       <td>{student.versement}</td>
                       <td
-                        id="non"
                         style={{
                           color:
                             student.statut === "Non Payé"
                               ? "red"
                               : student.statut === "Avance"
-                              ? "#ffa901"
-                              : "green",
-                          fontSize: "19px",
+                                ? "#ffa901"
+                                : "green",
+                          fontSize: "13px",
                           fontWeight: "700",
                         }}>
                         {student.statut}
                       </td>
                       <td>
-                        <span className="actions">
-                          <NavLink to={"/update-paie/" + student.id}>
-                            <FiMoreHorizontal />
-                          </NavLink>
+                        <span>
+                          <button
+                              onClick={() => {
+                                setSelectStudent(student)
+                                document.getElementById('my_modal_1').showModal()
+                              }}
+                              className="btn btn-ghost btn-xs">Détails</button>
                         </span>
                       </td>
                     </tr>
-                  </tbody>
+                </tbody>
                 ))}
-            </table>
-          </div>
-        </div>
-      </motion.div>
+              </table>
+            </div>
+        <dialog id="my_modal_1" className={"modal"} >
+          <div className="modal-box bg-white w-full max-w-xl">
+            {selectedStudent && (
+                <div>
+                  <h2 className="text-center font-semibold uppercase">{selectedStudent.firstName} {selectedStudent.lastName}</h2>
+                  <p className="text-center">{selectedStudent.classe}</p>
+
+                  <NavLink to={"/update-paie/" + selectedStudent.id}
+                           className="btn bg-color2 hover:bg-color3 border-none text-white mx-20">Ajouter Paiement
+                  </NavLink>
+                  <button
+                      onClick={() => handleDelete(selectedStudent.id)}
+                      className="btn bg-red-600 border-none text-white m-10 hover:bg-red-700">Delete
+                  </button>
+                </div>
+                )
+            }
+              <button
+                  onClick={() => document.getElementById('my_modal_1').close()}
+                  type={"button"} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕
+              </button>
+            </div>
+        </dialog>
+      </div>
     </>
   );
 }

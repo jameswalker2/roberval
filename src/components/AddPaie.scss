@@ -9,13 +9,16 @@
     width: 76rem;
     height: 3rem;
     border-radius: 15px;
-    padding: 0 90px 0 20px;
+    padding: 0 50px 0 30px;
     background-color: white;
+
     .link_Addpaie {
       text-decoration: none;
       font-weight: 500;
       font-size: 17px;
       color: #330096;
+      margin: 15px;
+
       &:hover {
         color: #4d00e4;
       }
@@ -31,7 +34,6 @@
     margin: 50px 0;
     h2 {
       color: #4d00e4;
-      text-transform: capitalize;
     }
     #add_list {
       display: flex;
@@ -79,43 +81,13 @@
       border: none;
       border-radius: 10px;
       box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-      color: gray;
       padding: 10px;
       font-size: 19px;
+      background-color: #fafafa;
     }
     #sr {
       width: 60rem;
     }
   }
-
-  .table_list {
-    table-layout: auto;
-    border-collapse: collapse;
-    background-color: #ffa901;
-    border: none;
-    white-space: nowrap;
-    width: 70rem;
-    margin: 10px 20px;
-    overflow: auto;
-    thead {
-      background-color: #5800ff;
-      color: #fafafa;
-    }
-
-    // th {
-    //   // padding: 200rem;
-    //   // padding: 5px;
-    // }
-
-    td {
-      // border-bottom: 2px solid #ffa901;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 0 15px;
-    }
-    tbody tr:hover {
-      background-color: #330096;
-      color: #fafafa;
-    }
-  }
+  
 }

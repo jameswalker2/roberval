@@ -1,125 +1,17 @@
-.container_link_el {
-  position: relative;
+
+.actions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  top: 3%;
-  left: 5%;
-  width: 90%;
-  height: 7vh;
-  background-color: #fafafa;
-  margin-bottom: 80px;
-  border-radius: 350px;
-  padding: 0 50px 0 20px;
+  justify-content: flex-start;
 
-  #span {
-    margin: 20px;
-    color: #4d00e4;
+  :nth-child(2) {
+    margin: 0 15px;
   }
 
-  #container_h1 {
+  cursor: pointer;
+  color: #ff2e2e;
+
+  #nav {
     color: #5800ff;
-    font-size: 20px;
-    padding: 20px;
-  }
-
-  #back {
-    margin: 20px;
-    color: #330096;
-    width: 40px;
-    height: 30px;
   }
 }
-.link_el {
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 17px;
-  color: #330096;
-  &:hover {
-    color: #4d00e4;
-  }
-}
-.container {
-  position: relative;
-  height: 700px;
-  width: 80%;
-  left: 48%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  margin: 50px 0;
 
-  .search_bar {
-    //position: relative;
-    display: inline-flex;
-    justify-content: space-between;
-    // left/: 118vh;
-    // top: 20rem;
-    align-items: center;
-    margin: 0 0 20px;
-    padding: 20px;
-    border-radius: 108px;
-    background-color: white;
-    height: 4rem;
-    width: 83rem;
-    font-size: 20px;
-
-    #search_bar {
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    #icon_search {
-      position: relative;
-      width: 20px;
-      height: 50px;
-      color: #5800ff;
-      left: 120px;
-    }
-
-    #button_add_el {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background-color: #5800ff;
-      color: white;
-      border-radius: 150px;
-      font-size: 15px;
-      font-weight: 700;
-      height: 40px;
-      width: 250px;
-      margin: 0 5px 0 80px;
-      text-transform: capitalize;
-      text-decoration: none;
-      cursor: pointer;
-      #btn_add_el {
-        width: 30px;
-        height: 20px;
-      }
-      &:hover {
-        background-color: #ffa901;
-      }
-    }
-  }
-
-  #thead {
-    width: 1000px;
-    position: sticky;
-    top: 0;
-  }
-  tbody {
-    font-weight: 700;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-start;
-    :nth-child(2) {
-      margin: 0 15px;
-    }
-    cursor: pointer;
-    color: #ff2e2e;
-    #nav {
-      color: #5800ff;
-    }
-  }
-}

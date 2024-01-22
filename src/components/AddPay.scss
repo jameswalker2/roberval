@@ -28,94 +28,31 @@
     border-radius: 15px;
     padding: 20px;
     margin: 50px 0;
+
     h2 {
-      color: #4d00e4;
-      text-transform: capitalize;
-      font-size: 20px;
-      font-weight: 700;
+      color: #330096;
+      font-size: 17px;
+      font-weight: 500;
     }
+
     #add_list {
       display: flex;
       align-items: center;
 
-      button {
-        width: 8.5rem;
-        height: 2.5rem;
+
+      #sr {
+        width: 60rem;
+        height: 2.8rem;
+        margin: 20px;
         border: none;
-        background-color: #4d00e4;
-        color: white;
-        font-size: 20px;
-        font-weight: 500;
-        border-radius: 100px;
-        cursor: pointer;
-        &:hover {
-          background-color: #ffa901;
-        }
+        border-radius: 10px;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+        color: gray;
+        padding: 10px;
+        background-color: #fafafa;
+        font-size: 19px;
+
       }
-    }
-
-    #bt {
-      background-color: #4d00e4;
-      width: 12.5rem;
-      height: 2.5rem;
-      color: #fafafa;
-      font-size: 20px;
-      border-radius: 100px;
-      border: none;
-      margin: 0 0 0 550px;
-      cursor: pointer;
-      &:hover {
-        background-color: #ffa901;
-      }
-    }
-
-    #sr,
-    #bl,
-    #ma,
-    #st {
-      width: 21.6rem;
-      height: 2.8rem;
-      margin: 20px;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-      color: gray;
-      padding: 10px;
-      font-size: 19px;
-    }
-    #sr {
-      width: 60rem;
-    }
-  }
-
-  .table_list {
-    table-layout: auto;
-    border-collapse: collapse;
-    background-color: #ffa901;
-    border: none;
-    white-space: nowrap;
-    width: 70rem;
-    margin: 10px 20px;
-    overflow: auto;
-    thead {
-      background-color: #5800ff;
-      color: #fafafa;
-    }
-
-    // th {
-    //   // padding: 200rem;
-    //   // padding: 5px;
-    // }
-
-    td {
-      // border-bottom: 2px solid #ffa901;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 0 15px;
-    }
-    tbody tr:hover {
-      background-color: #330096;
-      color: #fafafa;
     }
   }
 }

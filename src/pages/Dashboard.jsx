@@ -1,93 +1,95 @@
 import { useState, useEffect } from "react";
-import { NavBar } from "../../header/NavBar.jsx";
+import { NavBar } from "../components/Navbar/NavBar.jsx";
 import { NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
-import { supabase } from "../../login/SupabaseConfig.jsx";
+import { supabase } from "../Config/SupabaseConfig.jsx";
 import Chart from "react-apexcharts";
 import { FaUserGraduate } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { MdOutlineAppRegistration } from "react-icons/md";
 import "./Dashboard.scss";
+import moment from "moment";
 
 export function Dashboard() {
   const [students, setStudents] = useState([]);
   const [staffs, setStaffs] = useState([]);
-  const [state, setState] = useState({
-    options: {
+  const [chartIncome, setChartIncome] = useState([])
+  const [chartExpense, setChartExpense] = useState([])
+
+
+  const options = {
+    stroke: {
+      curve: 'smooth'
+    },
       chart: {
         id: "basic-bar",
       },
-      xaxis: {
-        categories: [
-          "Janvier",
-          "Février",
-          "Mars",
-          "Avril",
-          "Mai",
-          "Juin",
-          "Juillet",
-          "Aout",
-          "Septembre",
-          "Octobre",
-          "Novembre",
-          "Décembre",
-        ],
         label: {
           show: true,
         },
-      },
-    },
-    series: [
-      {
+    series: [{
         name: "Revenu",
-        data: [
-          20500, 2500, 500, 10000, 200, 5160, 8000, 250, 3000, 48059, 500,
-          10000,
-        ],
+        data: chartIncome.map(nums => nums.amount),
         color: "#00ff00",
       },
       {
-        name: "Depense",
-        data: [
-	        2800, 200, 3000, 150, 56156, 4899, 1778, 5168, 5822, 100, 8000, 528,
-        ],
+        name: "Dépense",
+        data: chartExpense.map(nums => nums.amount),
         color: "#ff2424",
         fontWeight: 800,
       },
     ],
-  });
+      xaxis: {
+      categories: chartIncome.map(dates => moment(dates.date).format("MMM/YYYY"))
+    }
+  };
 
   useEffect(() => {
-    async function numStudents() {
-      const { data } = await supabase.from("students").select("*");
+    async function fetchData() {
+      try {
+        const studentsData = await supabase
+            .from("students")
+            .select("*");
+        if (studentsData.data) {
+          setStudents(studentsData.data);
+        }
 
-      if (data) {
-        setStudents(data);
+        const staffsData = await supabase
+            .from("staffs")
+            .select("*");
+        if (staffsData.data) {
+          setStaffs(staffsData.data);
+        }
+
+
+
+        const incomeData = await supabase
+            .from("income")
+            .select("date, amount")
+        if (incomeData.data) {
+          setChartIncome(incomeData.data.map(entry => entry));
+        }
+        console.log(chartIncome.map(dates => dates.date))
+
+        const expenseData = await supabase
+            .from("expense")
+            .select("amount, date")
+        if (expenseData.data) {
+          setChartExpense(expenseData.data.map(entry => entry));
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données depuis Supabase:", error.message);
       }
     }
 
-    async function numStaffs() {
-      const { data } = await supabase.from("staffs").select();
+    fetchData();
 
-      if (data) {
-        setStaffs(data);
-      }
-    }
-
-    numStudents();
-    numStaffs();
   }, []);
+
 
   return (
     <>
       <NavBar />
-      <motion.div
-        initial={{ opacity: 0, scaleY: 0 }}
-        animate={{ opacity: 1, scaleY: 1 }}
-        exit={{ opacity: 0, scaleY: 0 }}
-        transition={{ duration: 0.2, easeinout: [0.22, 1, 0.36, 1] }}>
-        {/*  */}
         <div className="container_dash">
           <section className="dashboard">
             <h1>Dashboard</h1>
@@ -123,7 +125,7 @@ export function Dashboard() {
                   <h3 className="mt-5 text-[15px] uppercase">
                     Total professeurs
                   </h3>
-                  <h2 className="text-[30px]">100</h2>
+                  <h2 className="text-[30px]">{staffs.length}</h2>
                 </div>
               </NavLink>
               <NavLink
@@ -132,7 +134,7 @@ export function Dashboard() {
                 id="ct">
                 <div className="title">
                   <MdOutlineAppRegistration className="w-[20px] h-[20px]" />
-                  <h3 className="mt-5 text-[15px] uppercase">Incription</h3>
+                  <h3 className="mt-5 text-[15px] uppercase">Inscriptions</h3>
                   <h2 className="text-[30px]">10</h2>
                 </div>
               </NavLink>
@@ -141,15 +143,14 @@ export function Dashboard() {
           <section className="revenu">
             <h4 className="text-color1 font-semibold">Balance</h4>
             <Chart
-              options={state.options}
-              series={state.series}
-              type="area"
-              width={"1190"}
-              height={"330"}
+                type="area"
+                options={options}
+                series={options.series}
+                width={"1190"}
+                height={"330"}
             />
           </section>
         </div>
-      </motion.div>
     </>
   );
 }
