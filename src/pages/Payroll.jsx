@@ -6,13 +6,6 @@ import { motion } from "framer-motion";
 import Select from "react-select";
 import { supabase } from "../../login/SupabaseConfig.jsx";
 import moment from "moment";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
 import "./Payroll.scss";
 
 export function Payroll() {

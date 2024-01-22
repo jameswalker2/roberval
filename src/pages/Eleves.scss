@@ -9,12 +9,14 @@
   height: 7vh;
   background-color: #fafafa;
   margin-bottom: 80px;
-  border-radius: 15px;
+  border-radius: 350px;
   padding: 0 50px 0 20px;
+
   #span {
     margin: 20px;
     color: #4d00e4;
   }
+
   #container_h1 {
     color: #5800ff;
     font-size: 20px;
@@ -47,19 +49,20 @@
   margin: 50px 0;
 
   .search_bar {
-    position: relative;
+    //position: relative;
     display: inline-flex;
     justify-content: space-between;
-    // left: 118vh;
+    // left/: 118vh;
     // top: 20rem;
     align-items: center;
     margin: 0 0 20px;
     padding: 20px;
-    border-radius: 28px;
+    border-radius: 108px;
     background-color: white;
     height: 4rem;
-    width: 190vh;
+    width: 83rem;
     font-size: 20px;
+
     #search_bar {
       box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
     }

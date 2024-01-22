@@ -208,6 +208,7 @@ export function Staffs() {
               <form onSubmit={handleAddStaff} method="dialog">
                 
                 {/* if there is a button in form, it will close the modal */}
+                  <label className="text-red-600">*</label>
                 <div>
                   <input
                     onChange={(e) => setName(e.target.value)}
@@ -215,10 +216,11 @@ export function Staffs() {
                   <input
                     onChange={(e) => setLastName(e.target.value)}
                     type="text" placeholder="Prénom" className="input w-[22rem] bg-gray-200 mr-20 mb-10"/>
+                  <input type="date" className="input w-[22rem] bg-gray-200 mr-20 mb-10"/>
                   <select
                     onChange={(e) => setRole(e.target.value)}
                     name="role" className="select w-[22rem] bg-gray-200 mr-20 mb-10">
-                    <option disabled selected>Role</option>
+                    <option disabled selected>Fonction</option>
                     <option value="Professeur Prescolaire">Professeur Prescolaire</option>
                     <option value="Professeur Primaire">Professeur Primaire</option>
                     <option value="Professeur Secondaire">Professeur Secondaire</option>

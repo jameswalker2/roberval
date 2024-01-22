@@ -1,4 +1,4 @@
-import {NavLink, useParams} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {BiArrowBack, BiSolidPencil} from "react-icons/bi";
 import "./Eleves.scss";
 import { FiSearch } from "react-icons/fi";
@@ -6,9 +6,9 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { supabase } from "../login/SupabaseConfig.jsx";
 import { BsPersonFillAdd } from "react-icons/bs";
+import {toast, Toaster} from "react-hot-toast";
 
-export function Eleves() {
-  const {id} = useParams()
+export function Eleves({sd}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [allResults, setAllResults] = useState([]);
 
@@ -34,12 +34,15 @@ export function Eleves() {
   }, [searchQuery]);
   
   const handleDelete = async () => {
-    const {error} = await supabase.from("students").delete().eq("id", id)
+    const {error} = await supabase.from("students").delete().eq("id", sd)
     
     if (error) {
+      toast.error(error.message)
       console.log(error)
     }
   }
+  
+  console.log(sd)
   
   return (
       <>
@@ -134,8 +137,7 @@ export function Eleves() {
                       <span className="actions">
                         <NavLink
                             id="nav"
-                            // to={`/edit/${student.id}`
-                            to={`/edit/`}>
+                            to={"/edit/" + student.id}>
                           <BiSolidPencil/>
                         </NavLink>
                         <FaRegTrashAlt
@@ -149,6 +151,7 @@ export function Eleves() {
               </table>) : (
               <p className="text-2xl flex justify-center mt-40">Aucune donnée trouvé</p>
           )}
+          <Toaster/>
         </div>
       </div>
     </>

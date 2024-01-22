@@ -3,8 +3,8 @@ import {supabase} from "../login/SupabaseConfig.jsx"
 import {useState} from "react"
 import {BiArrowBack} from "react-icons/bi"
 import {toast, Toaster} from "react-hot-toast";
-import './Inscription.scss'
 import * as Yup from "yup";
+import './Inscription.scss'
 
 // import {BsPersonFillAdd} from 'react-icons/bs'
 
@@ -45,8 +45,8 @@ export function Inscription() {
   // const validationSchema = Yup.object().shape({
   //   firstName: Yup.string().required('Le nom est requis'),
   //   lastName: Yup.string().required('Le prénom est requis'),
-  //   birth: Yup.date().required('La date est requis'),
-  //   gender: Yup.boolean().required('Le genre est requis'),
+  //   // birth: Yup.date().required('La date est requis'),
+  //   gender: Yup.boolean().oneOf([true], 'Vous devez selectionner un genre'),
   //   departmentBirth: Yup.string().required('Le département de naissance est requis'),
   //   commonBirth: Yup.string().required('La commune de naissance est requis'),
   //   adressBirth: Yup.string().required("L'adresse de naissance est requis"),
@@ -59,7 +59,7 @@ export function Inscription() {
     try {
       // await validationSchema.validate({firstName, lastName, birth, gender, departmentBirth, commonBirth, adressBirth}, {abortEarly: false})
       
-      const {data, error} = await supabase
+      const {error} = await supabase
         .from('students')
         .insert({
           firstName,
@@ -94,10 +94,7 @@ export function Inscription() {
           otherPhone
         }).single()
       if (error) throw error;
-      if (data) {
-        // toast.success("Test")
-        console.log(data)
-      }
+      toast.success("Formulaire soumis avec succès!")
     } catch (error) {
       // if (error.name === 'ValidationError') {
       //   error.errors.forEach((validationError) => {
@@ -142,6 +139,7 @@ export function Inscription() {
           setPhone(''),
           setOtherPhone(''),
         )
+    
     }
   
   return (
@@ -156,7 +154,7 @@ export function Inscription() {
           <form onSubmit={handleAdd} className="bg-white rounded w-full h-auto mt-20 p-4">
             <div className="bg-gray-50 p-5 rounded mt-2">
               <h2 className="text-color1 text-xl font-semibold">Informations Personnelles</h2>
-              <p className="mb-10">Tous les champs sont obligatoires <span className="text-red-600">*</span></p>
+              <p className="mb-10">Tous les champs sont obligatoires</p>
               <div className="flex flex-wrap justify-items-center">
                 <input
                   onChange={(e) => setFirstName(e.target.value)}
@@ -201,8 +199,8 @@ export function Inscription() {
                 </div>
                 <select
                   onChange={(e) => setWtHandicap(e.target.value)}
-                  name="wthandicap" className="select w-[22rem] bg-gray-200 ml-[7.7rem] text-[18px]">
-                  <option disabled selected>Quel type handicap ?</option>
+                  name="wthandicap" defaultValue={"0"} className="select w-[22rem] bg-gray-200 ml-[7.7rem] text-[18px]">
+                  <option value={"0"} className="text-gray-400">Quel type handicap ?</option>
                   <option value="Moteur">Moteur</option>
                   <option value="Sensoriel">Sensoriel</option>
                   <option value="Cognitif">Cognitif</option>
@@ -216,15 +214,15 @@ export function Inscription() {
               <div className="flex flex-wrap justify-items-center">
                 <select
                   onChange={(e) => setVacation(e.target.value)}
-                  name="vacation" className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
-                  <option disabled selected>Vacation</option>
-                  <option value="Vacation matin">AM</option>
-                  <option value="Vacation soir">PM</option>
+                  name="vacation" defaultValue={"0"} className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
+                  <option value={"0"} className="text-gray-400">Vacation</option>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
                 </select>
                 <select
                   onChange={(e) => setLevel(e.target.value)}
-                  name="Niveau" className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
-                  <option disabled selected>{`Niveau d'enseignement`}</option>
+                  name="Niveau" defaultValue={"0"} className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
+                  <option value={"0"} className="text-gray-400">{`Niveau d'enseignement`}</option>
                   <option value="Prescolaire">Prescolaire</option>
                   <option value="Fondamental I">Fondamental I</option>
                   <option value="Fondamental II">Fondamental II</option>
@@ -233,8 +231,8 @@ export function Inscription() {
                 </select>
                 <select
                   onChange={(e) => setClasse(e.target.value)}
-                  name="Classe" className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
-                  <option disabled selected>{`Niveau d'études`}</option>
+                  name="Classe" defaultValue={"0"} className="select w-[22rem] bg-gray-200 mr-20 mb-10 text-[18px]">
+                  <option value={"0"} className="text-gray-400">{`Niveau d'études`}</option>
                   <option value="1e Annee Kind">1e Année Kind</option>
                   <option value="2e Annee Kind">2e Année Kind</option>
                   <option value="3e Annee Kind">3e Année Kind</option>
@@ -344,7 +342,7 @@ export function Inscription() {
             </div>
             <button
               className="btn ml-[70rem] mt-10 bg-color1 text-white hover:bg-color3 border-none w-56"
-              type={"submit"}>Soumettre le formulaire
+              type="submit">Soumettre le formulaire
             </button>
           </form>
         )}
