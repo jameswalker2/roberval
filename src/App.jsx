@@ -4,17 +4,18 @@ import { Edit } from "@/components/Edit.jsx";
 import { UpdatePaie } from "@/components/UpdatePaie.jsx";
 import { UpdatePay } from "@/components/UpdatePay.jsx";
 import { Login } from "@/pages/AuthConfig/Login.jsx";
-import { Caisse } from "@/pages/Caisse.jsx";
-import { Dashboard } from "@/pages/Dashboard.jsx";
-import { Eleves } from "@/pages/Eleves.jsx";
-import { Expense } from "@/pages/Expense.jsx";
-import { Income } from "@/pages/Income.jsx";
-import { Inscription } from "@/pages/Inscription.jsx";
+import { Caisse } from "@/pages/Caisse/Caisse.jsx";
+import { Expense } from "@/pages/Caisse/Income&Expense/Expense.jsx";
+import { Income } from "@/pages/Caisse/Income&Expense/Income.jsx";
+import { Dashboard } from "@/pages/Dashboard/Dashboard.jsx";
 import { Paiement } from "@/pages/Paiement.jsx";
 import { Payroll } from "@/pages/Payroll.jsx";
+import { Inscription } from "@/pages/Register/Inscription";
 import { Staffs } from "@/pages/Staffs/Staffs.jsx";
+import { Eleves } from "@/pages/Students/Eleves.jsx";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
+import Gain from "./pages/Profit&Loss/Gain";
 
 const AppRoutes = () => {
   return (
@@ -34,6 +35,7 @@ const AppRoutes = () => {
       <Route path="/update-pay/:id" element={<UpdatePay />} />
       <Route path="/income" element={<Income />} />
       <Route path="/expense" element={<Expense />} />
+      <Route path="/gain" element={<Gain />} />
     </Routes>
   );
 };
@@ -43,21 +45,6 @@ function App() {
     <>
       <Router>
         <AppRoutes />
-        {/*<Route path="/login" element={<Login />} />*/}
-        {/*<Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />*/}
-        {/*<Route path="/paiement" element={<Paiement />} />*/}
-        {/*<Route path="/payroll" element={<Payroll />} />*/}
-        {/*<Route path="/caisse" element={<Caisse />} />*/}
-        {/*<Route path="/inscription" element={<Inscription />} />*/}
-        {/*<Route path="/staffs" element={<Staffs />} />*/}
-        {/*<Route path="/eleves" element={<Eleves />} />*/}
-        {/*<Route path="/edit/:id" element={<Edit />} />*/}
-        {/*<Route path="/addpaie" element={<AddPaie />} />*/}
-        {/*<Route path="/update-paie/:id" element={<UpdatePaie />} />*/}
-        {/*<Route path="/addpay" element={<AddPay />} />*/}
-        {/*<Route path="/update-pay/:id" element={<UpdatePay />} />*/}
-        {/*<Route path="/income" element={<Income/>} />*/}
-        {/*<Route path="/expense" element={<Expense/>} />*/}
       </Router>
     </>
   );

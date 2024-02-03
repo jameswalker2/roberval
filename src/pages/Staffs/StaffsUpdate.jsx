@@ -227,9 +227,15 @@ function StaffsUpdate({ visibleUp, onCloseUp, selectedStaffs }) {
                     <option value="" className="text-gray-300">
                       Fonction
                     </option>
-                    <option value="Directeur">Directeur</option>
-                    <option value="Enseignant(e)">Enseignant(e)</option>
-                    <option value="Censeur">Censeur</option>
+                    <option value="Professeur Prescolaire">
+                      Professeur Prescolaire
+                    </option>
+                    <option value="Professeur Fondamentale">
+                      Professeur Fondamentale
+                    </option>
+                    <option value="Professeur Secondaire">
+                      Professeur Secondaire
+                    </option>
                     <option value="Staff Direction">Staff Direction</option>
                   </select>
                 </label>

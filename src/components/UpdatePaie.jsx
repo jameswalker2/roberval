@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { NavBar } from "./Navbar/NavBar.jsx";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { supabase } from "../Config/SupabaseConfig.jsx";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { FaUserGraduate } from "react-icons/fa6";
-import moment from "moment";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../Config/SupabaseConfig.jsx";
+import { NavBar } from "./Navbar/NavBar.jsx";
 import "./UpdatePaie.scss";
-import {toast, Toaster} from "react-hot-toast";
 
 export function UpdatePaie() {
   const { id } = useParams();
@@ -25,8 +25,8 @@ export function UpdatePaie() {
   const [phone, setPhone] = useState("");
   const [classe, setClasse] = useState("");
   const [created_at, setCreated_at] = useState("");
-  const [lastName, setLastName] = useState("")
-  const [nouveauMontant, setNouveauMontant] = useState(0)
+  const [lastName, setLastName] = useState("");
+  const [nouveauMontant, setNouveauMontant] = useState(0);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -55,7 +55,6 @@ export function UpdatePaie() {
         navigate("/paiement", { replace: true });
         console.log(error);
       }
-
     };
 
     fetchStudent();
@@ -67,20 +66,47 @@ export function UpdatePaie() {
     try {
       const { error } = await supabase
         .from("paie")
-        .update({ amount: montantTotal, balance: testAmount, versement, statut, mode, date })
+        .update({
+          amount: montantTotal,
+          balance: testAmount,
+          versement,
+          statut,
+          mode,
+          date,
+        })
         .eq("id", id)
         .select("id");
 
       if (error) {
-        throw error
+        throw error;
       } else {
-        toast.success("Paiement ajouter avec success !")
+        toast.success("Paiement ajouter avec success !");
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (error) {
       console.log(error);
     }
+
+    try {
+      const { error } = await supabase
+        .from("income")
+        .insert({
+          amount: montantTotal,
+          mode,
+          date,
+          name: lastName,
+          what: "Frais Scolaire",
+        })
+        .eq("id", id)
+        .select("id");
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.log(error.message);
     }
+  };
 
   const handleNouveauMontantChange = (e) => {
     setNouveauMontant(parseFloat(e.target.value) || 0);
@@ -90,27 +116,31 @@ export function UpdatePaie() {
 
   let montantTotal = amount + nouveauMontant;
 
-
-
   return (
     <>
       <NavBar />
-      <Toaster position={"top-right"}/>
+      <Toaster position={"top-right"} />
       <div className="container_edit">
         <div className="flex w-[75.9rem] items-center justify-between h-11 mb-10 bg-white px-10 rounded-full">
           <NavLink className="text-2xl text-color1" to={"/paiement"}>
             <BiArrowBack />
           </NavLink>
           <div>
-            <NavLink className="font-medium text-color2 hover:text-color1" to={"/dashboard"}>
+            <NavLink
+              className="font-medium text-color2 hover:text-color1"
+              to={"/dashboard"}>
               Dashboard
             </NavLink>
             <span className="m-5">|</span>
-            <NavLink className="font-medium text-color2 hover:text-color1" to={"/eleves"}>
+            <NavLink
+              className="font-medium text-color2 hover:text-color1"
+              to={"/eleves"}>
               Eleves
             </NavLink>
             <span className="m-5">|</span>
-            <NavLink className="font-medium text-color2 hover:text-color1" to={"/paiement"}>
+            <NavLink
+              className="font-medium text-color2 hover:text-color1"
+              to={"/paiement"}>
               Paiement
             </NavLink>
           </div>
@@ -159,14 +189,19 @@ export function UpdatePaie() {
           <h2>Paiement info</h2>
           <form onSubmit={handleUpdateFees}>
             <input
-              type="text" placeholder="Montant Avancé"
+              type="text"
+              placeholder="Montant Avancé"
               value={nouveauMontant}
               onChange={handleNouveauMontantChange}
-              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mt-10 mr-10 mb-10"/>
+              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mt-10 mr-10 mb-10"
+            />
             <input
-              type="text" value={testAmount} placeholder="Balance"
+              type="text"
+              value={testAmount}
+              placeholder="Balance"
               onChange={(e) => setUpdateBalance(e.target.value)}
-              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"/>
+              className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"
+            />
             <select
               value={versement}
               className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs mr-10"
@@ -196,10 +231,16 @@ export function UpdatePaie() {
               <option value="Chèque">Chèque</option>
             </select>
             <input
-              value={date} type="date"
+              value={date}
+              type="date"
               className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs mr-10"
-              onChange={(e) => setDate(e.target.value)}/>
-            <button className="btn bg-color2 text-white border-none mt-10 mb-10 hover:bg-color3" type="submit">Ajouter paiement</button>
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <button
+              className="btn bg-color2 text-white border-none mt-10 mb-10 hover:bg-color3"
+              type="submit">
+              Ajouter paiement
+            </button>
           </form>
           {/*  */}
           <h2>Résultat</h2>

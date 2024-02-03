@@ -1,7 +1,6 @@
 .container_dash {
   position: relative;
   width: 80%;
-  height: 44rem;
   left: 13%;
 }
 
@@ -23,13 +22,13 @@
 .content-dash {
   position: absolute;
   display: flex;
-  margin: 30px -11px;
+  margin: 30px 0px;
   #ct {
     background-color: #ffffff;
     width: 280px;
     border-radius: 5px;
-    margin: 0px 18px;
-    padding: 20px;
+    margin: 0px 48px 0 0;
+    padding: 20px 15px;
     text-decoration: none;
     color: black;
   }
@@ -51,6 +50,6 @@
   top: 41vh;
   background-color: #f3f3f3;
   border-radius: 5px;
-  width: 105%;
+  width: 78.5rem;
   height: 55vh;
 }

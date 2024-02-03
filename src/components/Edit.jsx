@@ -147,10 +147,6 @@ export function Edit() {
       }
     } catch (error) {
       toast.error(error.message);
-    } finally {
-      setTimeout(() => {
-        setLoading(true);
-      }, 1000);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -266,6 +262,7 @@ export function Edit() {
                     onChange={(e) => setGender(e.target.value)}
                     type="radio"
                     name="gender"
+                    id="Garçon"
                     value={"Garçon"}
                     checked={gender === "Garçon"}
                     className="radio border-color2 border-2 w-5 h-5"
@@ -277,6 +274,7 @@ export function Edit() {
                     onChange={(e) => setGender(e.target.value)}
                     type="radio"
                     name="gender"
+                    id="Fille"
                     value={"Fille"}
                     checked={gender === "Fille"}
                     className="radio border-color2 border-2 w-5 h-5"
@@ -294,6 +292,7 @@ export function Edit() {
                     }}
                     type="radio"
                     name="handicap"
+                    id="Oui"
                     value={"Oui"}
                     checked={handicap === "Oui"}
                     className="radio border-color2 border-2 w-5 h-5"
@@ -308,6 +307,7 @@ export function Edit() {
                     }}
                     type="radio"
                     name="handicap"
+                    id="Non"
                     value={"Non"}
                     checked={handicap === "Non"}
                     className="radio border-color2 border-2 w-5 h-5"
@@ -316,7 +316,6 @@ export function Edit() {
                 <select
                   onChange={(e) => setWtHandicap(e.target.value)}
                   name="wthandicap"
-                  defaultValue={"0"}
                   value={wtHandicap}
                   disabled={!isHandicapEnabled}
                   className="select w-[22rem] bg-gray-200 ml-[9.9rem] text-[18px]">
@@ -465,7 +464,7 @@ export function Edit() {
                     name="3"
                     value={"Vivant"}
                     checked={statutFather === "Vivant"}
-                    className="radio border-color2 border-2 w-5 h-5 mr-[39rem]"
+                    className="radio border-color2 border-2 w-5 h-5 mr-[50rem]"
                   />
                 </div>
                 <input
