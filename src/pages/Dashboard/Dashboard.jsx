@@ -72,7 +72,7 @@ export function Dashboard() {
     <>
       <NavBar />
       <div className="h-screen">
-        <div className="container_dash">
+        <div className="absolute left-48">
           <section className="dashboard">
             <h1>Dashboard</h1>
             <p>Bienvenue sur votre Dashboard</p>
