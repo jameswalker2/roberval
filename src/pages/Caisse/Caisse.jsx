@@ -11,7 +11,7 @@ import CaisseLink from "./CaisseLink.jsx";
 export function Caisse() {
   const [recentTransactions, setRecentTransactions] = useState([]);
 
-  const [state, setState] = useState({
+  const [state] = useState({
     options: {
       chart: {
         id: "basic-bar",

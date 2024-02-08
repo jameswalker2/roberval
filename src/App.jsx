@@ -15,6 +15,7 @@ import { Staffs } from "@/pages/Staffs/Staffs.jsx";
 import { Eleves } from "@/pages/Students/Eleves.jsx";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
+import { ResetPassword } from "./pages/AuthConfig/reset/ResetPassword";
 import Gain from "./pages/Profit&Loss/Gain";
 
 const AppRoutes = () => {
@@ -36,6 +37,7 @@ const AppRoutes = () => {
       <Route path="/income" element={<Income />} />
       <Route path="/expense" element={<Expense />} />
       <Route path="/gain" element={<Gain />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 };

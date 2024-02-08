@@ -58,7 +58,7 @@ function Charts() {
         type="area"
         options={options}
         series={options.series}
-        width={"1190"}
+        width={"1150"}
         height={"330"}
       />
     </div>
