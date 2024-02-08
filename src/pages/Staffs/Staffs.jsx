@@ -1,5 +1,6 @@
+import { Modal } from "antd";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { BiArrowBack, BiSolidAddToQueue, BiSolidPencil } from "react-icons/bi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
@@ -49,15 +50,28 @@ export function Staffs() {
     return () => fetchStaffs();
   }, [searchStaff]);
 
+  const config = {
+    title: "Erreur !",
+    content: (
+      <>
+        <h2 className="mt-5">
+          {"Vous n'êtes pas autorisé à effectuer cette opération"}
+        </h2>
+      </>
+    ),
+  };
+
   const handleDelete = async (staffId) => {
     try {
       const { error } = await supabase
         .from("staffs")
         .delete()
-        .eq("id", staffId);
+        .eq("id", staffId)
+        .single();
 
       if (error) {
         console.error(error);
+        Modal.error(config);
       }
     } catch (error) {
       toast.error(error.message);
@@ -103,6 +117,7 @@ export function Staffs() {
   return (
     <>
       <div className="h-[100vh]">
+        <Toaster />
         <div className="relative w-[90%] h-[7vh] bg-white top-10 left-20 rounded-full pl-5 pr-20 flex items-center justify-between mb-[80px] ">
           <NavLink className="text-2xl text-color1" to={"/dashboard"}>
             <BiArrowBack />
