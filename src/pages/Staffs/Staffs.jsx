@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { BiArrowBack, BiSolidAddToQueue, BiSolidPencil } from "react-icons/bi";
@@ -199,21 +199,25 @@ export function Staffs() {
                       <td>{staff.email}</td>
                       <td>
                         <span className="flex justify-flex-start">
-                          <BiSolidPencil
-                            onClick={() => {
-                              if (staff) {
-                                setSelectedStaff(staff);
-                                openUpdateModal();
-                              } else {
-                                toast.error("Not Select");
-                              }
-                            }}
-                            className="mr-5 text-color2 cursor-pointer"
-                          />
-                          <FaRegTrashAlt
-                            className="text-red-600 cursor-pointer"
-                            onClick={() => handleDelete(staff.id)}
-                          />
+                          <Button className="mr-2">
+                            <BiSolidPencil
+                              onClick={() => {
+                                if (staff) {
+                                  setSelectedStaff(staff);
+                                  openUpdateModal();
+                                } else {
+                                  toast.error("Not Select");
+                                }
+                              }}
+                              className="text-color2 cursor-pointer"
+                            />
+                          </Button>
+                          <Button>
+                            <FaRegTrashAlt
+                              className="text-red-600 cursor-pointer"
+                              onClick={() => handleDelete(staff.id)}
+                            />
+                          </Button>
                         </span>
                       </td>
                     </tr>

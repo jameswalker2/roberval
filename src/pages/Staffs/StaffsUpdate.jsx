@@ -86,8 +86,6 @@ function StaffsUpdate({ visibleUp, onCloseUp, selectedStaffs }) {
     setEmail("");
   };
 
-  // console.log(selectedStaffs);
-
   // Le rendu
   return (
     <>

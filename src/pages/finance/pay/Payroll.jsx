@@ -1,9 +1,10 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { NavLink } from "react-router-dom";
-import { supabase } from "../Config/SupabaseConfig.jsx";
-import { NavBar } from "../components/Navbar/NavBar.jsx";
+import { supabase } from "../../../Config/SupabaseConfig.jsx";
+import { NavBar } from "../../../components/Navbar/NavBar.jsx";
+import DetailsPage from "./DetailsPage.jsx";
 import "./Payroll.scss";
 // import { FiMoreHorizontal } from "react-icons/fi";
 
@@ -12,7 +13,16 @@ export function Payroll() {
   const [staffs, setStaffs] = useState([]);
   const [role, setRole] = useState([]);
   const [search, setSearch] = useState("");
-  const [selectedStudent, setSelectStudent] = useState(null);
+  const [selectedStaff, setSelectStaffs] = useState(null);
+  const [isModalShow, setIsModalShow] = useState(false);
+
+  const openIsModalShow = () => {
+    setIsModalShow(true);
+  };
+
+  const closeIsModalShow = () => {
+    setIsModalShow(false);
+  };
 
   useEffect(() => {
     const getStudents = async () => {
@@ -46,12 +56,17 @@ export function Payroll() {
 
   const handleDelete = async (payId) => {
     try {
-      const { error } = await supabase.from("pay").delete().eq("id", payId);
+      const { error } = await supabase
+        .from("pay")
+        .delete()
+        .eq("id", payId)
+        .single();
 
       if (error) {
-        console.error(error);
+        console.log(error.message);
+        toast.error("Vous n'êtes pas autorisé à effectuer cette opération");
       } else {
-        document.getElementById("my_modal_1").close();
+        console.log("Ok");
       }
     } catch (error) {
       toast.error(error.message);
@@ -95,6 +110,7 @@ export function Payroll() {
   return (
     <>
       <NavBar />
+      <Toaster position="top-right" />
       <div className="h-screen">
         <div className="container_all_pay">
           <div
@@ -141,111 +157,99 @@ export function Payroll() {
               />
               <NavLink
                 className={
-                  "btn bg-color2 text-white hover:bg-color3 border-none"
+                  "btn bg-color2 text-white w-48 hover:bg-color3 border-none"
                 }
                 to={"/addpay"}>
-                + Ajouter
+                + Générer une Payroll
               </NavLink>
             </div>
           </div>
-
           <div className="overflow-x-auto mt-5 bg-white h-96 rounded-2xl">
-            <table className="table">
-              <thead className="text-color1" key="thead">
-                <tr>
-                  <th>ID</th>
-                  <th>Nom Complet</th>
-                  <th>Role</th>
-                  <th>Téléphone</th>
-                  <th>Date de création</th>
-                  <th>Valeur Avancée</th>
-                  <th>Balance</th>
-                  <th>Date</th>
-                  <th>Statut</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              {filterStaffs
-                .filter(
-                  (resultL) =>
-                    resultL.name.toLowerCase().includes(search.toLowerCase()) ||
-                    resultL.lastName
-                      .toLowerCase()
-                      .includes(search.toLowerCase()),
-                )
-                .map((staff) => (
-                  <tbody key={staff.id} className="">
-                    <tr>
-                      <td>0{staff.id}</td>
-                      <td>
-                        {staff.name} {staff.lastName}
-                      </td>
-                      <td>{staff.role}</td>
-                      <td>{staff.phone}</td>
-                      <td>{moment(staff.created_at).format("DD/MM/YYYY")}</td>
-                      <td>$ {staff.amount}</td>
-                      <td>$ {staff.balance}</td>
-                      <td>{staff.date}</td>
-                      <td
-                        id="non"
-                        style={{
-                          color:
-                            staff.statut === "Non Payé"
-                              ? "red"
-                              : staff.statut === "Avance"
-                              ? "#ffa901"
-                              : "green",
-                          fontSize: "13px",
-                          fontWeight: "700",
-                        }}>
-                        {staff.statut}
-                      </td>
-                      <td>
-                        <span>
-                          <button
-                            onClick={() => {
-                              setSelectStudent(staff);
-                              document.getElementById("my_modal_1").showModal();
-                            }}
-                            className="btn btn-ghost btn-xs">
-                            Détails
-                          </button>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                ))}
-            </table>
+            {filterStaffs.length > 0 ? (
+              <table className="table">
+                <thead className="text-color1" key="thead">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom Complet</th>
+                    <th>Role</th>
+                    <th>Téléphone</th>
+                    <th>Date de création</th>
+                    <th>Valeur Avancée</th>
+                    <th>Balance</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                {filterStaffs
+                  .filter(
+                    (resultL) =>
+                      resultL.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                      resultL.lastName
+                        .toLowerCase()
+                        .includes(search.toLowerCase()),
+                  )
+                  .map((staff) => (
+                    <tbody key={staff.id} className="">
+                      <tr>
+                        <td>0{staff.id}</td>
+                        <td>
+                          {staff.name} {staff.lastName}
+                        </td>
+                        <td>{staff.role}</td>
+                        <td>{staff.phone}</td>
+                        <td>{moment(staff.created_at).format("DD/MM/YYYY")}</td>
+                        <td>$ {staff.amount}</td>
+                        <td>$ {staff.balance}</td>
+                        <td>{staff.date}</td>
+                        <td
+                          id="non"
+                          style={{
+                            color:
+                              staff.statut === "Non Payé"
+                                ? "red"
+                                : staff.statut === "Avance"
+                                ? "#ffa901"
+                                : "green",
+                            fontSize: "13px",
+                            fontWeight: "700",
+                          }}>
+                          {staff.statut}
+                        </td>
+                        <td>
+                          <span>
+                            <button
+                              onClick={() => {
+                                if (staff) {
+                                  setSelectStaffs(staff);
+                                  openIsModalShow();
+                                } else {
+                                  toast.error("Erreur !");
+                                }
+                              }}
+                              className="btn btn-ghost btn-xs">
+                              Détails
+                            </button>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
+              </table>
+            ) : (
+              <p className="text-2xl flex justify-center mt-40">
+                Aucune payroll générée pour le moment
+              </p>
+            )}
           </div>
-          <dialog id="my_modal_1" className={"modal"}>
-            <div className="modal-box bg-white w-full max-w-xl">
-              {selectedStudent && (
-                <div>
-                  <h2 className="text-center font-semibold uppercase">
-                    {selectedStudent.firstName} {selectedStudent.lastName}
-                  </h2>
-                  <p className="text-center">{selectedStudent.role}</p>
-
-                  <NavLink
-                    to={"/update-pay/" + selectedStudent.id}
-                    className="btn bg-color2 hover:bg-color3 border-none text-white mx-20">
-                    Ajouter Payroll
-                  </NavLink>
-                  <button
-                    onClick={() => handleDelete(selectedStudent.id)}
-                    className="btn bg-red-600 border-none text-white m-10 hover:bg-red-700">
-                    Delete
-                  </button>
-                </div>
-              )}
-              <button
-                onClick={() => document.getElementById("my_modal_1").close()}
-                type={"button"}
-                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                ✕
-              </button>
-            </div>
-          </dialog>
+          <DetailsPage
+            selectedStaff={selectedStaff}
+            show={isModalShow}
+            close={closeIsModalShow}
+            deleteID={handleDelete}
+          />
         </div>
       </div>
     </>
