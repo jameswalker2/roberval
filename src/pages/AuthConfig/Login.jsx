@@ -19,15 +19,15 @@ export function Login() {
 
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen bg-gradient-to-t from-color1 to-fuchsia-100 ">
         <Toaster position={"top-right"} />
         <div
-          className="container_login absolute flex left-[50%] top-[50%] bg-color3 p-2 rounded-2xl w-[65rem] h-[35rem]
-        max-[1040px]:w-[90%] max-[1040px]:p-[1%] max-[1040px]:h-[60%] ">
+          className="container_login absolute flex left-[50%] top-[50%] bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-100
+          border-gray-100 bg-color3 p-2 rounded-2xl w-[65rem] h-[35rem] max-[1040px]:w-[90%] max-[1040px]:p-[1%] max-[1040px]:h-[60%] ">
           <div className="bg- rounded-l-2xl flex justify-center max-[800px]:hidden">
             <img width="500" src={imageRoberval} alt="svg" id="img_roberval" />
           </div>
-          <div className="flex items-center justify-center bg-color2 ml-20 rounded-2xl w-[30rem] p-10 max-[1040px]:w-[100%] max-[1040px]:ml-0  ">
+          <div className="flex items-center justify-center bg-color1 ml-20 rounded-2xl w-[30rem] p-10 max-[1040px]:w-[100%] max-[1040px]:ml-0  ">
             <Formik
               initialValues={{ email: "", password: "" }}
               validationSchema={validationSchema}
@@ -47,7 +47,7 @@ export function Login() {
               }}>
               {({ isSubmitting }) => (
                 <Form>
-                  <div className="text-center text-white">
+                  <div className="text-center text-color2">
                     <h1 className="text-3xl capitalize font-bold max-[500px]:text-xl">
                       Bienvenue !
                     </h1>
@@ -70,7 +70,7 @@ export function Login() {
                       <ErrorMessage
                         name="email"
                         component="div"
-                        className="text-red-500"
+                        className="text-left text-red-500"
                       />
                     </div>
                     <div className="form-control w-full max-w-xs mb-10">
@@ -89,7 +89,7 @@ export function Login() {
                       <ErrorMessage
                         name="password"
                         component="div"
-                        className="text-red-500"
+                        className="text-left text-red-500"
                       />
                     </div>
                     {isSubmitting ? (
@@ -97,7 +97,7 @@ export function Login() {
                     ) : (
                       <div className="text-center flex flex-col ">
                         <button
-                          className="btn bg-white border-none text-color1 hover:bg-color3 hover:text-white mb-5"
+                          className="btn text-color2 bg-transparent border-2 hover:border-none hover:bg-color3"
                           type="submit"
                           disabled={isSubmitting}>
                           Se connecter
