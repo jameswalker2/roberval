@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line no-undef
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -18,10 +19,11 @@ module.exports = {
     },
     extend: {
       colors: {
-        color1: "#6366F1",
-        color2: "#FFFFFF",
-        color3: "#FFA500",
-        // color4: "#2C2C2C",
+        primaryColor: "#2556eb",
+        supportingColor1: "#232429",
+        supportingColor2: "#5AD374",
+        supportingColor3: "#FD6477",
+        supportingColor4: "#FFBF5A",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -77,5 +79,6 @@ module.exports = {
       },
     },
   },
+  // eslint-disable-next-line no-undef
   plugins: [require("tailwindcss-animate"), require("daisyui")],
 };

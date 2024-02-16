@@ -69,46 +69,46 @@ export function Dashboard() {
   return (
     <>
       <NavBar />
-      <div className="h-screen px-52 py-5 bg-color1">
-        <div className="text-color2">
+      <div className="h-screen pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div className="w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
           <h1 className="font-semibold text-2xl">Dashboard</h1>
         </div>
         <div className="flex">
           <NavLink to={"/eleves"}>
-            <Card className="w-60 mt-10 mr-5">
+            <Card className="w-64 bg-color2 mt-10 mr-12 shadow-sm">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg">Total Eleves</h2>
                 <GraduationCap
                   size={40}
-                  strokeWidth={2.25}
-                  className="text-color1 bg-color1 bg-opacity-45 p-2 rounded-full"
+                  strokeWidth={1.5}
+                  className="text-primaryColor bg-primaryColor bg-opacity-10 p-2 rounded-full"
                 />
               </div>
               <Statistic value={students} className="font-semibold" />
             </Card>
           </NavLink>
           <NavLink to={"/staffs"}>
-            <Card className="w-60 mt-10 mr-5">
+            <Card className="w-64 mt-10 mr-12 shadow-sm">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg">Total Staffs</h2>
 
                 <Users
                   size={40}
-                  strokeWidth={2.25}
-                  className="text-color3 bg-color3 bg-opacity-45 p-2 rounded-full"
+                  strokeWidth={1.5}
+                  className="text-supportingColor2 bg-supportingColor2 bg-opacity-10 p-2 rounded-full"
                 />
               </div>
               <Statistic value={staffs} className="font-semibold" />
             </Card>
           </NavLink>
           <NavLink to={"/staffs"}>
-            <Card className="w-60 mt-10 mr-5">
+            <Card className="w-64 mt-10 mr-12 shadow-sm">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg">Total Professeurs</h2>
                 <Users
                   size={40}
-                  strokeWidth={2.25}
-                  className="text-purple-500 bg-purple-300 bg-opacity-45 p-2 rounded-full"
+                  strokeWidth={1.5}
+                  className="text-supportingColor3 bg-supportingColor3 bg-opacity-10 p-2 rounded-full"
                 />
               </div>
               <Statistic
@@ -118,13 +118,13 @@ export function Dashboard() {
             </Card>
           </NavLink>
           <NavLink to={"/inscription"}>
-            <Card className="w-60 mt-10 mr-5">
+            <Card className="w-64 mt-10 mr-12 shadow-sm">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg">Total Inscription</h2>
                 <FolderKanban
                   size={40}
-                  strokeWidth={2.25}
-                  className="text-green-500 bg-green-300 bg-opacity-45 p-2 rounded-full"
+                  strokeWidth={1.5}
+                  className="text-supportingColor4 bg-supportingColor4 bg-opacity-10 p-2 rounded-full"
                 />
               </div>
               {Object.keys(totalRegistrationsPerDay).map((day) => (
@@ -138,8 +138,10 @@ export function Dashboard() {
           </NavLink>
         </div>
         <div>
-          <Card style={{ width: 1020, height: 380, marginTop: 20 }}>
-            <h4 className="text-color1 font-semibold mb-5">Balance</h4>
+          <Card style={{ width: 1170, height: 400, marginTop: 20 }}>
+            <h4 className="text-supportingColor1 font-medium text-[20px] mb-5">
+              Balance
+            </h4>
             <Charts />
           </Card>
         </div>
