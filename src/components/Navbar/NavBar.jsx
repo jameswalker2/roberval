@@ -10,10 +10,16 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import "./NavBar.scss";
 
 export function NavBar() {
+
+    const location = useLocation()
+
+  const isActive = (path) => {
+      return location.pathname === path
+  }
   return (
     <>
       <nav className="fixed w-56 h-[100%] bg-primaryColor">
@@ -25,8 +31,8 @@ export function NavBar() {
           <li>
             <h2 className="menu-title">Accueil</h2>
             <ul>
-              <li className="mb-2 text-[16px] font-normal focus:bg-supportingColor3">
-                <Link to={"/dashboard"}>
+              <li className="mb-2 text-[16px] font-normal">
+                <Link to={"/dashboard"} className={`flex items-center ${isActive("/dashboard") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <LayoutDashboard />
                   Dashboard
                 </Link>
@@ -38,25 +44,25 @@ export function NavBar() {
             <h2 className="menu-title">Administration</h2>
             <ul>
               <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/eleves"}>
+                <Link to={"/eleves"} className={`flex items-center ${isActive("/eleves") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <GraduationCap />
                   Eleves
                 </Link>
               </li>
               <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/staffs"}>
+                <Link to={"/staffs"} className={`flex items-center ${isActive("/staffs") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <Users />
                   Staffs
                 </Link>
               </li>
               <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/paiement"}>
+                <Link to={"/paiement"} className={`flex items-center ${isActive("/paiement") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <Banknote />
                   Paiement
                 </Link>
               </li>
               <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/payroll"}>
+                <Link to={"/payroll"} className={`flex items-center ${isActive("/payroll") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <Wallet />
                   Payroll
                 </Link>
@@ -67,26 +73,33 @@ export function NavBar() {
           <li>
             <h2 className="menu-title">Finance</h2>
             <ul>
+              <details open>
+
+                <summary><Landmark /> Caisse</summary>
+                <ul>
+                  <li className="mb-2 text-[16px] font-normal">
+                    <Link to={"/income"} className={`flex items-center ${isActive("/income") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
+                      <ArrowDownToLine />
+                      Revenu
+                    </Link>
+                  </li>
+                  <li className="mb-2 text-[16px] font-normal">
+                    <Link to={"/expense"} className={`flex items-center ${isActive("/expense") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
+                      <ArrowUpToLine />
+                      Dépense
+                    </Link>
+                  </li>
+                </ul>
+              </details>
               <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/caisse"}>
+                <Link to={"/caisse"} className={`flex items-center ${isActive("/caisse") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <Landmark />
                   Caisse
                 </Link>
               </li>
+
               <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/income"}>
-                  <ArrowUpToLine />
-                  Revenu
-                </Link>
-              </li>
-              <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/expense"}>
-                  <ArrowDownToLine />
-                  Dépense
-                </Link>
-              </li>
-              <li className="mb-2 text-[16px] font-normal">
-                <Link to={"/gain"}>
+                <Link to={"/gain"} className={`flex items-center ${isActive("/gain") ? "bg-white text-primaryColor hover:bg-slate-200" : ""}`}>
                   <BarChartBig />
                   Profit & Perte
                 </Link>
