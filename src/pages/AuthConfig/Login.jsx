@@ -63,7 +63,7 @@ export function Login() {
                         id="email"
                         name="email"
                         placeholder="Écrivez ici..."
-                        className="input input-bordered border-2 border-supportingColor4 text-supportingColor1 w-80 mb-2"
+                        className="input input-bordered border-2 bg-white border-supportingColor4 text-supportingColor1 w-80 mb-2"
                       />
                       <ErrorMessage
                         name="email"
@@ -82,7 +82,7 @@ export function Login() {
                         id="password"
                         name="password"
                         placeholder="Écrivez ici..."
-                        className="input input-bordered border-2 border-supportingColor4 text-supportingColor1 w-80 mb-2 font-normal"
+                        className="input input-bordered border-2 bg-white border-supportingColor4 text-supportingColor1 w-80 mb-2 font-normal"
                       />
                       <ErrorMessage
                         name="password"
