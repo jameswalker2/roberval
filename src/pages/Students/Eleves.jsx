@@ -1,8 +1,7 @@
-import { Pagination } from "antd";
+import { Empty, Pagination } from "antd";
+import { UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import { BiSolidPencil } from "react-icons/bi";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../Config/SupabaseConfig.jsx";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
@@ -98,11 +97,19 @@ export function Eleves() {
           </ul>
         </div>
 
-        <div className=" w-[95%] p-4 rounded-lg bg-white mb-5 mt-10">
-          <h2 className="font-medium mb-5 text-supportingColor1 ">
-            Selectionner les critères
-          </h2>
-          <div className="flex items-center justify-center">
+        <div className=" w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div className="flex justify-between items-center mb-5">
+            <h2 className="font-medium  text-supportingColor1 ">
+              Selectionner les critères
+            </h2>
+            <NavLink
+              className="btn bg-primaryColor text-white border-none hover:bg-opacity-90 "
+              to={"/inscription"}>
+              <UserPlus />
+              Nouveau Eleves
+            </NavLink>
+          </div>
+          <div className="flex justify-center items-center ">
             <select
               onChange={(e) => setSelectedClasse(e.target.value)}
               className="select select-bordered w-full max-w-xs mr-20 bg-primaryColor text-white">
@@ -120,27 +127,24 @@ export function Eleves() {
                 setSearchQuery(e.target.value);
               }}
               value={searchQuery}
-              className="input input-bordered bg-white rounded-full h-9 w-[30rem] "
+              className="input input-bordered bg-white border-primaryColor border-2 rounded-full w-[30rem] "
               type="search"
               id="search_bar"
               placeholder="Cherchez avec le nom ou prénom de l'étudiant..."
             />
-            <NavLink
-              className="flex justify-center items-center bg-color2 rounded-full text-red-600 w-20 h-8"
-              to={"/inscription"}>
-              Ajouter
-            </NavLink>
           </div>
         </div>
 
-        <div className="overflow-x-auto w-full h-[32rem] rounded-2xl bg-white p-5 ">
-          <h2 className="font-semibold text-color1 mb-1">Liste des élèves</h2>
+        <div className="overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm ">
+          <h2 className="font-medium text-supportingColor1 mb-5">
+            Liste des élèves
+          </h2>
           {allResults.length > 0 ? (
             <div>
               <table className="table table-xs">
                 <thead
                   key="thead"
-                  className="text-color2 text-sm bg-gray-50 hover:bg-gray-100">
+                  className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10 ">
                   <tr>
                     <th>ID</th>
                     <th>Nom</th>
@@ -178,12 +182,26 @@ export function Eleves() {
                         <td>{student.phone}</td>
                         <td>
                           <span className="actions">
-                            <NavLink id="nav" to={"/edit/" + student.id}>
-                              <BiSolidPencil />
-                            </NavLink>
-                            <FaRegTrashAlt
-                              onClick={() => handleDelete(student.id)}
-                            />
+                            <div className="dropdown dropdown-end">
+                              <div
+                                tabIndex={0}
+                                role="button"
+                                className="btn w-20 border-none bg-primaryColor hover:bg-opacity-90 text-white">
+                                Détails
+                              </div>
+                              <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
+                                <li className="text-supportingColor4 hover:bg-slate-100 rounded-box">
+                                  <NavLink to={"/edit/" + student.id}>
+                                    Modifier
+                                  </NavLink>
+                                </li>
+                                <li className="text-red-600 hover:bg-slate-100 rounded-box cursor-pointer">
+                                  <p onClick={() => handleDelete(student.id)}>
+                                    Supprimer
+                                  </p>
+                                </li>
+                              </ul>
+                            </div>
                           </span>
                         </td>
                       </tr>
@@ -195,12 +213,12 @@ export function Eleves() {
                 pageSize={studentsPerPage}
                 total={filterStudents.length}
                 onChange={(page) => setCurrentPage(page)}
-                className="text-center"
+                className="text-center mt-5"
               />
             </div>
           ) : (
             <p className="text-2xl flex justify-center mt-40">
-              Aucune donnée trouvé
+              <Empty />
             </p>
           )}
         </div>
