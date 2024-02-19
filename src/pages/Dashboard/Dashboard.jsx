@@ -1,7 +1,7 @@
+import { Card, Statistic } from "antd";
+import { FolderKanban, GraduationCap, Users } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { FaChalkboardTeacher, FaUserGraduate, FaUsers } from "react-icons/fa";
-import { MdOutlineAppRegistration } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../Config/SupabaseConfig.jsx";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
@@ -37,8 +37,6 @@ export function Dashboard() {
   }, []);
 
   useEffect(() => {
-    console.log(registrations);
-
     const registreMax = registrations.reduce((acc, item) => {
       const date = moment(item.date).format("YYYY-MM-DD");
 
@@ -71,67 +69,81 @@ export function Dashboard() {
   return (
     <>
       <NavBar />
-      <div className="h-screen">
-        <div className="absolute left-48">
-          <section className="dashboard">
-            <h1>Dashboard</h1>
-            <p>Bienvenue sur votre Dashboard</p>
-            {/*  */}
-            <section className="content-dash">
-              <NavLink
-                className="card card-compact w-96 shadow-xl"
-                to={"/eleves"}
-                id="ct">
-                <FaUserGraduate className="w-[20px] h-[20px]" />
-                <div className="title">
-                  <h3 className="mt-5 text-[15px] uppercase">Totale Elèves</h3>
-                  <h2 className="text-[30px]">{students}</h2>
-                </div>
-              </NavLink>
-              <NavLink
-                className="card card-compact w-96 shadow-xl"
-                to={"/staffs"}
-                id="ct">
-                <FaUsers className="w-[20px] h-[20px]" />
-                <div className="title">
-                  <h3 className="mt-5 text-[15px] uppercase">Total staffs</h3>
-                  <h2 className="text-[30px]">{staffs}</h2>
-                </div>
-              </NavLink>
-              <NavLink
-                className="card card-compact w-96  shadow-xl"
-                to={"/staffs"}
-                id="ct">
-                <FaChalkboardTeacher className="w-[20px] h-[20px]" />
-                <div className="title">
-                  <h3 className="mt-5 text-[15px] uppercase">
-                    Total Professeurs{/* {staffs} */}
-                  </h3>
-                  <h2 className="text-[30px]">{maxSizePerGroup.Professeur}</h2>
-                </div>
-              </NavLink>
-              <NavLink
-                className="card card-compact w-96  shadow-xl"
-                to={"/inscription"}
-                id="ct">
-                <div className="title">
-                  <MdOutlineAppRegistration className="w-[20px] h-[20px]" />
-                  <h3 className="mt-5 text-[15px] uppercase">Inscriptions</h3>
-                  {Object.keys(totalRegistrationsPerDay).map((day) => (
-                    <div key={day}>
-                      <h2 className="text-[30px]">
-                        {totalRegistrationsPerDay[day]}
-                      </h2>
-                    </div>
-                  ))}
-                </div>
-              </NavLink>
-            </section>
-          </section>
-          <section className="revenu">
-            <h4 className="text-color1 font-semibold">Balance</h4>
+      <div className="h-screen pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div className="w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
+          <h1 className="font-semibold text-2xl">Dashboard</h1>
+        </div>
+        <div className="flex sm:flex-wrap ">
+          <NavLink to={"/eleves"}>
+            <Card className="w-64 bg-color2 mt-10 mr-16 shadow-sm">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg">Total Eleves</h2>
+                <GraduationCap
+                  size={40}
+                  strokeWidth={1.5}
+                  className="text-primaryColor bg-primaryColor bg-opacity-10 p-2 rounded-full"
+                />
+              </div>
+              <Statistic value={students} className="font-semibold" />
+            </Card>
+          </NavLink>
+          <NavLink to={"/staffs"}>
+            <Card className="w-64 mt-10 mr-16 shadow-sm">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg">Total Staffs</h2>
+
+                <Users
+                  size={40}
+                  strokeWidth={1.5}
+                  className="text-supportingColor2 bg-supportingColor2 bg-opacity-10 p-2 rounded-full"
+                />
+              </div>
+              <Statistic value={staffs} className="font-semibold" />
+            </Card>
+          </NavLink>
+          <NavLink to={"/staffs"}>
+            <Card className="w-64 mt-10 mr-16 shadow-sm">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg">Total Professeurs</h2>
+                <Users
+                  size={40}
+                  strokeWidth={1.5}
+                  className="text-supportingColor3 bg-supportingColor3 bg-opacity-10 p-2 rounded-full"
+                />
+              </div>
+              <Statistic
+                value={maxSizePerGroup.Professeur}
+                className="font-semibold"
+              />
+            </Card>
+          </NavLink>
+          <NavLink to={"/inscription"}>
+            <Card className="w-64 mt-10 shadow-sm">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg">Total Inscription</h2>
+                <FolderKanban
+                  size={40}
+                  strokeWidth={1.5}
+                  className="text-supportingColor4 bg-supportingColor4 bg-opacity-10 p-2 rounded-full"
+                />
+              </div>
+              {Object.keys(totalRegistrationsPerDay).map((day) => (
+                <Statistic
+                  key={day}
+                  value={totalRegistrationsPerDay[day]}
+                  className="font-semibold"
+                />
+              ))}
+            </Card>
+          </NavLink>
+        </div>
+        <div>
+          <Card className={"mt-10 w-[95%] h-96 "}>
+            <h4 className="text-supportingColor1 font-medium text-[20px] mb-5">
+              Balance
+            </h4>
             <Charts />
-          </section>
+          </Card>
         </div>
       </div>
     </>

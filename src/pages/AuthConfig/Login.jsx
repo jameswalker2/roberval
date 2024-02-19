@@ -14,20 +14,18 @@ export function Login() {
     email: Yup.string()
       .email("Adresse e-mail invalide")
       .required("Champ e-mail requis"),
-    password: Yup.string().required("Champ password requis"),
+    password: Yup.string().required("Champ mot de passe requis"),
   });
 
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen bg-primaryColor">
         <Toaster position={"top-right"} />
-        <div
-          className="container_login absolute flex left-[50%] top-[50%] bg-color3 p-2 rounded-2xl w-[65rem] h-[35rem]
-        max-[1040px]:w-[90%] max-[1040px]:p-[1%] max-[1040px]:h-[60%] ">
-          <div className="bg- rounded-l-2xl flex justify-center max-[800px]:hidden">
-            <img width="500" src={imageRoberval} alt="svg" id="img_roberval" />
+        <div className="absolute flex left-[15%] top-[10%] w-[70%] h-[80%] bg-white p-2 rounded-lg ">
+          <div className=" bg-supportingColor4 rounded-lg w-[60%] flex justify-center ">
+            <img style={{ width: 500 }} src={imageRoberval} alt="svg" />
           </div>
-          <div className="flex items-center justify-center bg-color2 ml-20 rounded-2xl w-[30rem] p-10 max-[1040px]:w-[100%] max-[1040px]:ml-0  ">
+          <div className="w-[0%] flex ml-14 mt-10">
             <Formik
               initialValues={{ email: "", password: "" }}
               validationSchema={validationSchema}
@@ -47,17 +45,17 @@ export function Login() {
               }}>
               {({ isSubmitting }) => (
                 <Form>
-                  <div className="text-center text-white">
-                    <h1 className="text-3xl capitalize font-bold max-[500px]:text-xl">
-                      Bienvenue !
+                  <div className="text-primaryColor ">
+                    <h1 className="text-[30px] capitalize font-bold ">
+                      Se connecter
                     </h1>
-                    <h2 className="text-md mb-10 max-[500px]:text-xs ">
-                      Veuillez entrer vos coordonnées
+                    <h2 className="text-md mb-10  font-normal">
+                      Entrez votre email et votre mot de passe
                     </h2>
-                    <div className="form-control w-full max-w-xs mb-5  max-[100px]:max-w-sm">
+                    <div className="form-control w-full max-w-xs mb-5">
                       <label htmlFor="email" className="label">
-                        <span className="label-text text-white">
-                          Entrez votre email{" "}
+                        <span className="label-text text-primaryColor font-normal text-[16px]">
+                          Email{" "}
                         </span>
                       </label>
                       <Field
@@ -65,18 +63,18 @@ export function Login() {
                         id="email"
                         name="email"
                         placeholder="Écrivez ici..."
-                        className="input input-bordered bg-white text-black w-80 max-w-xs max-[500px]:w-96 mb-2"
+                        className="input input-bordered border-2 border-supportingColor4 text-supportingColor1 w-80 mb-2"
                       />
                       <ErrorMessage
                         name="email"
                         component="div"
-                        className="text-red-500"
+                        className="text-left text-red-500 font-[16px]"
                       />
                     </div>
                     <div className="form-control w-full max-w-xs mb-10">
                       <label htmlFor="password" className="label">
-                        <span className="label-text text-white">
-                          Entrez votre mot de passe{" "}
+                        <span className="label-text text-primaryColor font-normal text-[16px]">
+                          Mot de passe{" "}
                         </span>
                       </label>
                       <Field
@@ -84,29 +82,26 @@ export function Login() {
                         id="password"
                         name="password"
                         placeholder="Écrivez ici..."
-                        className="input input-bordered bg-white text-black w-80 max-w-xs mb-2"
+                        className="input input-bordered border-2 border-supportingColor4 text-supportingColor1 w-80 mb-2 font-normal"
                       />
                       <ErrorMessage
                         name="password"
                         component="div"
-                        className="text-red-500"
+                        className="text-left text-red-500 font-[16px]"
                       />
                     </div>
                     {isSubmitting ? (
-                      <div className="loading loading-spinner"></div>
+                      <div className="text-center">
+                        <span className="loading loading-spinner" />
+                      </div>
                     ) : (
-                      <div className="text-center flex flex-col ">
+                      <div className="flex flex-col ">
                         <button
-                          className="btn bg-white border-none text-color1 hover:bg-color3 hover:text-white mb-5"
+                          className="btn text-primaryColor bg-transparent border-2 border-supportingColor4 hover:border-none hover:bg-primaryColor hover:text-white"
                           type="submit"
                           disabled={isSubmitting}>
                           Se connecter
                         </button>
-                        {/* <NavLink
-                          to="/reset-password"
-                          className="btn  bg-white border-none text-color1 hover:bg-color3 hover:text-white hover:underline">
-                          Mot de passe oublié ?
-                        </NavLink> */}
                       </div>
                     )}
                   </div>

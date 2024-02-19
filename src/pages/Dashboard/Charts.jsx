@@ -2,12 +2,13 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { supabase } from "../../Config/SupabaseConfig";
+import {Empty} from "antd";
 
 function Charts() {
   const [chartIncome, setChartIncome] = useState([]);
   const [chartExpense, setChartExpense] = useState([]);
 
-  const options = {
+  const incomes = {
     stroke: {
       curve: "smooth",
     },
@@ -23,12 +24,6 @@ function Charts() {
         data: chartIncome.map((nums) => nums.amount),
         color: "#00ff00",
       },
-      {
-        name: "Dépense",
-        data: chartExpense.map((nums) => nums.amount),
-        color: "#ff2424",
-        fontWeight: 800,
-      },
     ],
     xaxis: {
       categories: chartIncome.map((dates) =>
@@ -36,6 +31,33 @@ function Charts() {
       ),
     },
   };
+
+  // const expenses = {
+  //   stroke: {
+  //     curve: "smooth",
+  //   },
+  //   chart: {
+  //     id: "area",
+  //   },
+  //   label: {
+  //     show: true,
+  //   },
+  //   series: [
+  //     {
+  //       name: "Dépense",
+  //       data:  chartExpense.map((nums) => nums.amount),
+  //       color: "#ff2424",
+  //       fontWeight: 800,
+  //     },
+  //   ],
+  //   xaxis: {
+  //     type: "datetime",
+  //     categories: chartIncome.map((dates) =>
+  //       moment(dates.date).format("MMM/YYYY"),
+  //     ),
+  //   },
+  //
+  // };
 
   useEffect(() => {
     async function fetchDataChart() {
@@ -52,15 +74,31 @@ function Charts() {
 
     fetchDataChart();
   }, [chartIncome, chartExpense]);
+
+  console.log(chartIncome);
   return (
     <div>
-      <Chart
-        type="area"
-        options={options}
-        series={options.series}
-        width={"1150"}
-        height={"330"}
-      />
+      {chartExpense.length > 0 ? (
+        <div className="flex">
+          <Chart
+            type="area"
+            options={incomes}
+            series={incomes.series}
+            width={"1070"}
+            height={"300"}
+            className={"mr-10"}
+          />
+          {/*<Chart*/}
+          {/*  type="area"*/}
+          {/*  options={expenses}*/}
+          {/*  series={expenses.series}*/}
+          {/*  width={"530"}*/}
+          {/*  height={"300"}*/}
+          {/*/>*/}
+        </div>
+      ) : (
+          <Empty />
+      )}
     </div>
   );
 }

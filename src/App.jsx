@@ -4,19 +4,19 @@ import { Edit } from "@/components/Edit.jsx";
 import { UpdatePaie } from "@/components/UpdatePaie.jsx";
 import { UpdatePay } from "@/components/UpdatePay.jsx";
 import { Login } from "@/pages/AuthConfig/Login.jsx";
+import { ResetPassword } from "@/pages/AuthConfig/reset/ResetPassword";
 import { Caisse } from "@/pages/Caisse/Caisse.jsx";
 import { Expense } from "@/pages/Caisse/Income&Expense/Expense.jsx";
 import { Income } from "@/pages/Caisse/Income&Expense/Income.jsx";
 import { Dashboard } from "@/pages/Dashboard/Dashboard.jsx";
-import { Paiement } from "@/pages/Paiement.jsx";
-import { Payroll } from "@/pages/Payroll.jsx";
+import Gain from "@/pages/Profit&Loss/Gain";
 import { Inscription } from "@/pages/Register/Inscription";
 import { Staffs } from "@/pages/Staffs/Staffs.jsx";
 import { Eleves } from "@/pages/Students/Eleves.jsx";
+import { Paiement } from "@/pages/finance/paie/Paiement";
+import { Payroll } from "@/pages/finance/pay/Payroll";
 import { Route, Routes } from "react-router-dom";
 import "./App.scss";
-import { ResetPassword } from "./pages/AuthConfig/reset/ResetPassword";
-import Gain from "./pages/Profit&Loss/Gain";
 
 function App() {
   return (

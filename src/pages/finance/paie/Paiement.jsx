@@ -2,8 +2,8 @@ import moment from "moment/moment.js";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { NavLink } from "react-router-dom";
-import { supabase } from "../Config/SupabaseConfig.jsx";
-import { NavBar } from "../components/Navbar/NavBar.jsx";
+import { supabase } from "../../../Config/SupabaseConfig.jsx";
+import { NavBar } from "../../../components/Navbar/NavBar.jsx";
 import "./Paiement.scss";
 
 export function Paiement() {
@@ -140,72 +140,80 @@ export function Paiement() {
           <NavLink
             className="btn bg-color2 text-white border-none hover:bg-color3"
             to={"/addpaie"}>
-            + Ajouter un nouveau paiement
+            + Générer un paiement
           </NavLink>
           {/*<h3>Total <span>$10,000 </span></h3>*/}
         </div>
         <div className="overflow-x-auto mt-10 bg-white h-[26rem] rounded-2xl ml-[16%] w-[75rem]">
-          <table className="table">
-            <thead className="text-color1">
-              <tr>
-                <th>ID</th>
-                <th>Classe</th>
-                <th>Nom Complet</th>
-                <th>Date de création</th>
-                <th>Montant Avancée</th>
-                <th>Balance</th>
-                <th>Date</th>
-                <th>Versement</th>
-                <th>Statut</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            {filterStudents
-              .filter((resultL) =>
-                resultL.firstName.toLowerCase().includes(search.toLowerCase()),
-              )
-              .map((student) => (
-                <tbody key={student.id} className="scroll">
-                  <tr>
-                    <td>0{student.id}</td>
-                    <td>{student.classe}</td>
-                    <td>
-                      {student.firstName} {student.lastName}
-                    </td>
-                    <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
-                    <td>{student.amount}</td>
-                    <td>{student.balance}</td>
-                    <td>{student.date}</td>
-                    <td>{student.versement}</td>
-                    <td
-                      style={{
-                        color:
-                          student.statut === "Non Payé"
-                            ? "red"
-                            : student.statut === "Avance"
-                            ? "#ffa901"
-                            : "green",
-                        fontSize: "13px",
-                        fontWeight: "700",
-                      }}>
-                      {student.statut}
-                    </td>
-                    <td>
-                      <span>
-                        <button
-                          onClick={() => {
-                            setSelectStudent(student);
-                            document.getElementById("my_modal_1").showModal();
-                          }}
-                          className="btn btn-ghost btn-xs">
-                          Détails
-                        </button>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              ))}
-          </table>
+          {filterStudents > 0 ? (
+            <table className="table">
+              <thead className="text-color1">
+                <tr>
+                  <th>ID</th>
+                  <th>Classe</th>
+                  <th>Nom Complet</th>
+                  <th>Date de création</th>
+                  <th>Montant Avancée</th>
+                  <th>Balance</th>
+                  <th>Date</th>
+                  <th>Versement</th>
+                  <th>Statut</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              {filterStudents
+                .filter((resultL) =>
+                  resultL.firstName
+                    .toLowerCase()
+                    .includes(search.toLowerCase()),
+                )
+                .map((student) => (
+                  <tbody key={student.id} className="scroll">
+                    <tr>
+                      <td>0{student.id}</td>
+                      <td>{student.classe}</td>
+                      <td>
+                        {student.firstName} {student.lastName}
+                      </td>
+                      <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
+                      <td>{student.amount}</td>
+                      <td>{student.balance}</td>
+                      <td>{student.date}</td>
+                      <td>{student.versement}</td>
+                      <td
+                        style={{
+                          color:
+                            student.statut === "Non Payé"
+                              ? "red"
+                              : student.statut === "Avance"
+                              ? "#ffa901"
+                              : "green",
+                          fontSize: "13px",
+                          fontWeight: "700",
+                        }}>
+                        {student.statut}
+                      </td>
+                      <td>
+                        <span>
+                          <button
+                            onClick={() => {
+                              setSelectStudent(student);
+                              document.getElementById("my_modal_1").showModal();
+                            }}
+                            className="btn btn-ghost btn-xs">
+                            Détails
+                          </button>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
+            </table>
+          ) : (
+            <p className="text-2xl flex justify-center mt-40">
+              Aucune paiement générée pour le moment
+            </p>
+          )}
         </div>
         <dialog id="my_modal_1" className={"modal"}>
           <div className="modal-box bg-white w-full max-w-xl">
