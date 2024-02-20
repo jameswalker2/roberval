@@ -1,40 +1,50 @@
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
+import {Card} from "antd";
 
 function CaisseLink() {
-  return (
-    <div>
-      <div className="flex pt-10 pl-5 mb-10">
-        <NavLink
-          to={"/income"}
-          id="revenu"
-          className="card mr-10 w-96 h-40 shadow-xl p-[20px] bg-gradient-to-r from-blue-400 to-green-400">
-          <h2 className="mb-5 text-xl text-slate-100 ">Revenu</h2>
-          <h1 className="mb-3 text-4xl text-color1 font-semibold text-color">
-            $5000ht
-          </h1>
-          <span className="">
-            <p className="text-slate-100">Cliquez pour accéder</p>
-          </span>
-        </NavLink>
-        <NavLink
-          to={"/expense"}
-          id="expense"
-          className="card mr-10 w-96 h-40 shadow-xl p-[20px] bg-gradient-to-r from-blue-400 to-red-400">
-          <h2 className="mb-5 text-xl text-slate-100">Dépense</h2>
-          <h1 className="mb-3 text-4xl text-color1 font-semibold">$3000ht</h1>
-          <p className="text-slate-100">Cliquez pour accéder</p>
-        </NavLink>
-        <NavLink
-          to={"/gain"}
-          id="bank"
-          className="card w-96 h-40 shadow-xl p-[20px] bg-gradient-to-r from-blue-400 to-purple-500">
-          <h2 className="mb-5 text-xl text-slate-100">Profit et Perte</h2>
-          <h1 className="mb-3 text-4xl text-color1 font-semibold">$3000ht</h1>
-          <p className="text-slate-100">Cliquez pour accéder</p>
-        </NavLink>
-      </div>
-    </div>
-  );
+	return (
+		<div>
+			<div className="flex pl-5 mb-10">
+				<NavLink
+					to={"/income"}
+					id="revenu">
+					<Card
+						className="w-80 mt-10 mr-16 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1
+						hover:scale-110 duration-300">
+						<h2
+							className="mb-10 text-xl w-24 rounded-lg text-center text-white bg-supportingColor2 hover:bg-white">Revenu</h2>
+						<h2 className="text-4xl text-color1 font-semibold text-supportingColor1">
+							$5000ht
+						</h2>
+					</Card>
+				</NavLink>
+				
+				<NavLink
+					to={"/expense"}
+					id="expense">
+					<Card className="w-80 mt-10 mr-16 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1
+						hover:scale-110 duration-300">
+						<h2 className="mb-10 text-xl w-24 rounded-lg text-center text-white bg-supportingColor3">Dépense</h2>
+						<h2 className="text-4xl text-color1 font-semibold text-supportingColor1">
+							$1000ht
+						</h2>
+					</Card>
+				</NavLink>
+				
+				<NavLink
+					to={"/gain"}
+					id="bank">
+					<Card className="w-80 mt-10 mr-16 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1
+						hover:scale-110 duration-300">
+						<h2 className="mb-10 text-xl w-36 rounded-lg text-center text-white bg-supportingColor4">Profit & Perte</h2>
+						<h2 className="text-4xl text-color1 font-semibold text-supportingColor1">
+							$4000ht
+						</h2>
+					</Card>
+				</NavLink>
+			</div>
+		</div>
+	);
 }
 
 export default CaisseLink;

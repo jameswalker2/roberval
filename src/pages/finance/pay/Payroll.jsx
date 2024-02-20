@@ -113,7 +113,7 @@ export function Payroll() {
 	return (
 		<>
 			<NavBar/>
-			<Toaster position="top-right"/>
+			<Toaster position="top-center"/>
 			<div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
 				<div
 					className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
@@ -219,16 +219,18 @@ export function Payroll() {
 										{/*<td>{staff.date}</td>*/}
 										<td
 											id="non"
-											className={"btn btn-ghost text-white font-medium"}
-											style={{
+										
+										>
+											<p style={{
 												backgroundColor:
 													staff.statut === "Non Payé"
 														? "#FD6477"
 														: staff.statut === "Avance"
 															? "#FFBF5A"
 															: "#5AD374",
-											}}>
-											{staff.statut}
+											}} className={"text-white text-center p-1 rounded-lg font-medium"}>
+												{staff.statut}
+											</p>
 										</td>
 										<td>
 											<span>
