@@ -7,7 +7,7 @@ import { supabase } from "../../Config/SupabaseConfig.jsx";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
 import "./Eleves.scss";
 
-const studentsPerPage = 15;
+const studentsPerPage = 10;
 export function Eleves() {
   const [searchQuery, setSearchQuery] = useState("");
   const [allResults, setAllResults] = useState([]);
@@ -80,7 +80,7 @@ export function Eleves() {
     <>
       <NavBar />
       <Toaster />
-      <div className="h-screen pl-64 py-5 bg-primaryColor bg-opacity-10">
+      <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
         <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
           <h1 className="font-semibold text-2xl">Eleves</h1>
           <ul>
@@ -97,7 +97,7 @@ export function Eleves() {
           </ul>
         </div>
 
-        <div className=" w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <div className="flex justify-between items-center mb-5">
             <h2 className="font-medium  text-supportingColor1 ">
               Selectionner les critères
@@ -135,7 +135,7 @@ export function Eleves() {
           </div>
         </div>
 
-        <div className="overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm ">
+        <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm ">
           <h2 className="font-medium text-supportingColor1 mb-5">
             Liste des élèves
           </h2>
@@ -186,7 +186,7 @@ export function Eleves() {
                               <div
                                 tabIndex={0}
                                 role="button"
-                                className="btn w-20 border-none bg-primaryColor hover:bg-opacity-90 text-white">
+                                className="btn h-2 text-xs border-none bg-primaryColor hover:bg-opacity-90 text-white">
                                 Détails
                               </div>
                               <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
@@ -217,9 +217,7 @@ export function Eleves() {
               />
             </div>
           ) : (
-            <p className="text-2xl flex justify-center mt-40">
               <Empty />
-            </p>
           )}
         </div>
       </div>
