@@ -69,7 +69,7 @@ export function Dashboard() {
   return (
     <>
       <NavBar />
-      <div className="h-screen pl-64 py-5 bg-primaryColor bg-opacity-10">
+      <div className="h-auto pl-64 py-5 bg-primaryColor bg-opacity-10">
         <div className="w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
           <h1 className="font-semibold text-2xl">Dashboard</h1>
         </div>
