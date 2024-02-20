@@ -15,8 +15,8 @@ export function Eleves() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [selectedClasse, setSelectedClasse] = useState(false);
 	const [classe, setClasse] = useState([]);
-
-
+	
+	
 	useEffect(() => {
 		const fetchAllResults = async () => {
 			try {
@@ -24,7 +24,7 @@ export function Eleves() {
 					.from("students")
 					.select("*")
 					.textSearch(searchQuery);
-
+				
 				if (data) {
 					setAllResults(data);
 					setClasse([...new Set(data.map((student) => student.classe))]);
@@ -35,17 +35,19 @@ export function Eleves() {
 				console.log(error.message)
 			}
 		};
-
-		return fetchAllResults(currentPage);
+		
+		return () => {
+			fetchAllResults(currentPage);
+		}
 	}, [currentPage, searchQuery]);
-
+	
 	const handleDelete = async (studentId) => {
 		try {
 			const {error} = await supabase
 				.from("students")
 				.delete()
 				.eq("id", studentId);
-
+			
 			if (error) {
 				console.error(error);
 			} else {
@@ -57,17 +59,17 @@ export function Eleves() {
 			toast.error(error.message);
 		}
 	};
-
+	
 	const collectionOptions = classe.map((category) => ({
 		value: category,
 		label: category,
 	}));
-
+	
 	const filterStudents = selectedClasse
 		? allResults.filter((student) => student.classe === selectedClasse)
 		: allResults;
 	const formatDate = (date) => new Date(date).toDateString();
-
+	
 	const startIndex = (currentPage - 1) * studentsPerPage;
 	const endIndex = startIndex + studentsPerPage;
 	const paginatedStudents = allResults
@@ -77,7 +79,7 @@ export function Eleves() {
 				result.lastName.toLowerCase().includes(searchQuery.toLowerCase()),
 		)
 		.slice(startIndex, endIndex);
-
+	
 	return (
 		<>
 			<NavBar/>
@@ -99,7 +101,7 @@ export function Eleves() {
 						</li>
 					</ul>
 				</div>
-
+				
 				<div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
 					<div className="flex justify-between items-center mb-5">
 						<h2 className="font-medium  text-supportingColor1 ">
@@ -137,7 +139,7 @@ export function Eleves() {
 						/>
 					</div>
 				</div>
-
+				
 				<div
 					className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm ">
 					<h2 className="font-medium text-supportingColor1 mb-5">
@@ -187,10 +189,8 @@ export function Eleves() {
 											<td>
                           <span className="actions">
                             <div className="dropdown dropdown-end">
-                              <div
-								  tabIndex={0}
-								  role="button"
-								  className="btn h-2 text-xs border-none bg-primaryColor hover:bg-opacity-90 text-white">
+                              <div tabIndex={0} role="button"
+																	 className="btn h-2 text-xs border-none bg-primaryColor hover:bg-opacity-90 text-white">
                                 Détails
                               </div>
                               <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
