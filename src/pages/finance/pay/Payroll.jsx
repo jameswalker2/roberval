@@ -254,7 +254,7 @@ export function Payroll() {
 								))}
 						</table>
 					) : (
-						<Empty/>
+						<Empty description={"Aucune donnée disponible"}/>
 					)}
 				</div>
 				<DetailsPage

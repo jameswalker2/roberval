@@ -1,4 +1,4 @@
-import moment from "moment/moment.js";
+import moment from "moment";
 import {useEffect, useState} from "react";
 import {toast} from "react-hot-toast";
 import {NavLink} from "react-router-dom";
@@ -18,23 +18,22 @@ export function Paiement() {
 	useEffect(() => {
 		const getStudents = async () => {
 			try {
-				// eslint-disable-next-line no-unused-vars
 				const {data, error} = await supabase
 					.from("paie")
 					.select("*")
 					.textSearch(search);
 				
-				if (data) {
+				if (error) {
+					console.log(error.message);
+				} else {
 					setStudentsP(data);
 					setClasses([...new Set(data.map((student) => student.classe))]);
-				} else {
-					console.log(error.message);
 				}
 			} catch (error) {
 				console.log(error);
 			}
 		};
-		getStudents();
+		return () => getStudents()
 	}, [search]);
 	
 	const collectionOptions = classes.map((category) => ({
@@ -225,7 +224,7 @@ export function Paiement() {
 								))}
 						</table>
 					) : (
-						<Empty/>
+						<Empty description={"Aucune donnée disponible"}/>
 					)}
 				</div>
 				<dialog id="my_modal_1" className={"modal"}>
