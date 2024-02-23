@@ -21,19 +21,19 @@ export function NavBar() {
   };
   return (
     <>
-      <nav className="fixed w-56 h-[100%] bg-primaryColor">
+      <div className="fixed w-56 h-[100%] bg-primaryColor">
         <span className="flex items-center p-5 text-white">
           <School strokeWidth={1.5} className="w-8 h-8" />
           <h2 className="text-[20px] font-bold ml-5">Roberval</h2>
         </span>
-        <ul className="menu w-56  text-white ">
+        <ul className="menu w-56  text-white">
           <li>
             <h2 className="menu-title text-supportingColor1">Accueil</h2>
             <ul>
-              <li className="mb-2 text-[16px] font-normal">
+              <li className="mb-2">
                 <Link
                   to={"/dashboard"}
-                  className={`flex items-center ${
+                  className={`flex items-center  active:opacity-0 ${
                     isActive("/dashboard")
                       ? "bg-white text-primaryColor hover:bg-slate-200"
                       : ""
@@ -154,7 +154,7 @@ export function NavBar() {
             </ul>
           </li>
         </ul>
-      </nav>
+      </div>
     </>
   );
 }
