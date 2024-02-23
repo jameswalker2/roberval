@@ -1,7 +1,6 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
-import { DatePicker } from "antd";
+import { Button, DatePicker, Modal } from "antd";
 import { useEffect, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 import { NavBar } from "../../components/Navbar/NavBar";
@@ -95,14 +94,18 @@ export function Inscription() {
         })
         .single();
       if (error) throw error;
-      toast.success("Formulaire soumis avec succès!");
+      Modal.success({
+        content: "Formulaire soumis avec succès!",
+        okButtonProps: {
+          type: "default",
+        },
+      });
     } catch (error) {
       // if (error.name === 'ValidationError') {
       //   error.errors.forEach((validationError) => {
-      //     toast.error(validationError)
       //   });
       // }
-      toast.error(error.message);
+      console.log(error.message);
     }
     e.target.reset(
       setFirstName(""),
@@ -226,7 +229,7 @@ export function Inscription() {
                 <input
                   onChange={(e) => setFirstName(e.target.value)}
                   type="text"
-                  placeholder="Méat"
+                  placeholder="Nom"
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
@@ -242,7 +245,7 @@ export function Inscription() {
                 <input
                   onChange={(e) => setLastName(e.target.value)}
                   type="text"
-                  placeholder="Junior"
+                  placeholder="Prénom"
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
@@ -257,7 +260,7 @@ export function Inscription() {
                 </div>
                 <DatePicker
                   onChange={(e) => setBirth(e.target.value)}
-                  placeholder="2024/02/23"
+                  placeholder="Date de naissance"
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
@@ -267,14 +270,14 @@ export function Inscription() {
               <label className="form-control w-full max-w-xs mr-5 mb-2">
                 <div className="label">
                   <span className="label-text text-supportingColor1">
-                    Département de naissance{" "}
+                    Département de naissance
                     <span className="text-red-600">*</span>
                   </span>
                 </div>
                 <input
                   onChange={(e) => setDepartmentBirth(e.target.value)}
                   type="text"
-                  placeholder="Artibonite"
+                  placeholder="Département de naissance"
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
@@ -290,7 +293,7 @@ export function Inscription() {
                 <input
                   onChange={(e) => setCommonBirth(e.target.value)}
                   type="text"
-                  placeholder="Saint-Marc"
+                  placeholder="Commune de naissance "
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
@@ -306,7 +309,7 @@ export function Inscription() {
                 <input
                   onChange={(e) => setAdressBirth(e.target.value)}
                   type="text"
-                  placeholder="#109, Route de Pont-Ambour"
+                  placeholder="Lieu de naissance"
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
@@ -445,7 +448,8 @@ export function Inscription() {
               Les champs avec un astérisque{" "}
               <span className="text-red-600">*</span> sont obligatoires
             </p>
-            <div className="flex flex-wrap justify-items-center">
+
+            <div className="flex flex-wrap ml-10 justify-items-center">
               <label className="form-control w-full max-w-xs mr-5 mb-2">
                 <div className="label">
                   <span className="label-text text-supportingColor1">
@@ -512,15 +516,17 @@ export function Inscription() {
               </label>
             </div>
           </div>
-          <div className="bg-gray-50 p-5 rounded mt-20">
-            <h2 className="text-color1 text-xl font-semibold">
+
+          <div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
+            <h2 className="text-supportingColor1 text-xl font-medium">
               Informations Parents
             </h2>
-            <p className="mb-10">
+            <p className="mb-10 text-primaryColor">
               Les champs avec un astérisque{" "}
               <span className="text-red-600">*</span> sont obligatoires
             </p>
-            <div className="flex flex-wrap justify-items-center">
+
+            <div className="flex flex-wrap ml-10 justify-items-center">
               <label className="form-control w-full max-w-xs mr-5 mb-2">
                 <div className="label">
                   <span className="label-text text-supportingColor1">
@@ -531,7 +537,7 @@ export function Inscription() {
                   onChange={(e) => setFirstFather(e.target.value)}
                   type="text"
                   placeholder="Nom du père"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -547,7 +553,7 @@ export function Inscription() {
                   onChange={(e) => setLastFather(e.target.value)}
                   type="text"
                   placeholder="Prénom du père"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -563,14 +569,14 @@ export function Inscription() {
                   onChange={(e) => setJobFather(e.target.value)}
                   type="text"
                   placeholder="Profession du père"
-                  className="input w-[22rem] bg-gray-200"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
                 </div>
               </label>
 
-              <div className="flex items-center font-semibold mb-10">
+              <div className="flex flex-wrap items-center w-full max-w-xs mr-[50rem] mb-10 font-medium">
                 <h2 className="mr-2">Statut du père:</h2>
                 <h2 className="mr-2">Décédé</h2>
                 <input
@@ -578,7 +584,7 @@ export function Inscription() {
                   type="radio"
                   name="3"
                   value={"Décédé"}
-                  className="radio border-color2 border-2 w-5 h-5"
+                  className="radio border-primaryColor border-2 w-5 h-5"
                 />
                 <h2 className="mx-2">Vivant</h2>
                 <input
@@ -586,10 +592,11 @@ export function Inscription() {
                   type="radio"
                   name="3"
                   value={"Vivant"}
-                  className="radio border-color2 border-2 w-5 h-5 mr-[50rem]"
+                  className="radio border-primaryColor border-2 w-5 h-5 "
                 />
               </div>
-              <label className="form-control w-full max-w-xs mr-5 mb-2">
+
+              <label className="form-control w-full max-w-xs mr-5 mb-10">
                 <div className="label">
                   <span className="label-text text-supportingColor1">
                     Nom de la Mère <span className="text-red-600">*</span>
@@ -599,7 +606,7 @@ export function Inscription() {
                   onChange={(e) => setFirstMother(e.target.value)}
                   type="text"
                   placeholder="Nom de la mère"
-                  className="input w-[22rem] bg-gray-200 mr-5 my-10"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -615,7 +622,7 @@ export function Inscription() {
                   onChange={(e) => setLastMother(e.target.value)}
                   type="text"
                   placeholder="Prénom de la mère"
-                  className="input w-[22rem] bg-gray-200 mr-5 my-10"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -631,13 +638,13 @@ export function Inscription() {
                   onChange={(e) => setJobMother(e.target.value)}
                   type="text"
                   placeholder="Profession de la mère"
-                  className="input w-[22rem] bg-gray-200 mr-5 my-10"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
                 </div>
               </label>
-              <div className="flex items-center font-semibold">
+              <div className="flex items-center font-medium">
                 <h2 className="mr-2">Statut de la mère:</h2>
                 <h2 className="mr-2">Décédée</h2>
                 <input
@@ -645,7 +652,7 @@ export function Inscription() {
                   type="radio"
                   name="4"
                   value={"Décédée"}
-                  className="radio border-color2 border-2 w-5 h-5"
+                  className="radio border-primaryColor border-2 w-5 h-5"
                 />
                 <h2 className="mx-2">Vivante</h2>
                 <input
@@ -653,20 +660,22 @@ export function Inscription() {
                   type="radio"
                   name="4"
                   value={"Vivante"}
-                  className="radio border-color2 border-2 w-5 h-5"
+                  className="radio border-primaryColor border-2 w-5 h-5"
                 />
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 p-5 rounded mt-20">
-            <h2 className="text-color1 text-xl font-semibold">
+
+          <div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
+            <h2 className="text-supportingColor1 text-xl font-medium">
               Personne en cas urgence
             </h2>
-            <p className="mb-10">
+            <p className="mb-10 text-primaryColor">
               Les champs avec un astérisque{" "}
               <span className="text-red-600">*</span> sont obligatoires
             </p>
-            <div className="flex flex-wrap justify-items-center">
+
+            <div className="flex flex-wrap ml-10 justify-items-center">
               <label className="form-control w-full max-w-xs mr-5 mb-10">
                 <div className="label">
                   <span className="label-text text-supportingColor1">
@@ -678,7 +687,7 @@ export function Inscription() {
                   onChange={(e) => setLinkPerson(e.target.value)}
                   type="text"
                   placeholder="Nom complet"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -692,7 +701,7 @@ export function Inscription() {
                   onChange={(e) => setNif(e.target.value)}
                   type="text"
                   placeholder="Nif"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input  w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -706,7 +715,7 @@ export function Inscription() {
                   onChange={(e) => setNinu(e.target.value)}
                   type="text"
                   placeholder="Ninu"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input  w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -722,7 +731,7 @@ export function Inscription() {
                   onChange={(e) => setPhone(e.target.value)}
                   type="text"
                   placeholder="Téléphone"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input  w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -738,7 +747,7 @@ export function Inscription() {
                   onChange={(e) => setOtherPhone(e.target.value)}
                   type="text"
                   placeholder="Autre téléphone"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input  w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -754,7 +763,7 @@ export function Inscription() {
                   onChange={(e) => setEmail(e.target.value)}
                   type="text"
                   placeholder="Email"
-                  className="input w-[22rem] bg-gray-200 mr-5 mb-10"
+                  className="input  w-full max-w-xs mr-5 bg-slate-100 border-primaryColor border-2"
                 />
                 <div className="label">
                   <span className="label-text-alt"></span>
@@ -762,13 +771,15 @@ export function Inscription() {
               </label>
             </div>
           </div>
-          <button
-            className="btn ml-[70rem] mt-10 bg-color1 text-white hover:bg-color3 border-none w-56"
-            type="submit">
-            Soumettre le formulaire
-          </button>
+          <div className="text-center">
+            <Button
+              className="btn bg-primaryColor text-white border-none
+                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100"
+              type="submit">
+              Soumettre le formulaire
+            </Button>
+          </div>
         </form>
-        <Toaster position={"top-right"} />
       </div>
     </>
   );
