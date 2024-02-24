@@ -176,103 +176,105 @@ export function Staffs() {
           onCloseUp={closeUpdateModal}
         />
 
-        {resultsStaffs.length > 0 ? (
-          <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-            <h2 className="font-medium text-supportingColor1 mb-5">
-              Liste des membres - {resultsStaffs.length}
-            </h2>
-            <table className="table table-xs">
-              <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
-                <tr>
-                  <th>ID</th>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Role</th>
-                  <th>Adresse</th>
-                  <th>Téléphone</th>
-                  <th>Gmail</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              {paginatedStaffs
-                .filter(
-                  (staff) =>
-                    staff.name
-                      .toLowerCase()
-                      .includes(searchStaff.toLowerCase()) ||
-                    staff.lastName
-                      .toLowerCase()
-                      .includes(searchStaff.toLowerCase()),
-                )
-                .map((staff) => (
-                  <tbody key={staff.id} className="font-semibold">
-                    <tr>
-                      <td>0{staff.id}</td>
-                      <td>{staff.name}</td>
-                      <td>{staff.lastName}</td>
-                      <td>{staff.role}</td>
-                      <td>{staff.adress}</td>
-                      <td>{staff.phone}</td>
-                      <td>{staff.email}</td>
-                      <td>
-                        <span className="flex justify-flex-start">
-                          <div className="dropdown dropdown-end">
-                            <div
-                              tabIndex={0}
-                              role="button"
-                              className={
-                                "btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor " +
-                                "hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100"
-                              }>
-                              Détails
-                            </div>
-                            <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
-                              <li className="text-supportingColor4 hover:bg-slate-100 rounded-box mb-2">
-                                <Button
-                                  onClick={() => {
-                                    if (staff) {
-                                      setSelectedStaff(staff);
-                                      openUpdateModal();
-                                    } else {
-                                      console.log("Please select");
+        <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
+          {resultsStaffs.length > 0 ? (
+            <div>
+              <h2 className="font-medium text-supportingColor1 mb-5">
+                Liste des membres - {resultsStaffs.length}
+              </h2>
+              <table className="table table-xs">
+                <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Role</th>
+                    <th>Adresse</th>
+                    <th>Téléphone</th>
+                    <th>Gmail</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                {paginatedStaffs
+                  .filter(
+                    (staff) =>
+                      staff.name
+                        .toLowerCase()
+                        .includes(searchStaff.toLowerCase()) ||
+                      staff.lastName
+                        .toLowerCase()
+                        .includes(searchStaff.toLowerCase()),
+                  )
+                  .map((staff) => (
+                    <tbody key={staff.id} className="font-semibold">
+                      <tr>
+                        <td>0{staff.id}</td>
+                        <td>{staff.name}</td>
+                        <td>{staff.lastName}</td>
+                        <td>{staff.role}</td>
+                        <td>{staff.adress}</td>
+                        <td>{staff.phone}</td>
+                        <td>{staff.email}</td>
+                        <td>
+                          <span className="flex justify-flex-start">
+                            <div className="dropdown dropdown-end">
+                              <div
+                                tabIndex={0}
+                                role="button"
+                                className={
+                                  "btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor " +
+                                  "hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100"
+                                }>
+                                Détails
+                              </div>
+                              <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
+                                <li className="text-supportingColor4 hover:bg-slate-100 rounded-box mb-2">
+                                  <Button
+                                    onClick={() => {
+                                      if (staff) {
+                                        setSelectedStaff(staff);
+                                        openUpdateModal();
+                                      } else {
+                                        console.log("Please select");
+                                      }
+                                    }}
+                                    className={
+                                      "flex items-center bg-supportingColor4 text-white font-medium " +
+                                      "border-none hover:bg-slate-100 active:bg-slate-100"
+                                    }>
+                                    Modifier
+                                  </Button>
+                                </li>
+                                <li>
+                                  <Button
+                                    className={
+                                      "flex items-center bg-supportingColor3 text-white font-medium" +
+                                      "border-none hover:bg-slate-100 active:bg-slate-100"
                                     }
-                                  }}
-                                  className={
-                                    "flex items-center bg-supportingColor4 text-white font-medium " +
-                                    "border-none hover:bg-slate-100 active:bg-slate-100"
-                                  }>
-                                  Modifier
-                                </Button>
-                              </li>
-                              <li>
-                                <Button
-                                  className={
-                                    "flex items-center bg-supportingColor3 text-white font-medium" +
-                                    "border-none hover:bg-slate-100 active:bg-slate-100"
-                                  }
-                                  onClick={() => handleDelete(staff.id)}>
-                                  Supprimer
-                                </Button>
-                              </li>
-                            </ul>
-                          </div>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                ))}
-            </table>
-            <Pagination
-              current={currentPage}
-              pageSize={staffsPerPage}
-              total={resultsStaffs.length}
-              onChange={(page) => setCurrentPage(page)}
-              className="text-center mt-5"
-            />
-          </div>
-        ) : (
-          <Empty description={"Aucune donnée disponible"} />
-        )}
+                                    onClick={() => handleDelete(staff.id)}>
+                                    Supprimer
+                                  </Button>
+                                </li>
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
+              </table>
+              <Pagination
+                current={currentPage}
+                pageSize={staffsPerPage}
+                total={resultsStaffs.length}
+                onChange={(page) => setCurrentPage(page)}
+                className="text-center mt-5"
+              />
+            </div>
+          ) : (
+            <Empty description={"Aucune donnée disponible"} />
+          )}
+        </div>
       </div>
     </>
   );

@@ -55,10 +55,12 @@ function CaisseLink() {
   };
 
   return (
-    <div>
-      <div className="flex flex-wrap mb-10">
+    <>
+      <div className="flex flex-wrap">
         <NavLink to={"/income"} id="revenu">
-          <Card className="w-96 max-xs-w mt-10 mr-8 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
+          <Card
+            className="w-96 max-xs-w mt-10 mr-8 shadow-sm 
+          transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
             <Chart
               options={incomes}
               series={incomes.series}
@@ -104,7 +106,7 @@ function CaisseLink() {
           </Card>
         </NavLink>
       </div>
-    </div>
+    </>
   );
 }
 

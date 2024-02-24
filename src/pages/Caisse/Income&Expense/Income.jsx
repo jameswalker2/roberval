@@ -1,7 +1,8 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Empty } from "antd";
+import { Button, DatePicker, Empty } from "antd";
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export function Income() {
   const [incomes, setIncomes] = useState([]);
@@ -112,36 +113,65 @@ export function Income() {
   return (
     <>
       <NavBar />
-      <div className="h-[60rem]">
-        <div className="absolute top-10 left-[16%] max-w-full h-[56rem] ">
-          <div className="bg-white h-[21rem] w-[72rem] rounded-2xl p-5">
-            <h1 className="font-semibold uppercase text-2xl text-color1">
-              Revenu
-            </h1>
-            <h2 className="mb-10">Ajouter un nouveau revenu</h2>
+      <div className="h-screen overflow-y-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div
+          className={
+            "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
+            "text-supportingColor1 bg-white rounded-lg shadow-sm"
+          }>
+          <h1 className="font-semibold text-2xl">Revenu</h1>
+          <ul>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/dashboard"}>
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/gain"}>
+                Caisse
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/income"}>
+                Revenu
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div>
+            <h2 className="mb-10 font-medium text-xl text-supportingColor1">
+              Ajouter un nouveau revenu
+            </h2>
+          </div>
+
+          <div>
             <form onSubmit={handleAddIncome}>
               <div className="flex flex-wrap">
                 <label className="form-control w-full max-w-xs mr-10">
                   <div className="label">
-                    <span className="label-text text-black">Nom</span>
+                    <span className="label-text text-supportingColor1">
+                      Nom
+                    </span>
                   </div>
                   <input
                     onChange={(e) => setName(e.target.value)}
                     type="text"
                     placeholder="ex: James..."
-                    className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
+                    className="input bg-slate-100 border-primaryColor border-2"
                   />
                 </label>
                 <label className="form-control w-full max-w-xs mr-10">
                   <div className="label">
-                    <span className="label-text text-black">
+                    <span className="label-text text-supportingColor1">
                       Type de dépense
                     </span>
                   </div>
                   <select
                     onChange={(e) => setType(e.target.value)}
                     defaultValue=""
-                    className="select select-bordered focus:select-primary bg-gray-200">
+                    className="select bg-slate-100 border-primaryColor border-2">
                     <option value="" className="text-gray-300">
                       Type
                     </option>
@@ -152,14 +182,14 @@ export function Income() {
                 </label>
                 <label className="form-control w-full max-w-xs mr-10 mb-5">
                   <div className="label">
-                    <span className="label-text text-black">
+                    <span className="label-text text-supportingColor1">
                       Mode de Paiement
                     </span>
                   </div>
                   <select
                     onChange={(e) => setMode(e.target.value)}
                     defaultValue=""
-                    className="select select-bordered focus:select-primary bg-gray-200">
+                    className="select bg-slate-100 border-primaryColor border-2">
                     <option value="" className="text-gray-300">
                       Mode de paiement
                     </option>
@@ -170,95 +200,100 @@ export function Income() {
                 </label>
                 <label className="form-control w-full max-w-xs mr-10 mb-5">
                   <div className="label">
-                    <span className="label-text text-black">Date</span>
+                    <span className="label-text text-supportingColor1">
+                      Date
+                    </span>
                   </div>
-                  <input
+                  <DatePicker
                     onChange={(e) => setDate(e.target.value)}
-                    type="date"
-                    placeholder="ex: James..."
-                    className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
+                    placeholder="Date de naissance"
+                    className="input bg-slate-100 border-primaryColor border-2"
                   />
                 </label>
                 <label className="form-control w-full max-w-xs mr-10 ">
                   <div className="label">
-                    <span className="label-text text-black">Montant</span>
+                    <span className="label-text text-supportingColor1">
+                      Montant
+                    </span>
                   </div>
                   <input
                     onChange={(e) => setAmount(e.target.value)}
                     type="number"
                     placeholder="ex: 1000"
-                    className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
+                    className="input bg-slate-100 border-primaryColor border-2"
                   />
                 </label>
-                <button
+                <Button
                   type="submit"
-                  className="btn bg-color1 text-white hover:bg-color3 border-none w-28 mt-9 ml-52">
+                  className="btn bg-primaryColor text-white border-none
+                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
                   Ajouter
-                </button>
+                </Button>
               </div>
             </form>
           </div>
-          <div className="mt-10 bg-white overflow-y-auto h-2/4 w-[72rem] rounded-2xl p-5">
-            <div className="flex mb-10 items-center">
-              <h2 className="text-color1 capitalize font-semibold">
-                Liste de revenus
-              </h2>
-              <input
-                onChange={(e) => setSearchIncome(e.target.value)}
-                type="search"
-                placeholder="Recherche rapide"
-                className="input input-bordered focus:file-input-primary bg-gray-200 h-9 w-96 max-w-xs ml-60"
-              />
-            </div>
-            {/**/}
-            <div>
-              <div className="overflow-x-auto">
-                {incomes.length > 0 ? (
-                  <table className="table">
-                    <thead className="text-black">
-                      <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Type de dépense</th>
-                        <th>Mode de Paiement</th>
-                        <th>Date</th>
-                        <th>Montant</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    {incomes
-                      .filter((expense) =>
-                        expense.name
-                          .toLowerCase()
-                          .includes(searchIncome.toLowerCase()),
-                      )
-                      .map((expense) => (
-                        <tbody key={expense.id}>
-                          <tr>
-                            <th>0{expense.id}</th>
-                            <td>{expense.name}</td>
-                            <td>
-                              {expense.type}
-                              {expense.what}
-                            </td>
-                            <td>{expense.mode}</td>
-                            <td>{expense.date}</td>
-                            <td>{expense.amount}</td>
-                            <td>
-                              <button
-                                onClick={() => handleDeleteIncome(expense.id)}
-                                className="btn bg-red-600 text-white btn-xs">
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      ))}
-                  </table>
-                ) : (
-                  <Empty description={"Aucune donnée disponible"} />
-                )}
-              </div>
+        </div>
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div className="flex mb-10 items-center">
+            <h2 className="text-supportingColor1 font-medium">
+              Liste de revenus
+            </h2>
+            <input
+              onChange={(e) => setSearchIncome(e.target.value)}
+              type="search"
+              placeholder="Recherche rapide"
+              className="input input-bordered focus:file-input-primary bg-gray-200 h-9 w-96 max-w-xs ml-60"
+            />
+          </div>
+          {/**/}
+          <div>
+            <div className="overflow-x-auto">
+              {incomes.length > 0 ? (
+                <table className="table">
+                  <thead className="text-supportingColor1">
+                    <tr>
+                      <th>ID</th>
+                      <th>Nom</th>
+                      <th>Type de dépense</th>
+                      <th>Mode de Paiement</th>
+                      <th>Date</th>
+                      <th>Montant</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  {incomes
+                    .filter((expense) =>
+                      expense.name
+                        .toLowerCase()
+                        .includes(searchIncome.toLowerCase()),
+                    )
+                    .map((expense) => (
+                      <tbody key={expense.id}>
+                        <tr>
+                          <th>0{expense.id}</th>
+                          <td>{expense.name}</td>
+                          <td>
+                            {expense.type}
+                            {expense.what}
+                          </td>
+                          <td>{expense.mode}</td>
+                          <td>{expense.date}</td>
+                          <td>{expense.amount}</td>
+                          <td>
+                            <button
+                              onClick={() => handleDeleteIncome(expense.id)}
+                              className="btn bg-red-600 text-white btn-xs">
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
+                </table>
+              ) : (
+                <Empty description={"Aucune donnée disponible"} />
+              )}
             </div>
           </div>
         </div>
