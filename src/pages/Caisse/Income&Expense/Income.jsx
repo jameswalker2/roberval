@@ -1,6 +1,6 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Button, DatePicker, Empty } from "antd";
+import { Button, DatePicker, Empty, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -35,40 +35,46 @@ export function Income() {
   const handleAddIncome = async (e) => {
     e.preventDefault();
 
-    try {
-      const { error } = await supabase.from("income").insert({
+    const { error } = await supabase.from("income").upsert([
+      {
         name,
         type,
         mode,
         date,
         amount,
-      });
+      },
+    ]);
 
-      if (error) {
-        console.log(error);
-      }
-    } catch (error) {
-      console.log(error.message);
+    if (error) {
+      console.log(error);
     }
 
-    e.target.reset(
-      setName(""),
-      setType(""),
-      setMode(""),
-      setDate(""),
-      setAmount(""),
-    );
+    setName("");
+    setType("");
+    setMode("");
+    setDate("");
+    setAmount("");
   };
 
   const handleDeleteIncome = async (incomeId) => {
     try {
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from("income")
         .delete()
-        .eq("id", incomeId);
+        .eq("id", incomeId)
+        .single();
 
       if (error) {
-        console.error(error);
+        console.log(error);
+        Modal.error({
+          title: "Erreur !",
+          content: "Vous n'êtes pas autorisé pour cette opération !",
+          okButtonProps: {
+            type: "default",
+          },
+        });
+      } else {
+        console.log(data);
       }
     } catch (error) {
       console.log(error.message);
@@ -91,7 +97,6 @@ export function Income() {
               break;
             case "UPDATE":
               setIncomes((prevIncomes) => {
-                // Mise à jour de l'élément correspondant dans la liste
                 return prevIncomes.map((income) =>
                   income.id === changedData.id ? changedData : income,
                 );
@@ -147,90 +152,85 @@ export function Income() {
           </div>
 
           <div>
-            <form onSubmit={handleAddIncome}>
-              <div className="flex flex-wrap">
-                <label className="form-control w-full max-w-xs mr-10">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Nom
-                    </span>
-                  </div>
-                  <input
-                    onChange={(e) => setName(e.target.value)}
-                    type="text"
-                    placeholder="ex: James..."
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                </label>
-                <label className="form-control w-full max-w-xs mr-10">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Type de dépense
-                    </span>
-                  </div>
-                  <select
-                    onChange={(e) => setType(e.target.value)}
-                    defaultValue=""
-                    className="select bg-slate-100 border-primaryColor border-2">
-                    <option value="" className="text-gray-300">
-                      Type
-                    </option>
-                    <option value="Frais Scolaire">Frais Scolaire</option>
-                    <option value="Donnation">Donnation</option>
-                    <option value="Autres">Autres</option>
-                  </select>
-                </label>
-                <label className="form-control w-full max-w-xs mr-10 mb-5">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Mode de Paiement
-                    </span>
-                  </div>
-                  <select
-                    onChange={(e) => setMode(e.target.value)}
-                    defaultValue=""
-                    className="select bg-slate-100 border-primaryColor border-2">
-                    <option value="" className="text-gray-300">
-                      Mode de paiement
-                    </option>
-                    <option value="Cash">Cash</option>
-                    <option value="Chèque">Chèque</option>
-                    <option value="Bank">Bank</option>
-                  </select>
-                </label>
-                <label className="form-control w-full max-w-xs mr-10 mb-5">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Date
-                    </span>
-                  </div>
-                  <DatePicker
-                    onChange={(e) => setDate(e.target.value)}
-                    placeholder="Date de naissance"
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                </label>
-                <label className="form-control w-full max-w-xs mr-10 ">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Montant
-                    </span>
-                  </div>
-                  <input
-                    onChange={(e) => setAmount(e.target.value)}
-                    type="number"
-                    placeholder="ex: 1000"
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                </label>
-                <Button
-                  type="submit"
-                  className="btn bg-primaryColor text-white border-none
+            <div className="flex flex-wrap ml-10">
+              <label className="form-control w-full max-w-xs mr-10">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">Nom</span>
+                </div>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  placeholder="Nom"
+                  className="input bg-slate-100 border-primaryColor border-2"
+                />
+              </label>
+              <label className="form-control w-full max-w-xs mr-10">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">
+                    Type de dépense
+                  </span>
+                </div>
+                <select
+                  onChange={(e) => setType(e.target.value)}
+                  defaultValue=""
+                  className="select bg-slate-100 border-primaryColor border-2">
+                  <option value="" className="text-gray-300">
+                    Type
+                  </option>
+                  <option value="Frais Scolaire">Frais Scolaire</option>
+                  <option value="Donnation">Donnation</option>
+                  <option value="Autres">Autres</option>
+                </select>
+              </label>
+              <label className="form-control w-full max-w-xs mr-10 mb-5">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">
+                    Mode de Paiement
+                  </span>
+                </div>
+                <select
+                  onChange={(e) => setMode(e.target.value)}
+                  defaultValue=""
+                  className="select bg-slate-100 border-primaryColor border-2">
+                  <option value="" className="text-gray-300">
+                    Mode de paiement
+                  </option>
+                  <option value="Cash">Cash</option>
+                  <option value="Chèque">Chèque</option>
+                  <option value="Bank">Bank</option>
+                </select>
+              </label>
+              <label className="form-control w-full max-w-xs mr-10 mb-5">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">Date</span>
+                </div>
+                <DatePicker
+                  onChange={(date) => setDate(date)}
+                  placeholder="Date revenu"
+                  className="input bg-slate-100 border-primaryColor border-2"
+                />
+              </label>
+              <label className="form-control w-full max-w-xs mr-10 ">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">
+                    Montant
+                  </span>
+                </div>
+                <input
+                  onChange={(e) => setAmount(e.target.value)}
+                  type="number"
+                  placeholder="Montant"
+                  className="input bg-slate-100 border-primaryColor border-2"
+                />
+              </label>
+              <Button
+                onClick={handleAddIncome}
+                type="submit"
+                className="btn bg-primaryColor text-white border-none
                   hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
-                  Ajouter
-                </Button>
-              </div>
-            </form>
+                Ajouter
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -281,11 +281,15 @@ export function Income() {
                           <td>{expense.date}</td>
                           <td>{expense.amount}</td>
                           <td>
-                            <button
+                            <Button
                               onClick={() => handleDeleteIncome(expense.id)}
-                              className="btn bg-red-600 text-white btn-xs">
+                              type="submit"
+                              className={
+                                "btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 " +
+                                "hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
+                              }>
                               Delete
-                            </button>
+                            </Button>
                           </td>
                         </tr>
                       </tbody>

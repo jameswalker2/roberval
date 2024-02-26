@@ -72,11 +72,7 @@ export function Staffs() {
         });
       }
     } catch (error) {
-      Modal.error({
-        title: "Erreur",
-        content:
-          "Une erreur s'est produite lors de la suppression du membre du personnel.",
-      });
+      console.log(error.message);
     }
   };
 
