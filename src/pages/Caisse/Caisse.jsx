@@ -87,7 +87,7 @@ export function Caisse() {
   }, []);
 
   const generateBackgroundColor = () => {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    const randomColor = Math.floor(Math.random() * 177215).toString(16);
     return `#${randomColor}`;
   };
 
@@ -125,7 +125,7 @@ export function Caisse() {
               series={state.series}
               type="area"
               width={"95%"}
-              height={"100%"}
+              height={300}
             />
           </div>
 

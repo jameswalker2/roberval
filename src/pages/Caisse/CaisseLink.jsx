@@ -104,7 +104,7 @@ function CaisseLink() {
       <div className="flex flex-wrap">
         <NavLink to={"/income"} id="revenu">
           <Card
-            className="w-96 max-xs-w mt-10 mr-8 p-0 m-0 shadow-sm 
+            className="w-[95%] max-xs-w mt-10 mr-8 p-0 m-0 shadow-sm 
           transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="stat p-0">
               <div className="stat-title text-supportingColor1">
@@ -131,7 +131,7 @@ function CaisseLink() {
         </NavLink>
 
         <NavLink to={"/expense"} id="expense">
-          <Card className="w-96 max-xs-w mt-10 mr-8 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
+          <Card className="w-[95%] max-xs-w mt-10 mr-8 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="stat p-0">
               <div className="stat-title text-supportingColor1">
                 Total Dépense
@@ -157,7 +157,7 @@ function CaisseLink() {
         </NavLink>
 
         <NavLink to={"/gain"} id="bank">
-          <Card className="w-96 max-xs-w mt-10 mr-8 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
+          <Card className="w-[95%] max-xs-w mt-10 mr-8 shadow-sm transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="stat p-0">
               <div className="stat-title text-supportingColor1">
                 Total Profit & Perte
