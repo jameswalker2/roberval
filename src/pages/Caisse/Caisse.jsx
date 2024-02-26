@@ -110,24 +110,27 @@ export function Caisse() {
             </li>
           </ul>
         </div>
-        <CaisseLink />
 
-        <div className="card_secondaire">
-          <div className="card_chart">
-            <h2 className="font-semibold text-color1">
+        <div>
+          <CaisseLink />
+        </div>
+
+        <div className="flex flex-wrap">
+          <div className="w-[62.5%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+            <h2 className="font-medium text-supportingColor1">
               Balance revenu/dépense
             </h2>
-            {/* <p className="text-[15px] ">Total Balance du Dec</p> */}
             <Chart
               options={state.options}
               series={state.series}
               type="area"
-              width={"720"}
-              height={"310"}
+              width={"95%"}
+              height={"100%"}
             />
           </div>
-          <div className="ml-10 p-5 w-96 rounded-2xl bg-white">
-            <h2 className="text-[20px] text-color1 font-semibold">
+
+          <div className="w-[30%] p-4 rounded-lg bg-white ml-8 mt-10 shadow-sm">
+            <h2 className="text-supportingColor1 font-medium">
               Transactions récentes
             </h2>
             {recentTransactions.map((transaction, index) => (
