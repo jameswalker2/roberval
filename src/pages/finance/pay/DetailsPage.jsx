@@ -1,5 +1,4 @@
-import { Modal } from "antd";
-import { CircleUserRound } from "lucide-react";
+import { Avatar, Modal } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -39,33 +38,23 @@ function DetailsPage({ show, close, selectedStaff, deleteID }) {
     }
   }, [selectedStaff]);
 
+  const generateBackgroundColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    return `#${randomColor}`;
+  };
+
   return (
     <>
-      <Modal
-        centered
-        title={"Procédér au payroll"}
-        open={show}
-        width={1000}
-        onCancel={close}
-        footer={null}>
-        <div className="flex gap-3 p-2 ">
-          <CircleUserRound
-            strokeWidth={1}
-            size={"40px"}
-            className="text-color2"
-          />
-          <span>
-            <h2 className=" font-extrabold text-color2 uppercase">
-              {firstName} {lastName}
-            </h2>
-            <p className="">{role}</p>
-          </span>
+      <Modal open={show} width={1000} onCancel={close} footer={null}>
+        <div className={"mb-10"}>
+          <h2 className={"font-medium text-xl"}>Procéder au paiement</h2>
         </div>
-        <div className="p-2 mt-10">
+
+        <div className="overflow-x-auto mt-10 rounded-lg border-4 border-primaryColor border-opacity-10 shadow-sm">
           <table className="table table-xs ">
-            <thead className="text-color2 text-sm bg-gray-50 hover:bg-gray-100">
+            <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
               <tr>
-                <th>Staff ID</th>
+                <th className={"flex items-center"}>Nom Complet</th>
                 <th>Date de création</th>
                 <th>Balance</th>
                 <th>Valeur Avancée</th>
@@ -73,9 +62,19 @@ function DetailsPage({ show, close, selectedStaff, deleteID }) {
                 <th>Type de paiment</th>
               </tr>
             </thead>
-            <tbody className="font-semibold">
+            <tbody className="font-semibold bg-white">
               <tr>
-                <td>{id}</td>
+                <td className={"flex items-center"}>
+                  <Avatar
+                    style={{
+                      backgroundColor: generateBackgroundColor(),
+                      verticalAlign: "middle",
+                      marginRight: 5,
+                    }}>
+                    {firstName.charAt(0).toUpperCase()}
+                  </Avatar>
+                  {firstName} {lastName}
+                </td>
                 <td>{moment(created_at).format("DD/MM/YYYY")}</td>
                 <td>$ {balance}</td>
                 <td>$ {amount}</td>
@@ -85,17 +84,22 @@ function DetailsPage({ show, close, selectedStaff, deleteID }) {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-end items-center">
-          <NavLink
-            to={"/update-pay/" + id}
-            className="btn bg-color2 border-none text-white  hover:bg-color1 hover:text-white">
-            Ajouter Payroll
+
+        <div className="flex justify-end items-center mt-10">
+          <NavLink to={"/update-pay/" + id}>
+            <button
+              className="btn border-none bg-primaryColor text-white 
+						hover:bg-slate-100 hover:text-primaryColor">
+              Ajouter Payroll
+            </button>
           </NavLink>
           <button
             onClick={() => {
-              deleteID(id), close;
+              deleteID(id);
+              close;
             }}
-            className="btn bg-red-600 border-none ml-10 text-white hover:bg-red-700">
+            className="btn bg-supportingColor3 border-none ml-10 text-white 
+						hover:bg-slate-100 hover:text-supportingColor3">
             Delete
           </button>
         </div>

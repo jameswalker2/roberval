@@ -4,6 +4,7 @@ import Meta from "antd/es/card/Meta.js";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
 import "./Caisse.scss";
 import CaisseLink from "./CaisseLink.jsx";
@@ -86,33 +87,50 @@ export function Caisse() {
   }, []);
 
   const generateBackgroundColor = () => {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    const randomColor = Math.floor(Math.random() * 177215).toString(16);
     return `#${randomColor}`;
   };
 
   return (
     <>
       <NavBar />
-      <div className="h-screen pl-52">
-        {/*  */}
-        <CaisseLink />
-        {/*  */}
-        <div className="card_secondaire">
-          <div className="card_chart">
-            <h2 className="font-semibold text-color1">
+      <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
+          <h1 className="font-semibold text-2xl">Caisse</h1>
+          <ul>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/paiement"}>
+                Paiement
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/payroll"}>
+                Payroll
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <CaisseLink />
+        </div>
+
+        <div className="flex flex-wrap">
+          <div className="w-[62.5%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+            <h2 className="font-medium text-supportingColor1">
               Balance revenu/dépense
             </h2>
-            {/* <p className="text-[15px] ">Total Balance du Dec</p> */}
             <Chart
               options={state.options}
               series={state.series}
               type="area"
-              width={"720"}
-              height={"310"}
+              width={"95%"}
+              height={300}
             />
           </div>
-          <div className="ml-10 p-5 w-96 rounded-2xl bg-white">
-            <h2 className="text-[20px] text-color1 font-semibold">
+
+          <div className="w-[30%] p-4 rounded-lg bg-white ml-8 mt-10 shadow-sm">
+            <h2 className="text-supportingColor1 font-medium">
               Transactions récentes
             </h2>
             {recentTransactions.map((transaction, index) => (

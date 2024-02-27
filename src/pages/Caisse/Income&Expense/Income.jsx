@@ -1,11 +1,10 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button, DatePicker, Empty, Modal } from "antd";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { NavLink } from "react-router-dom";
 
 export function Income() {
-  const [loading, setLoading] = useState(true);
   const [incomes, setIncomes] = useState([]);
   const [searchIncome, setSearchIncome] = useState("");
   const [name, setName] = useState("");
@@ -36,43 +35,49 @@ export function Income() {
   const handleAddIncome = async (e) => {
     e.preventDefault();
 
-    try {
-      const { error } = await supabase.from("income").insert({
+    const { error } = await supabase.from("income").upsert([
+      {
         name,
         type,
         mode,
         date,
         amount,
-      });
+      },
+    ]);
 
-      if (error) {
-        console.log(error);
-      }
-    } catch (error) {
-      console.log(error.message);
+    if (error) {
+      console.log(error);
     }
 
-    e.target.reset(
-      setName(""),
-      setType(""),
-      setMode(""),
-      setDate(""),
-      setAmount(""),
-    );
+    setName("");
+    setType("");
+    setMode("");
+    setDate("");
+    setAmount("");
   };
 
   const handleDeleteIncome = async (incomeId) => {
     try {
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from("income")
         .delete()
-        .eq("id", incomeId);
+        .eq("id", incomeId)
+        .single();
 
       if (error) {
-        console.error(error);
+        console.log(error);
+        Modal.error({
+          title: "Erreur !",
+          content: "Vous n'êtes pas autorisé pour cette opération !",
+          okButtonProps: {
+            type: "default",
+          },
+        });
+      } else {
+        console.log(data);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.log(error.message);
     }
   };
 
@@ -92,7 +97,6 @@ export function Income() {
               break;
             case "UPDATE":
               setIncomes((prevIncomes) => {
-                // Mise à jour de l'élément correspondant dans la liste
                 return prevIncomes.map((income) =>
                   income.id === changedData.id ? changedData : income,
                 );
@@ -111,280 +115,191 @@ export function Income() {
     return () => incomeChannel.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  });
-
   return (
     <>
       <NavBar />
-      <div className="h-[60rem]">
-        <div className="absolute top-10 left-[16%] max-w-full h-[56rem] ">
-          {loading ? (
-            <Skeleton className="bg-white h-[21rem] w-[72rem] rounded-2xl p-5 mb-10" />
-          ) : (
-            <div className="bg-white h-[21rem] w-[72rem] rounded-2xl p-5">
-              <h1 className="font-semibold uppercase text-2xl text-color1">
+      <div className="h-screen overflow-y-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div
+          className={
+            "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
+            "text-supportingColor1 bg-white rounded-lg shadow-sm"
+          }>
+          <h1 className="font-semibold text-2xl">Revenu</h1>
+          <ul>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/dashboard"}>
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/gain"}>
+                Caisse
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/income"}>
                 Revenu
-              </h1>
-              <h2 className="mb-10">Ajouter un nouveau revenu</h2>
-              <form onSubmit={handleAddIncome}>
-                <div className="flex flex-wrap">
-                  <label className="form-control w-full max-w-xs mr-10">
-                    <div className="label">
-                      <span className="label-text text-black">Nom</span>
-                    </div>
-                    <input
-                      onChange={(e) => setName(e.target.value)}
-                      type="text"
-                      placeholder="ex: James..."
-                      className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
-                    />
-                  </label>
-                  <label className="form-control w-full max-w-xs mr-10">
-                    <div className="label">
-                      <span className="label-text text-black">
-                        Type de dépense
-                      </span>
-                    </div>
-                    <select
-                      onChange={(e) => setType(e.target.value)}
-                      defaultValue=""
-                      className="select select-bordered focus:select-primary bg-gray-200">
-                      <option value="" className="text-gray-300">
-                        Type
-                      </option>
-                      <option value="Frais Scolaire">Frais Scolaire</option>
-                      <option value="Donnation">Donnation</option>
-                      <option value="Autres">Autres</option>
-                    </select>
-                  </label>
-                  <label className="form-control w-full max-w-xs mr-10 mb-5">
-                    <div className="label">
-                      <span className="label-text text-black">
-                        Mode de Paiement
-                      </span>
-                    </div>
-                    <select
-                      onChange={(e) => setMode(e.target.value)}
-                      defaultValue=""
-                      className="select select-bordered focus:select-primary bg-gray-200">
-                      <option value="" className="text-gray-300">
-                        Mode de paiement
-                      </option>
-                      <option value="Cash">Cash</option>
-                      <option value="Chèque">Chèque</option>
-                      <option value="Bank">Bank</option>
-                    </select>
-                  </label>
-                  <label className="form-control w-full max-w-xs mr-10 mb-5">
-                    <div className="label">
-                      <span className="label-text text-black">Date</span>
-                    </div>
-                    <input
-                      onChange={(e) => setDate(e.target.value)}
-                      type="date"
-                      placeholder="ex: James..."
-                      className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
-                    />
-                  </label>
-                  <label className="form-control w-full max-w-xs mr-10 ">
-                    <div className="label">
-                      <span className="label-text text-black">Montant</span>
-                    </div>
-                    <input
-                      onChange={(e) => setAmount(e.target.value)}
-                      type="number"
-                      placeholder="ex: 1000"
-                      className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
-                    />
-                  </label>
-                  <button
-                    type="submit"
-                    className="btn bg-color1 text-white hover:bg-color3 border-none w-28 mt-9 ml-52">
-                    Ajouter
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-          {loading ? (
-            <Skeleton className="bg-white h-2/4 w-[72rem] rounded-2xl p-5 mb-10" />
-          ) : (
-            <div className="mt-10 bg-white overflow-y-auto h-2/4 w-[72rem] rounded-2xl p-5">
-              <div className="flex mb-10 items-center">
-                <h2 className="text-color1 capitalize font-semibold">
-                  Liste de revenus
-                </h2>
-                <input
-                  onChange={(e) => setSearchIncome(e.target.value)}
-                  type="search"
-                  placeholder="Recherche rapide"
-                  className="input input-bordered focus:file-input-primary bg-gray-200 h-9 w-96 max-w-xs ml-60"
-                />
-              </div>
-              {/**/}
-              <div>
-                <div className="overflow-x-auto">
-                  {incomes.length > 0 ? (
-                    <table className="table">
-                      <thead className="text-black">
-                        <tr>
-                          <th>ID</th>
-                          <th>Nom</th>
-                          <th>Type de dépense</th>
-                          <th>Mode de Paiement</th>
-                          <th>Date</th>
-                          <th>Montant</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      {incomes
-                        .filter((expense) =>
-                          expense.name
-                            .toLowerCase()
-                            .includes(searchIncome.toLowerCase()),
-                        )
-                        .map((expense) => (
-                          <tbody key={expense.id}>
-                            <tr>
-                              <th>0{expense.id}</th>
-                              <td>{expense.name}</td>
-                              <td>
-                                {expense.type}
-                                {expense.what}
-                              </td>
-                              <td>{expense.mode}</td>
-                              <td>{expense.date}</td>
-                              <td>{expense.amount}</td>
-                              <td>
-                                <button
-                                  onClick={() => handleDeleteIncome(expense.id)}
-                                  className="btn bg-red-600 text-white btn-xs">
-                                  Delete
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        ))}
-                    </table>
-                  ) : (
-                    <p className="text-2xl flex justify-center mt-20">
-                      Aucune donnée trouvé
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-          {/*<dialog id="my_modal_1" className={"modal"} >*/}
-          {/*	<div className="modal-box bg-white w-11/12 max-w-6xl">*/}
-          {/*		<h3 className="font-bold text-lg">Nouveau Membre</h3>*/}
-          {/*		<p className="">Les informations en <span className="text-red-600">*</span> sont obligatoires</p>*/}
-          {/*		<div className="modal-action">*/}
-          {/*			<form method="dialog">*/}
+              </NavLink>
+            </li>
+          </ul>
+        </div>
 
-          {/*				/!* if there is a button in form, it will close the modal *!/*/}
-          {/*				<div className="flex flex-wrap items-center">*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre nom <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="text"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							onChange={(e) => setName(e.target.value)}*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre Prénom <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="text"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre date de naissance </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="date"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre adresse <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="text"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre Nif <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="text"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre Ninu <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="text"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre numéro Whatsapp <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="text"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Quel est ton rôle ? <span className="text-red-600">*</span> </span>*/}
-          {/*						</div>*/}
-          {/*						<select*/}
-          {/*							name="role" className="select focus:select-primary w-[22rem] bg-gray-200 w-full max-w-xs">*/}
-          {/*							<option value="" className="text-gray-300">Fonction</option>*/}
-          {/*							<option value="Professeur Prescolaire">Professeur Prescolaire</option>*/}
-          {/*							<option value="Professeur Primaire">Professeur Primaire</option>*/}
-          {/*							<option value="Professeur Secondaire">Professeur Secondaire</option>*/}
-          {/*							<option value="Staff Direction">Staff Direction</option>*/}
-          {/*						</select>*/}
-          {/*					</label>*/}
-          {/*					<label className="form-control w-full max-w-xs mr-5 mb-10">*/}
-          {/*						<div className="label">*/}
-          {/*							<span className="label-text text-black">Entrez votre email ?</span>*/}
-          {/*						</div>*/}
-          {/*						<input*/}
-          {/*							type="email"*/}
-          {/*							placeholder="Écrivez ici..."*/}
-          {/*							// onChange={(e) => setEmail(e.target.value)}*/}
-          {/*							className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs " />*/}
-          {/*					</label>*/}
-          {/*				</div>*/}
-          {/*				<button type="submit"  className="btn bg-color1 hover:bg-color3 border-none text-white ml-[56rem]">Soumettre</button>*/}
-          {/*			</form>*/}
-          {/*			<button type={"button"}*/}
-          {/*					className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕*/}
-          {/*			</button>*/}
-          {/*		</div>*/}
-          {/*		<Toaster position={"top-right"}/>*/}
-          {/*	</div>*/}
-          {/*</dialog>*/}
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div>
+            <h2 className="mb-10 font-medium text-xl text-supportingColor1">
+              Ajouter un nouveau revenu
+            </h2>
+          </div>
+
+          <div>
+            <div className="flex flex-wrap ml-10">
+              <label className="form-control w-full max-w-xs mr-10">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">Nom</span>
+                </div>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  placeholder="Nom"
+                  className="input bg-slate-100 border-primaryColor border-2"
+                />
+              </label>
+              <label className="form-control w-full max-w-xs mr-10">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">
+                    Type de dépense
+                  </span>
+                </div>
+                <select
+                  onChange={(e) => setType(e.target.value)}
+                  defaultValue=""
+                  className="select bg-slate-100 border-primaryColor border-2">
+                  <option value="" className="text-gray-300">
+                    Type
+                  </option>
+                  <option value="Frais Scolaire">Frais Scolaire</option>
+                  <option value="Donnation">Donnation</option>
+                  <option value="Autres">Autres</option>
+                </select>
+              </label>
+              <label className="form-control w-full max-w-xs mr-10 mb-5">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">
+                    Mode de Paiement
+                  </span>
+                </div>
+                <select
+                  onChange={(e) => setMode(e.target.value)}
+                  defaultValue=""
+                  className="select bg-slate-100 border-primaryColor border-2">
+                  <option value="" className="text-gray-300">
+                    Mode de paiement
+                  </option>
+                  <option value="Cash">Cash</option>
+                  <option value="Chèque">Chèque</option>
+                  <option value="Bank">Bank</option>
+                </select>
+              </label>
+              <label className="form-control w-full max-w-xs mr-10 mb-5">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">Date</span>
+                </div>
+                <DatePicker
+                  onChange={(date) => setDate(date)}
+                  placeholder="Date revenu"
+                  className="input bg-slate-100 border-primaryColor border-2"
+                />
+              </label>
+              <label className="form-control w-full max-w-xs mr-10 ">
+                <div className="label">
+                  <span className="label-text text-supportingColor1">
+                    Montant
+                  </span>
+                </div>
+                <input
+                  onChange={(e) => setAmount(e.target.value)}
+                  type="number"
+                  placeholder="Montant"
+                  className="input bg-slate-100 border-primaryColor border-2"
+                />
+              </label>
+              <Button
+                onClick={handleAddIncome}
+                type="submit"
+                className="btn bg-primaryColor text-white border-none
+                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
+                Ajouter
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div className="flex mb-10 items-center">
+            <h2 className="text-supportingColor1 font-medium">
+              Liste de revenus
+            </h2>
+            <input
+              onChange={(e) => setSearchIncome(e.target.value)}
+              type="search"
+              placeholder="Recherche rapide"
+              className="input input-bordered focus:file-input-primary bg-gray-200 h-9 w-96 max-w-xs ml-60"
+            />
+          </div>
+          {/**/}
+          <div>
+            <div className="overflow-x-auto">
+              {incomes.length > 0 ? (
+                <table className="table">
+                  <thead className="text-supportingColor1">
+                    <tr>
+                      <th>ID</th>
+                      <th>Nom</th>
+                      <th>Type de dépense</th>
+                      <th>Mode de Paiement</th>
+                      <th>Date</th>
+                      <th>Montant</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  {incomes
+                    .filter((expense) =>
+                      expense.name
+                        .toLowerCase()
+                        .includes(searchIncome.toLowerCase()),
+                    )
+                    .map((expense) => (
+                      <tbody key={expense.id}>
+                        <tr>
+                          <th>0{expense.id}</th>
+                          <td>{expense.name}</td>
+                          <td>
+                            {expense.type}
+                            {expense.what}
+                          </td>
+                          <td>{expense.mode}</td>
+                          <td>{expense.date}</td>
+                          <td>{expense.amount}</td>
+                          <td>
+                            <Button
+                              onClick={() => handleDeleteIncome(expense.id)}
+                              type="submit"
+                              className={
+                                "btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 " +
+                                "hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
+                              }>
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
+                </table>
+              ) : (
+                <Empty description={"Aucune donnée disponible"} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

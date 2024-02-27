@@ -1,6 +1,7 @@
 import { useAuth } from "@/pages/AuthConfig/AuthContext.jsx";
+import { Modal } from "antd";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import imageRoberval from "../../assets/welcom_to_roberval.svg";
@@ -37,7 +38,13 @@ export function Login() {
                   if (error.name === "ValidationError") {
                     setErrors(error.errors);
                   } else {
-                    toast.error("Email ou Password est incorrect");
+                    Modal.error({
+                      content:
+                        "Email ou Password est incorrect, Essayer à nouveau",
+                      okButtonProps: {
+                        type: "default",
+                      },
+                    });
                   }
                 } finally {
                   setSubmitting(false);
@@ -63,7 +70,8 @@ export function Login() {
                         id="email"
                         name="email"
                         placeholder="Écrivez ici..."
-                        className="input input-bordered border-2 border-supportingColor4 text-supportingColor1 w-80 mb-2"
+                        className="input input-bordered border-2 bg-white border-primaryColor text-supportingColor1
+                        w-80 mb-2"
                       />
                       <ErrorMessage
                         name="email"
@@ -82,7 +90,8 @@ export function Login() {
                         id="password"
                         name="password"
                         placeholder="Écrivez ici..."
-                        className="input input-bordered border-2 border-supportingColor4 text-supportingColor1 w-80 mb-2 font-normal"
+                        className="input input-bordered border-2 bg-white border-primaryColor text-supportingColor1
+                        w-80 mb-2 font-normal"
                       />
                       <ErrorMessage
                         name="password"
@@ -97,7 +106,8 @@ export function Login() {
                     ) : (
                       <div className="flex flex-col ">
                         <button
-                          className="btn text-primaryColor bg-transparent border-2 border-supportingColor4 hover:border-none hover:bg-primaryColor hover:text-white"
+                          className="btn text-primaryColor bg-transparent border-2 border-primaryColor
+                          hover:border-none hover:bg-primaryColor hover:text-white"
                           type="submit"
                           disabled={isSubmitting}>
                           Se connecter

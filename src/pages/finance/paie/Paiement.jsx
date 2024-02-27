@@ -1,9 +1,10 @@
-import moment from "moment/moment.js";
+import { supabase } from "@/Config/SupabaseConfig.jsx";
+import { NavBar } from "@/components/Navbar/NavBar.jsx";
+import { Empty } from "antd";
+import { FilePlus2 } from "lucide-react";
+import moment from "moment";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import { NavLink } from "react-router-dom";
-import { supabase } from "../../../Config/SupabaseConfig.jsx";
-import { NavBar } from "../../../components/Navbar/NavBar.jsx";
 import "./Paiement.scss";
 
 export function Paiement() {
@@ -16,23 +17,22 @@ export function Paiement() {
   useEffect(() => {
     const getStudents = async () => {
       try {
-        // eslint-disable-next-line no-unused-vars
         const { data, error } = await supabase
           .from("paie")
           .select("*")
           .textSearch(search);
 
-        if (data) {
+        if (error) {
+          console.log(error.message);
+        } else {
           setStudentsP(data);
           setClasses([...new Set(data.map((student) => student.classe))]);
-        } else {
-          console.log(error.message);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    getStudents();
+    return () => getStudents();
   }, [search]);
 
   const collectionOptions = classes.map((category) => ({
@@ -54,7 +54,7 @@ export function Paiement() {
         document.getElementById("my_modal_1").close();
       }
     } catch (error) {
-      toast.error(error.message);
+      console.log(error.message);
     }
   };
 
@@ -95,59 +95,71 @@ export function Paiement() {
   return (
     <>
       <NavBar />
-      <div className="h-[100vh]">
-        <div
-          className="relative w-[75rem] h-[7vh]  bg-white top-10 left-[16%] rounded-full pl-5 pr-20 flex items-center
-        justify-between mb-[80px] ">
-          <h1 className="text-xl text-color1 font-semibold">Paiement</h1>
-          <div>
+      <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
+          <h1 className="font-semibold text-2xl">Paiement</h1>
+          <ul>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/dashboard"}>
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/eleves"}>
+                Eleves
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/paiement"}>
+                Paiement
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div className={"flex justify-between mb-5"}>
+            <h2 className="font-medium text-supportingColor1 mb-5">
+              Selectionner les critères
+            </h2>
             <NavLink
-              className="text-color2 hover:text-color1"
-              to={"/dashboard"}>
-              Dashboard
-            </NavLink>
-            <span className="m-5" id="span">
-              |
-            </span>
-            <NavLink className="text-color2 hover:text-color1" to={"/eleves"}>
-              Eleves
+              className="btn border-none bg-primaryColor text-white hover:bg-color3"
+              to={"/addpaie"}>
+              <FilePlus2 />
+              Générer un paiement
             </NavLink>
           </div>
-        </div>
-        <div className="flex justify-around items-center ml-[16%] bg-white w-[75rem] h-20 rounded-2xl">
-          <select
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="select select-bordered focus:select-primary bg-gray-200 w-full max-w-xs">
-            <option value="" className="text-gray-300">
-              Recherche par classe
-            </option>
-            {collectionOptions.map((option) => (
-              <option
-                className="text-black"
-                key={option.value}
-                value={option.value}>
-                {option.label}
+          <div className={"flex justify-around"}>
+            <select
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
+              <option value="" className="text-gray-300">
+                Recherche par classe
               </option>
-            ))}
-          </select>
-          <input
-            placeholder="Recherche par nom"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
-            type="search"
-          />
-          <NavLink
-            className="btn bg-color2 text-white border-none hover:bg-color3"
-            to={"/addpaie"}>
-            + Générer un paiement
-          </NavLink>
-          {/*<h3>Total <span>$10,000 </span></h3>*/}
+              {collectionOptions.map((option) => (
+                <option
+                  className="text-black"
+                  key={option.value}
+                  value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <input
+              placeholder="Recherche par nom"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input input-bordered w-96 border-primaryColor border-2 rounded-full bg-white
+              focus:file-input-primaryColor"
+              type="search"
+            />
+          </div>
         </div>
-        <div className="overflow-x-auto mt-10 bg-white h-[26rem] rounded-2xl ml-[16%] w-[75rem]">
+
+        <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
           {filterStudents > 0 ? (
             <table className="table">
-              <thead className="text-color1">
+              <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
                 <tr>
                   <th>ID</th>
                   <th>Classe</th>
@@ -210,9 +222,7 @@ export function Paiement() {
                 ))}
             </table>
           ) : (
-            <p className="text-2xl flex justify-center mt-40">
-              Aucune paiement générée pour le moment
-            </p>
+            <Empty description={"Aucune donnée disponible"} />
           )}
         </div>
         <dialog id="my_modal_1" className={"modal"}>
