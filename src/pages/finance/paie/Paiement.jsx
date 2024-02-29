@@ -5,6 +5,7 @@ import { FilePlus2 } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import ModalPaie from "./ModalPaie";
 import "./Paiement.scss";
 
 export function Paiement() {
@@ -13,6 +14,15 @@ export function Paiement() {
   const [selectedCategory, setSelectedCategory] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedStudent, setSelectStudent] = useState(null);
+  const [isModalPaieShow, setIsModalPaieShow] = useState(false);
+
+  const openIsModalShow = () => {
+    setIsModalPaieShow(true);
+  };
+
+  const closeIsModalShow = () => {
+    setIsModalPaieShow(false);
+  };
 
   useEffect(() => {
     const getStudents = async () => {
@@ -151,7 +161,7 @@ export function Paiement() {
               placeholder="Recherche par nom"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input input-bordered w-96 border-primaryColor border-2 rounded-full bg-white
+              className="input input-bordered w-96 border-primaryColor border-2 rounded-lg bg-white
               focus:file-input-primaryColor"
               type="search"
             />
@@ -159,6 +169,7 @@ export function Paiement() {
         </div>
 
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
+          <h2 className="mb-5 font-medium">Liste paiement générer</h2>
           {filterStudents.length > 0 ? (
             <table className="table">
               <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
@@ -194,27 +205,35 @@ export function Paiement() {
                       <td>{student.balance}</td>
                       <td>{student.date}</td>
                       <td>{student.versement}</td>
-                      <td
-                        style={{
-                          color:
-                            student.statut === "Non Payé"
-                              ? "red"
-                              : student.statut === "Avance"
-                              ? "#ffa901"
-                              : "green",
-                          fontSize: "13px",
-                          fontWeight: "700",
-                        }}>
-                        {student.statut}
+                      <td>
+                        <p
+                          style={{
+                            backgroundColor:
+                              student.statut === "Non Payé"
+                                ? "#FD6477"
+                                : student.statut === "Avance"
+                                ? "#FFBF5A"
+                                : "#5AD374",
+                          }}
+                          className={
+                            "text-white text-center p-1 rounded-lg font-medium"
+                          }>
+                          {student.statut}
+                        </p>
                       </td>
                       <td>
                         <span>
                           <button
                             onClick={() => {
-                              setSelectStudent(student);
-                              document.getElementById("my_modal_1").showModal();
+                              if (student) {
+                                setSelectStudent(student);
+                                openIsModalShow();
+                              } else {
+                                console.log("Erreur technique !");
+                              }
                             }}
-                            className="btn btn-ghost btn-xs">
+                            className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
+                            hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
                             Détails
                           </button>
                         </span>
@@ -224,38 +243,15 @@ export function Paiement() {
                 ))}
             </table>
           ) : (
-            <Empty description={"Aucune donnée disponible"} />
+            <Empty description={"Aucune paiement générer"} />
           )}
         </div>
-        <dialog id="my_modal_1" className={"modal"}>
-          <div className="modal-box bg-white w-full max-w-xl">
-            {selectedStudent && (
-              <div>
-                <h2 className="text-center font-semibold uppercase">
-                  {selectedStudent.firstName} {selectedStudent.lastName}
-                </h2>
-                <p className="text-center">{selectedStudent.classe}</p>
-
-                <NavLink
-                  to={"/update-paie/" + selectedStudent.id}
-                  className="btn bg-color2 hover:bg-color3 border-none text-white mx-20">
-                  Ajouter Paiement
-                </NavLink>
-                <button
-                  onClick={() => handleDelete(selectedStudent.id)}
-                  className="btn bg-red-600 border-none text-white m-10 hover:bg-red-700">
-                  Delete
-                </button>
-              </div>
-            )}
-            <button
-              onClick={() => document.getElementById("my_modal_1").close()}
-              type={"button"}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </div>
-        </dialog>
+        <ModalPaie
+          selectedStudents={selectedStudent}
+          showModalPaie={isModalPaieShow}
+          closeModalPaie={closeIsModalShow}
+          deletePaieID={handleDelete}
+        />
       </div>
     </>
   );
