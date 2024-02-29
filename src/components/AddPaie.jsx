@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
@@ -127,113 +128,125 @@ export function AddPaie() {
   return (
     <>
       <NavBar />
-      <div className="container_addPaie">
-        <div className="addPaie_header">
+      <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
           <NavLink to={"/paiement"}>
-            <BiArrowBack className="h-8 w-8 text-color1" />
+            <BiArrowBack className="h-8 w-8 p-1 text-primaryColor hover:bg-slate-100 rounded-full" />
           </NavLink>
-          <div>
-            <NavLink className="link_Addpaie" to={"/dashboard"}>
-              Dashboard
-            </NavLink>
-            <span>|</span>
-            <NavLink className="link_Addpaie" to={"/eleves"}>
-              Eleves
-            </NavLink>
-            <span>|</span>
-            <NavLink className="link_Addpaie" to={""}>
-              Ajouter un paiement
-            </NavLink>
+          <ul>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/dashboard"}>
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/paiement"}>
+                Paiement
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/addpaie"}>
+                Ajouter un paiement
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+          <div className="mb-5">
+            <h2>Selectionner les critères</h2>
+            {/* <p className="text-primaryColor font-extralight text-sm">
+              {"Rechercher l'élèves pour afficher ses informations  "}
+            </p> */}
+          </div>
+          <div className="flex flex-wrap justify-center">
+            <input
+              type="text"
+              className="input w-96 bg-slate-100 border-primaryColor border-2"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Rechercher avec le prénom de l'étudiant..."
+            />
+            <button
+              className="btn ml-52 bg-primaryColor text-white border-none 
+              hover:bg-slate-100 hover:text-primaryColor font-normal"
+              onClick={handleSearch}>
+              <Search size={20} />
+              Rechercher
+            </button>
           </div>
         </div>
-        <div className="addPaie_body">
-          <div className="body_add">
-            <h2>Ajouter un nouveau paiement</h2>
-            {/*  */}
-            <div id="add_list">
-              <input
-                type="text"
-                id="sr"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher avec le prénom de l'étudiant..."
-              />
-              <button id="bt_sr" onClick={handleSearch}>
-                Rechercher
-              </button>
-            </div>
 
-            {searchResults.length > 0 && (
-              <div>
-                <table className="table">
-                  <thead className="text-color1 ">
+        <div>
+          {searchResults.length > 0 && (
+            <div>
+              <table className="table">
+                <thead className="text-color1 ">
+                  <tr>
+                    <th>ID</th>
+                    <th>Classe</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Mère</th>
+                    <th>Père</th>
+                    <th>Phone</th>
+                  </tr>
+                </thead>
+                {searchResults.map((student) => (
+                  <tbody key={student}>
                     <tr>
-                      <th>ID</th>
-                      <th>Classe</th>
-                      <th>Nom</th>
-                      <th>Prénom</th>
-                      <th>Mère</th>
-                      <th>Père</th>
-                      <th>Phone</th>
+                      <td>{student.id}</td>
+                      <td>{student.classe}</td>
+                      <td>{student.firstName}</td>
+                      <td>{student.lastName}</td>
+                      <td>{student.lastMother}</td>
+                      <td>{student.lastFather}</td>
+                      <td>{student.phone}</td>
                     </tr>
-                  </thead>
-                  {searchResults.map((student) => (
-                    <tbody key={student}>
-                      <tr>
-                        <td>{student.id}</td>
-                        <td>{student.classe}</td>
-                        <td>{student.firstName}</td>
-                        <td>{student.lastName}</td>
-                        <td>{student.lastMother}</td>
-                        <td>{student.lastFather}</td>
-                        <td>{student.phone}</td>
-                      </tr>
-                    </tbody>
-                  ))}
-                </table>
-                {/*  */}
-                <form onSubmit={handleTransferData}>
-                  <input
-                    type="text"
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Montant Annuel"
-                    id="ma"
-                  />
-                  <input
-                    type="text"
-                    value={balance}
-                    onChange={(e) => setBalance(e.target.value)}
-                    placeholder={testAmount}
-                    id="bl"
-                  />
-                  <select
-                    onChange={(e) => setversement(e.target.value)}
-                    name="verse"
-                    id="vr">
-                    <option value="0" className="text-gray-300">
-                      Versement
-                    </option>
-                    <option value="1er Versement">1er Versement</option>
-                    <option value="2e Versement">2e Versement</option>
-                    <option value="3e Versement">3e Versement</option>
-                    <option value="Versement arierer">Versement arierer</option>
-                  </select>
-                  <select
-                    onChange={(e) => setStatut(e.target.value)}
-                    name="stat"
-                    id="st">
-                    <option value="0">Statut</option>
-                    <option value="Non Payé">Non Payé</option>
-                    <option value="Avance">Avance</option>
-                    <option value="Payé">Payé</option>
-                  </select>
-                  <button id="bt" type="submit">
-                    Ajouter paiement
-                  </button>
-                </form>
-              </div>
-            )}
-          </div>
+                  </tbody>
+                ))}
+              </table>
+              {/*  */}
+              <form onSubmit={handleTransferData}>
+                <input
+                  type="text"
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Montant Annuel"
+                  id="ma"
+                />
+                <input
+                  type="text"
+                  value={balance}
+                  onChange={(e) => setBalance(e.target.value)}
+                  placeholder={testAmount}
+                  id="bl"
+                />
+                <select
+                  onChange={(e) => setversement(e.target.value)}
+                  name="verse"
+                  id="vr">
+                  <option value="0" className="text-gray-300">
+                    Versement
+                  </option>
+                  <option value="1er Versement">1er Versement</option>
+                  <option value="2e Versement">2e Versement</option>
+                  <option value="3e Versement">3e Versement</option>
+                  <option value="Versement arierer">Versement arierer</option>
+                </select>
+                <select
+                  onChange={(e) => setStatut(e.target.value)}
+                  name="stat"
+                  id="st">
+                  <option value="0">Statut</option>
+                  <option value="Non Payé">Non Payé</option>
+                  <option value="Avance">Avance</option>
+                  <option value="Payé">Payé</option>
+                </select>
+                <button id="bt" type="submit">
+                  Ajouter paiement
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </>

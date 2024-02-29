@@ -143,11 +143,11 @@ export function Payroll() {
             <h2 className="font-medium text-supportingColor1 mb-5">
               Selectionner les critères
             </h2>
-            <NavLink
-              className="btn border-none bg-primaryColor text-white hover:bg-color3"
-              to={"/addpay"}>
-              <FilePlus2 />
-              Générer nouveau payroll
+            <NavLink to={"/addpay"}>
+              <button className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                <FilePlus2 />
+                Générer un nouveau payroll
+              </button>
             </NavLink>
           </div>
 

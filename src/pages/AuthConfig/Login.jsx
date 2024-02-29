@@ -38,13 +38,15 @@ export function Login() {
                   if (error.name === "ValidationError") {
                     setErrors(error.errors);
                   } else {
-                    Modal.error({
-                      content:
-                        "Email ou Password est incorrect, Essayer à nouveau",
-                      okButtonProps: {
-                        type: "default",
-                      },
-                    });
+                    setTimeout(() => {
+                      Modal.error({
+                        content:
+                          "Email ou Password est incorrect, Essayer à nouveau",
+                        okButtonProps: {
+                          type: "default",
+                        },
+                      });
+                    }, 1000);
                   }
                 } finally {
                   setSubmitting(false);
