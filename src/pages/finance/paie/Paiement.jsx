@@ -137,6 +137,7 @@ export function Paiement() {
               <option value="" className="text-gray-300">
                 Recherche par classe
               </option>
+
               {collectionOptions.map((option) => (
                 <option
                   className="text-black"
@@ -158,7 +159,7 @@ export function Paiement() {
         </div>
 
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-          {filterStudents > 0 ? (
+          {filterStudents.length > 0 ? (
             <table className="table">
               <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
                 <tr>

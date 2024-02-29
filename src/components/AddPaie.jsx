@@ -155,9 +155,6 @@ export function AddPaie() {
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <div className="mb-5">
             <h2>Selectionner les critères</h2>
-            {/* <p className="text-primaryColor font-extralight text-sm">
-              {"Rechercher l'élèves pour afficher ses informations  "}
-            </p> */}
           </div>
           <div className="flex flex-wrap justify-center">
             <input
@@ -178,9 +175,10 @@ export function AddPaie() {
 
         <div>
           {searchResults.length > 0 && (
-            <div>
+            <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
+              <h2 className="mb-5 font-medium">Résultat de la recherche</h2>
               <table className="table">
-                <thead className="text-color1 ">
+                <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
                   <tr>
                     <th>ID</th>
                     <th>Classe</th>
@@ -205,49 +203,103 @@ export function AddPaie() {
                   </tbody>
                 ))}
               </table>
-              {/*  */}
-              <form onSubmit={handleTransferData}>
-                <input
-                  type="text"
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="Montant Annuel"
-                  id="ma"
-                />
-                <input
-                  type="text"
-                  value={balance}
-                  onChange={(e) => setBalance(e.target.value)}
-                  placeholder={testAmount}
-                  id="bl"
-                />
-                <select
-                  onChange={(e) => setversement(e.target.value)}
-                  name="verse"
-                  id="vr">
-                  <option value="0" className="text-gray-300">
-                    Versement
-                  </option>
-                  <option value="1er Versement">1er Versement</option>
-                  <option value="2e Versement">2e Versement</option>
-                  <option value="3e Versement">3e Versement</option>
-                  <option value="Versement arierer">Versement arierer</option>
-                </select>
-                <select
-                  onChange={(e) => setStatut(e.target.value)}
-                  name="stat"
-                  id="st">
-                  <option value="0">Statut</option>
-                  <option value="Non Payé">Non Payé</option>
-                  <option value="Avance">Avance</option>
-                  <option value="Payé">Payé</option>
-                </select>
-                <button id="bt" type="submit">
-                  Ajouter paiement
-                </button>
-              </form>
             </div>
           )}
         </div>
+
+        {searchResults.length > 0 && (
+          <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+            <h2 className="font-medium">Information pour générer</h2>
+            <form onSubmit={handleTransferData}>
+              <div className="flex flex-wrap items-center p-10">
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Montant Annuel
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="Montant Annuel"
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Balance Annuel
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={balance}
+                    onChange={(e) => setBalance(e.target.value)}
+                    placeholder={testAmount}
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Versement mensuel
+                    </span>
+                  </div>
+                  <select
+                    onChange={(e) => setversement(e.target.value)}
+                    name="verse"
+                    className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
+                    <option value="0" className="text-gray-400">
+                      Versement
+                    </option>
+                    <option value="Versement 1">Versement 1</option>
+                    <option value="Versement 2">Versement 2</option>
+                    <option value="Versement 3">Versement 3</option>
+                    <option value="Versement arierer">Versement arierer</option>
+                  </select>
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Montant Annuel
+                    </span>
+                  </div>
+                  <select
+                    onChange={(e) => setStatut(e.target.value)}
+                    name="stat"
+                    className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
+                    <option value="0" className="text-gray-400">
+                      Statut
+                    </option>
+                    <option value="Non Payé">Non Payé</option>
+                    <option value="Avance">Avance</option>
+                    <option value="Payé">Payé</option>
+                  </select>
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <div className="ml-[45%]">
+                  <button
+                    className="btn bg-primaryColor text-white border-none 
+                  hover:bg-slate-100 hover:text-primaryColor font-normal"
+                    type="submit">
+                    Générer le paiement
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );

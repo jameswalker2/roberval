@@ -121,45 +121,47 @@ export function AddPay() {
           </div>
         </div>
 
-        {searchResults.length > 0 && (
-          <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-            <h2 className="mb-5 font-medium">Résultat de la recherche</h2>
-            <table className="table">
-              <thead
-                className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10"
-                key="thead">
-                <tr>
-                  <th>ID</th>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Adresse</th>
-                  <th>Role</th>
-                  <th>Téléphone</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
-              {searchResults.map((staff) => (
-                <tbody key={staff.staffs_id}>
+        <div>
+          {searchResults.length > 0 && (
+            <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
+              <h2 className="mb-5 font-medium">Résultat de la recherche</h2>
+              <table className="table">
+                <thead
+                  className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10"
+                  key="thead">
                   <tr>
-                    <td>0{staff.id}</td>
-                    <td>{staff.name}</td>
-                    <td>{staff.lastName}</td>
-                    <td>{staff.adress}</td>
-                    <td>{staff.role}</td>
-                    <td>{staff.phone}</td>
-                    <td>{staff.email}</td>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Adresse</th>
+                    <th>Role</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
                   </tr>
-                </tbody>
-              ))}
-            </table>
-          </div>
-        )}
+                </thead>
+                {searchResults.map((staff) => (
+                  <tbody key={staff.staffs_id}>
+                    <tr>
+                      <td>0{staff.id}</td>
+                      <td>{staff.name}</td>
+                      <td>{staff.lastName}</td>
+                      <td>{staff.adress}</td>
+                      <td>{staff.role}</td>
+                      <td>{staff.phone}</td>
+                      <td>{staff.email}</td>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            </div>
+          )}
+        </div>
 
         {searchResults.length > 0 && (
           <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
             <h2 className="font-medium">Information pour générer</h2>
             <form onSubmit={handleTransferData}>
-              <div className="flex flex-wrap p-10">
+              <div className="flex flex-wrap items-center p-10">
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
@@ -214,14 +216,14 @@ export function AddPay() {
                     <span className="label-text-alt"></span>
                   </div>
                 </label>
-              </div>
-              <div className="text-right mr-[10.5%]">
-                <button
-                  className="btn bg-primaryColor text-white border-none 
+                <div className="mr-[10.5%]">
+                  <button
+                    className="btn bg-primaryColor text-white border-none 
                   hover:bg-slate-100 hover:text-primaryColor font-normal"
-                  type="submit">
-                  Générer le nouveau paiement
-                </button>
+                    type="submit">
+                    Générer le nouveau paiement
+                  </button>
+                </div>
               </div>
             </form>
           </div>
