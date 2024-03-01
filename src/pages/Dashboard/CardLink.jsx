@@ -68,7 +68,7 @@ function CardLink() {
       <div className="flex sm:flex-wrap ">
         <NavLink to={"/eleves"}>
           <Card
-            className="w-64 bg-color2 mt-10 mr-16 shadow-sm transition ease-in-out delay-15 
+            className="w-64 bg-color2 mt-10 mr-[60px] shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
               <h2 className="text-lg">Total Eleves</h2>
@@ -83,7 +83,7 @@ function CardLink() {
         </NavLink>
         <NavLink to={"/staffs"}>
           <Card
-            className="w-64 mt-10 mr-16 shadow-sm transition ease-in-out delay-15 
+            className="w-64 mt-10 mr-[60px] shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
               <h2 className="text-lg">Total Staffs</h2>
@@ -99,7 +99,7 @@ function CardLink() {
         </NavLink>
         <NavLink to={"/staffs"}>
           <Card
-            className="w-64 mt-10 mr-16 shadow-sm transition ease-in-out delay-15 
+            className="w-64 mt-10 mr-[60px] shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
               <h2 className="text-lg">Total Professeurs</h2>
