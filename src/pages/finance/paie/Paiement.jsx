@@ -1,6 +1,6 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Empty } from "antd";
+import { Empty, Modal } from "antd";
 import { FilePlus2 } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -16,11 +16,11 @@ export function Paiement() {
   const [selectedStudent, setSelectStudent] = useState(null);
   const [isModalPaieShow, setIsModalPaieShow] = useState(false);
 
-  const openIsModalShow = () => {
+  const openIsModalPaieShow = () => {
     setIsModalPaieShow(true);
   };
 
-  const closeIsModalShow = () => {
+  const closeIsModalPaieShow = () => {
     setIsModalPaieShow(false);
   };
 
@@ -56,15 +56,21 @@ export function Paiement() {
 
   const handleDelete = async (paieId) => {
     try {
-      const { error } = await supabase.from("paie").delete().eq("id", paieId);
+      const { error } = await supabase
+        .from("paie")
+        .delete()
+        .eq("id", paieId)
+        .single();
 
       if (error) {
-        console.error(error);
-      } else {
-        document.getElementById("my_modal_1").close();
+        Modal.error({
+          title: "Erreur !",
+          content: "Vous n'êtes pas autorisé à effectuer cette opération",
+          okButtonProps: { type: "default" },
+        });
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 
@@ -227,7 +233,7 @@ export function Paiement() {
                             onClick={() => {
                               if (student) {
                                 setSelectStudent(student);
-                                openIsModalShow();
+                                openIsModalPaieShow();
                               } else {
                                 console.log("Erreur technique !");
                               }
@@ -249,7 +255,7 @@ export function Paiement() {
         <ModalPaie
           selectedStudents={selectedStudent}
           showModalPaie={isModalPaieShow}
-          closeModalPaie={closeIsModalShow}
+          closeModalPaie={closeIsModalPaieShow}
           deletePaieID={handleDelete}
         />
       </div>

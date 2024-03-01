@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Avatar, Modal } from "antd";
+import { Modal } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -21,7 +21,7 @@ function ModalPaie({
 
   useEffect(() => {
     if (selectedStudents) {
-      setFirstName(selectedStudents.name);
+      setFirstName(selectedStudents.firstName);
       setLastName(selectedStudents.lastName);
       setId(selectedStudents.id);
       setCreated_at(selectedStudents.created_at);
@@ -58,14 +58,6 @@ function ModalPaie({
             <tbody className="font-semibold bg-white">
               <tr>
                 <td className={"flex items-center"}>
-                  <Avatar
-                    style={{
-                      backgroundColor: "generateBackgroundColor()",
-                      verticalAlign: "middle",
-                      marginRight: 5,
-                    }}>
-                    {firstName.charAt(0).toUpperCase()}
-                  </Avatar>
                   {firstName} {lastName}
                 </td>
                 <td>{moment(created_at).format("DD/MM/YYYY")}</td>
@@ -79,17 +71,17 @@ function ModalPaie({
         </div>
 
         <div className="flex justify-end items-center mt-10">
-          <NavLink to={"/update-pay/" + id}>
+          <NavLink to={"/update-paie/" + id}>
             <button
               className="btn border-none bg-primaryColor text-white 
 						hover:bg-slate-100 hover:text-primaryColor">
-              Ajouter Payroll
+              Ajouter Paiement
             </button>
           </NavLink>
           <button
             onClick={() => {
               deletePaieID(id);
-              close;
+              closeModalPaie;
             }}
             className="btn bg-supportingColor3 border-none ml-10 text-white 
 						hover:bg-slate-100 hover:text-supportingColor3">
