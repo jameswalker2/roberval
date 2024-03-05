@@ -31,7 +31,7 @@ export function UpdatePaie() {
   useEffect(() => {
     const fetchStudent = async () => {
       const { data, error } = await supabase
-        .from("paie")
+        .from("generated_paiement")
         .select()
         .eq("id", id)
         .single();

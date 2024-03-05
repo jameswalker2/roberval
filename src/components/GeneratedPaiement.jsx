@@ -6,15 +6,12 @@ import { supabase } from "../Config/SupabaseConfig.jsx";
 import "./AddPaie.scss";
 import { NavBar } from "./Navbar/NavBar.jsx";
 
-export function AddPaie() {
+export function GeneratedPaiement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState("");
-  const [versement, setversement] = useState("");
   const [statut, setStatut] = useState("");
-  const [date, setDate] = useState(null);
-  const [mode, setMode] = useState(null);
 
   let getAmount = 0;
 
@@ -31,7 +28,7 @@ export function AddPaie() {
         setSearchResults(data);
       }
     } catch (error) {
-      console.error("An error occurred during the search:", error);
+      console.error(error.message);
     }
   };
 
@@ -40,43 +37,48 @@ export function AddPaie() {
 
     try {
       for (const row of searchResults) {
-        const {
-          lastName,
-          firstName,
-          lastFather,
-          lastMother,
-          linkPerson,
-          phone,
-          classe: studentClass,
-        } = row;
+        const { students_id } = row;
+        const { error: error1 } = await supabase
+          .from("generated_paiement")
+          .insert([
+            {
+              amount,
+              balance: testAmount,
+              statut,
+              student_id: students_id,
+            },
+          ]);
 
-        const { error } = await supabase.from("paie").insert([
-          {
-            lastName,
-            firstName,
-            classe: studentClass,
-            lastMother,
-            lastFather,
-            linkPerson,
-            phone,
-            amount,
-            balance: testAmount,
-            versement,
-            statut,
-            date,
-            mode,
-          },
-        ]);
-        if (error) {
-          throw error;
+        if (error1) {
+          throw error1;
         } else {
-          console.log("Data transfer completed successfully!");
+          setSearchResults([]);
         }
       }
-      setSearchResults([]);
+
+      for (const row of searchResults) {
+        const { students_id } = row;
+        const { error: error2 } = await supabase
+          .from("history_paiement")
+          .insert([
+            {
+              amount,
+              balance: testAmount,
+              statut,
+              generated_id: students_id,
+            },
+          ]);
+
+        if (error2) {
+          throw error2;
+        } else {
+          setSearchResults([]);
+        }
+      }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
+
     setSearchQuery("");
   };
 
@@ -145,7 +147,9 @@ export function AddPaie() {
               </NavLink>
             </li>
             <li>
-              <NavLink className="text-supportingColor1" to={"/addpaie"}>
+              <NavLink
+                className="text-supportingColor1"
+                to={"/GeneratedPaiement"}>
                 Ajouter un paiement
               </NavLink>
             </li>
@@ -245,28 +249,7 @@ export function AddPaie() {
                     <span className="label-text-alt"></span>
                   </div>
                 </label>
-                <label className="form-control w-full max-w-xs mr-5 mb-2">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Versement mensuel
-                    </span>
-                  </div>
-                  <select
-                    onChange={(e) => setversement(e.target.value)}
-                    name="verse"
-                    className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
-                    <option value="0" className="text-gray-400">
-                      Versement
-                    </option>
-                    <option value="Versement 1">Versement 1</option>
-                    <option value="Versement 2">Versement 2</option>
-                    <option value="Versement 3">Versement 3</option>
-                    <option value="Versement arierer">Versement arierer</option>
-                  </select>
-                  <div className="label">
-                    <span className="label-text-alt"></span>
-                  </div>
-                </label>
+
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
@@ -288,7 +271,7 @@ export function AddPaie() {
                     <span className="label-text-alt"></span>
                   </div>
                 </label>
-                <div className="ml-[45%]">
+                <div className="ml-[%]">
                   <button
                     className="btn bg-primaryColor text-white border-none 
                   hover:bg-slate-100 hover:text-primaryColor font-normal"

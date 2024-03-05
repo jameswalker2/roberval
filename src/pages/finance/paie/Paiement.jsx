@@ -28,18 +28,20 @@ export function Paiement() {
     const getStudents = async () => {
       try {
         const { data, error } = await supabase
-          .from("paie")
-          .select("*")
+          .from("generated_paiement")
+          .select(`*, students (*)`)
           .textSearch(search);
 
         if (error) {
-          console.log(error.message);
+          throw error;
         } else {
           setStudentsP(data);
-          setClasses([...new Set(data.map((student) => student.classe))]);
+          setClasses([
+            ...new Set(data.map((student) => student.students.classe)),
+          ]);
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
     return () => getStudents();
@@ -51,13 +53,13 @@ export function Paiement() {
   }));
 
   const filterStudents = selectedCategory
-    ? studentsP.filter((student) => student.classe === selectedCategory)
+    ? studentsP.filter((student) => student === selectedCategory)
     : studentsP;
 
   const handleDelete = async (paieId) => {
     try {
       const { error } = await supabase
-        .from("paie")
+        .from("generated_paiement")
         .delete()
         .eq("id", paieId)
         .single();
@@ -79,7 +81,7 @@ export function Paiement() {
       .channel("custom-all-channel")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "paie" },
+        { event: "*", schema: "public", table: "generated_paiement" },
         (payload) => {
           const eventType = payload.eventType;
           const changedData = payload.new;
@@ -186,31 +188,31 @@ export function Paiement() {
                   <th>Date de création</th>
                   <th>Montant Avancée</th>
                   <th>Balance</th>
-                  <th>Date</th>
-                  <th>Versement</th>
                   <th>Statut</th>
                   <th>Action</th>
                 </tr>
               </thead>
               {filterStudents
-                .filter((resultL) =>
-                  resultL.firstName
-                    .toLowerCase()
-                    .includes(search.toLowerCase()),
+                .filter(
+                  (resultL) =>
+                    resultL.students.firstName
+                      .toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    resultL.students.lastName
+                      .toLowerCase()
+                      .includes(search.toLowerCase()),
                 )
                 .map((student) => (
                   <tbody key={student.id} className="scroll">
                     <tr>
-                      <td>0{student.id}</td>
-                      <td>{student.classe}</td>
+                      <td>0{student.students.id}</td>
+                      <td>{student.students.classe}</td>
                       <td>
-                        {student.firstName} {student.lastName}
+                        {student.students.firstName} {student.students.lastName}
                       </td>
                       <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
                       <td>{student.amount}</td>
                       <td>{student.balance}</td>
-                      <td>{student.date}</td>
-                      <td>{student.versement}</td>
                       <td>
                         <p
                           style={{

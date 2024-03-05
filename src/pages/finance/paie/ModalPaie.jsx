@@ -21,8 +21,8 @@ function ModalPaie({
 
   useEffect(() => {
     if (selectedStudents) {
-      setFirstName(selectedStudents.firstName);
-      setLastName(selectedStudents.lastName);
+      setFirstName(selectedStudents.students.firstName);
+      setLastName(selectedStudents.students.lastName);
       setId(selectedStudents.id);
       setCreated_at(selectedStudents.created_at);
       setBalance(selectedStudents.balance);
@@ -31,6 +31,8 @@ function ModalPaie({
       setMode(selectedStudents.mode);
     }
   }, [selectedStudents]);
+
+  console.log(selectedStudents);
 
   return (
     <>
@@ -63,8 +65,8 @@ function ModalPaie({
                 <td>{moment(created_at).format("DD/MM/YYYY")}</td>
                 <td>$ {balance}</td>
                 <td>$ {amount}</td>
-                <td>{date}</td>
-                <td>{mode}</td>
+                {date === null ? <td>Non généré</td> : <td>{date}</td>}
+                {mode === null ? <td>Non généré</td> : <td>{mode}</td>}
               </tr>
             </tbody>
           </table>
