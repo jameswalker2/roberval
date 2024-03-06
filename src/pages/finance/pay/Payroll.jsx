@@ -143,11 +143,11 @@ export function Payroll() {
             <h2 className="font-medium text-supportingColor1 mb-5">
               Selectionner les critères
             </h2>
-            <NavLink
-              className="btn border-none bg-primaryColor text-white hover:bg-color3"
-              to={"/addpay"}>
-              <FilePlus2 />
-              Générer nouveau payroll
+            <NavLink to={"/addpay"}>
+              <button className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                <FilePlus2 />
+                Générer un nouveau payroll
+              </button>
             </NavLink>
           </div>
 
@@ -218,7 +218,7 @@ export function Payroll() {
                       <td>$ {staff.amount}</td>
                       <td>$ {staff.balance}</td>
                       {/*<td>{staff.date}</td>*/}
-                      <td id="non">
+                      <td>
                         <p
                           style={{
                             backgroundColor:
@@ -245,8 +245,8 @@ export function Payroll() {
                                 console.log("Erreur technique !");
                               }
                             }}
-                            className="btn btn-xs text-xs h-10 w-20 border-none bg-primaryColor hover:bg-opacity-90
-															text-white">
+                            className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
+                            hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
                             Détails
                           </button>
                         </span>
@@ -256,7 +256,7 @@ export function Payroll() {
                 ))}
             </table>
           ) : (
-            <Empty description={"Aucune donnée disponible"} />
+            <Empty description={"Aucune paiement générer"} />
           )}
         </div>
         <DetailsPage

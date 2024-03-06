@@ -1,4 +1,3 @@
-import { AddPaie } from "@/components/AddPaie.jsx";
 import { AddPay } from "@/components/AddPay.jsx";
 import { Edit } from "@/components/Edit.jsx";
 import { UpdatePaie } from "@/components/UpdatePaie.jsx";
@@ -17,6 +16,7 @@ import { Paiement } from "@/pages/finance/paie/Paiement";
 import { Payroll } from "@/pages/finance/pay/Payroll";
 import { Route, Routes } from "react-router-dom";
 import "./App.scss";
+import { GeneratedPaiement } from "./components/GeneratedPaiement";
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
         <Route path="/staffs" element={<Staffs />} />
         <Route path="/eleves" element={<Eleves />} />
         <Route path="/edit/:id" element={<Edit />} />
-        <Route path="/addpaie" element={<AddPaie />} />
+        <Route path="/addpaie" element={<GeneratedPaiement />} />
         <Route path="/update-paie/:id" element={<UpdatePaie />} />
         <Route path="/addpay" element={<AddPay />} />
         <Route path="/update-pay/:id" element={<UpdatePay />} />

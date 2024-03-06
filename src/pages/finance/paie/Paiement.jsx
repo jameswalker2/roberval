@@ -1,10 +1,11 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Empty } from "antd";
+import { Empty, Modal } from "antd";
 import { FilePlus2 } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import ModalPaie from "./ModalPaie";
 import "./Paiement.scss";
 
 export function Paiement() {
@@ -12,27 +13,31 @@ export function Paiement() {
   const [classes, setClasses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedStudent, setSelectStudent] = useState(null);
+  const [selectedPaiement, setSelectedPaiement] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const getStudents = async () => {
+    const getPaiement = async () => {
       try {
         const { data, error } = await supabase
-          .from("paie")
-          .select("*")
+          .from("generated_paiement")
+          .select(`*, students (*)`)
+          .order("created_at", { ascending: false })
           .textSearch(search);
 
         if (error) {
-          console.log(error.message);
+          throw error;
         } else {
           setStudentsP(data);
-          setClasses([...new Set(data.map((student) => student.classe))]);
+          setClasses([
+            ...new Set(data.map((student) => student.students.classe)),
+          ]);
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
-    return () => getStudents();
+    return () => getPaiement();
   }, [search]);
 
   const collectionOptions = classes.map((category) => ({
@@ -41,21 +46,35 @@ export function Paiement() {
   }));
 
   const filterStudents = selectedCategory
-    ? studentsP.filter((student) => student.classe === selectedCategory)
+    ? studentsP.filter((student) => student === selectedCategory)
     : studentsP;
 
   const handleDelete = async (paieId) => {
     try {
-      const { error } = await supabase.from("paie").delete().eq("id", paieId);
+      const { error } = await supabase
+        .from("generated_paiement")
+        .delete()
+        .eq("id", paieId)
+        .single();
 
       if (error) {
-        console.error(error);
-      } else {
-        document.getElementById("my_modal_1").close();
+        Modal.error({
+          title: "Erreur !",
+          content: "Vous n'êtes pas autorisé à effectuer cette opération",
+          okButtonProps: { type: "default" },
+        });
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
+  };
+
+  const handleShowModalPaiement = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModalPaiement = () => {
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -63,7 +82,7 @@ export function Paiement() {
       .channel("custom-all-channel")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "paie" },
+        { event: "*", schema: "public", table: "generated_paiement" },
         (payload) => {
           const eventType = payload.eventType;
           const changedData = payload.new;
@@ -116,19 +135,19 @@ export function Paiement() {
             </li>
           </ul>
         </div>
-
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <div className={"flex justify-between mb-5"}>
             <h2 className="font-medium text-supportingColor1 mb-5">
               Selectionner les critères
             </h2>
-            <NavLink
-              className="btn border-none bg-primaryColor text-white hover:bg-color3"
-              to={"/addpaie"}>
-              <FilePlus2 />
-              Générer un paiement
+            <NavLink to={"/addpaie"}>
+              <button className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                <FilePlus2 />
+                Générer un paiement
+              </button>
             </NavLink>
           </div>
+
           <div className={"flex justify-around"}>
             <select
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -136,6 +155,7 @@ export function Paiement() {
               <option value="" className="text-gray-300">
                 Recherche par classe
               </option>
+
               {collectionOptions.map((option) => (
                 <option
                   className="text-black"
@@ -149,15 +169,15 @@ export function Paiement() {
               placeholder="Recherche par nom"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input input-bordered w-96 border-primaryColor border-2 rounded-full bg-white
+              className="input input-bordered w-96 border-primaryColor border-2 rounded-lg bg-white
               focus:file-input-primaryColor"
               type="search"
             />
           </div>
         </div>
-
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-          {filterStudents > 0 ? (
+          <h2 className="mb-5 font-medium">Liste paiement générer</h2>
+          {filterStudents.length > 0 ? (
             <table className="table">
               <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
                 <tr>
@@ -167,52 +187,58 @@ export function Paiement() {
                   <th>Date de création</th>
                   <th>Montant Avancée</th>
                   <th>Balance</th>
-                  <th>Date</th>
-                  <th>Versement</th>
                   <th>Statut</th>
                   <th>Action</th>
                 </tr>
               </thead>
               {filterStudents
-                .filter((resultL) =>
-                  resultL.firstName
-                    .toLowerCase()
-                    .includes(search.toLowerCase()),
+                .filter(
+                  (resultL) =>
+                    resultL.students.firstName
+                      .toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    resultL.students.lastName
+                      .toLowerCase()
+                      .includes(search.toLowerCase()),
                 )
                 .map((student) => (
                   <tbody key={student.id} className="scroll">
                     <tr>
-                      <td>0{student.id}</td>
-                      <td>{student.classe}</td>
+                      <td>0{student.students.id}</td>
+                      <td>{student.students.classe}</td>
                       <td>
-                        {student.firstName} {student.lastName}
+                        {student.students.firstName} {student.students.lastName}
                       </td>
                       <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
                       <td>{student.amount}</td>
                       <td>{student.balance}</td>
-                      <td>{student.date}</td>
-                      <td>{student.versement}</td>
-                      <td
-                        style={{
-                          color:
-                            student.statut === "Non Payé"
-                              ? "red"
-                              : student.statut === "Avance"
-                              ? "#ffa901"
-                              : "green",
-                          fontSize: "13px",
-                          fontWeight: "700",
-                        }}>
-                        {student.statut}
+                      <td>
+                        <p
+                          style={{
+                            backgroundColor:
+                              student.statut === "Non Payé"
+                                ? "#FD6477"
+                                : student.statut === "Avance"
+                                ? "#FFBF5A"
+                                : "#5AD374",
+                          }}
+                          className={
+                            "text-white text-center p-1 rounded-lg font-medium"
+                          }>
+                          {student.statut}
+                        </p>
                       </td>
                       <td>
                         <span>
                           <button
                             onClick={() => {
-                              setSelectStudent(student);
-                              document.getElementById("my_modal_1").showModal();
+                              if (student) {
+                                handleShowModalPaiement();
+                                setSelectedPaiement(student);
+                              }
                             }}
-                            className="btn btn-ghost btn-xs">
+                            className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
+                            hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
                             Détails
                           </button>
                         </span>
@@ -222,38 +248,15 @@ export function Paiement() {
                 ))}
             </table>
           ) : (
-            <Empty description={"Aucune donnée disponible"} />
+            <Empty description={"Aucune paiement générer"} />
           )}
         </div>
-        <dialog id="my_modal_1" className={"modal"}>
-          <div className="modal-box bg-white w-full max-w-xl">
-            {selectedStudent && (
-              <div>
-                <h2 className="text-center font-semibold uppercase">
-                  {selectedStudent.firstName} {selectedStudent.lastName}
-                </h2>
-                <p className="text-center">{selectedStudent.classe}</p>
-
-                <NavLink
-                  to={"/update-paie/" + selectedStudent.id}
-                  className="btn bg-color2 hover:bg-color3 border-none text-white mx-20">
-                  Ajouter Paiement
-                </NavLink>
-                <button
-                  onClick={() => handleDelete(selectedStudent.id)}
-                  className="btn bg-red-600 border-none text-white m-10 hover:bg-red-700">
-                  Delete
-                </button>
-              </div>
-            )}
-            <button
-              onClick={() => document.getElementById("my_modal_1").close()}
-              type={"button"}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </div>
-        </dialog>
+        <ModalPaie
+          paiementId={selectedPaiement}
+          onClose={handleCloseModalPaiement}
+          onOpen={showModal}
+          deletePaieID={handleDelete}
+        />
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
 import "@/pages/Staffs/Modal.scss";
-import { Button, Empty, Modal, Pagination } from "antd";
+import { Empty, Modal, Pagination } from "antd";
 import { CopyPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -225,7 +225,7 @@ export function Staffs() {
                               </div>
                               <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
                                 <li className="text-supportingColor4 hover:bg-slate-100 rounded-box mb-2">
-                                  <Button
+                                  <button
                                     onClick={() => {
                                       if (staff) {
                                         setSelectedStaff(staff);
@@ -236,20 +236,20 @@ export function Staffs() {
                                     }}
                                     className={
                                       "flex items-center bg-supportingColor4 text-white font-medium " +
-                                      "border-none hover:bg-slate-100 active:bg-slate-100"
+                                      "border-none hover:bg-slate-100 hover:text-supportingColor4 active:bg-slate-100"
                                     }>
                                     Modifier
-                                  </Button>
+                                  </button>
                                 </li>
                                 <li>
-                                  <Button
+                                  <button
                                     className={
                                       "flex items-center bg-supportingColor3 text-white font-medium" +
-                                      "border-none hover:bg-slate-100 active:bg-slate-100"
+                                      "border-none hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
                                     }
                                     onClick={() => handleDelete(staff.id)}>
                                     Supprimer
-                                  </Button>
+                                  </button>
                                 </li>
                               </ul>
                             </div>
