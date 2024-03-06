@@ -1,12 +1,10 @@
+import { Modal } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import { BiArrowBack } from "react-icons/bi";
 import { FaUserGraduate } from "react-icons/fa6";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../Config/SupabaseConfig.jsx";
 import { NavBar } from "./Navbar/NavBar.jsx";
-import "./UpdatePaie.scss";
 
 export function UpdatePaie() {
   const { id } = useParams();
@@ -80,7 +78,7 @@ export function UpdatePaie() {
       if (error) {
         throw error;
       } else {
-        toast.success("Paiement ajouter avec success !");
+        Modal.success("Paiement ajouter avec success !");
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (error) {
@@ -119,33 +117,29 @@ export function UpdatePaie() {
   return (
     <>
       <NavBar />
-      <Toaster position={"top-right"} />
-      <div className="container_edit">
-        <div className="flex w-[75.9rem] items-center justify-between h-11 mb-10 bg-white px-10 rounded-full">
-          <NavLink className="text-2xl text-color1" to={"/paiement"}>
-            <BiArrowBack />
-          </NavLink>
-          <div>
-            <NavLink
-              className="font-medium text-color2 hover:text-color1"
-              to={"/dashboard"}>
-              Dashboard
-            </NavLink>
-            <span className="m-5">|</span>
-            <NavLink
-              className="font-medium text-color2 hover:text-color1"
-              to={"/eleves"}>
-              Eleves
-            </NavLink>
-            <span className="m-5">|</span>
-            <NavLink
-              className="font-medium text-color2 hover:text-color1"
-              to={"/paiement"}>
-              Paiement
-            </NavLink>
-          </div>
+      <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
+          <h1 className="font-semibold text-2xl">Ajouter Paiement</h1>
+          <ul>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/dashboard"}>
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/eleves"}>
+                Eleves
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="text-supportingColor1" to={"/paiement"}>
+                Paiement
+              </NavLink>
+            </li>
+          </ul>
         </div>
-        <div className="edit_studInfo">
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <div id="stud_info">
             <h2>info de l&apos;édutiant</h2>
             <div id="icon_fees">
@@ -185,7 +179,8 @@ export function UpdatePaie() {
             </div>
           </div>
         </div>
-        <div id="fees_info">
+
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <h2>Paiement info</h2>
           <form onSubmit={handleUpdateFees}>
             <input

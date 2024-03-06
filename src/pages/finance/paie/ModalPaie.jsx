@@ -1,46 +1,36 @@
 /* eslint-disable react/prop-types */
+import { supabase } from "@/Config/SupabaseConfig";
 import { Modal } from "antd";
-import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-function ModalPaie({
-  selectedStudents,
-  showModalPaie,
-  closeModalPaie,
-  deletePaieID,
-}) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [id, setId] = useState("");
-  const [created_at, setCreated_at] = useState("");
-  const [balance, setBalance] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
-  const [mode, setMode] = useState("");
+function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
+  const [paiementHistory, setPaiementHistory] = useState([]);
 
   useEffect(() => {
-    if (selectedStudents) {
-      setFirstName(selectedStudents.students.firstName);
-      setLastName(selectedStudents.students.lastName);
-      setId(selectedStudents.id);
-      setCreated_at(selectedStudents.created_at);
-      setBalance(selectedStudents.balance);
-      setAmount(selectedStudents.amount);
-      setDate(selectedStudents.date);
-      setMode(selectedStudents.mode);
-    }
-  }, [selectedStudents]);
+    const getHistoryPaiement = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("history_paiement")
+          .select("*")
+          .eq("generated_id", paiementId.student_id);
 
-  console.log(selectedStudents);
+        if (error) {
+          throw error;
+        } else {
+          setPaiementHistory(data || []);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getHistoryPaiement();
+  }, [paiementId]);
 
   return (
     <>
-      <Modal
-        open={showModalPaie}
-        width={1000}
-        onCancel={closeModalPaie}
-        footer={null}>
+      <Modal open={onOpen} width={1000} onCancel={onClose} footer={null}>
         <div className={"mb-10"}>
           <h2 className={"font-medium text-xl"}>Procéder au paiement</h2>
         </div>
@@ -57,23 +47,26 @@ function ModalPaie({
                 <th>Type de paiment</th>
               </tr>
             </thead>
-            <tbody className="font-semibold bg-white">
-              <tr>
-                <td className={"flex items-center"}>
-                  {firstName} {lastName}
-                </td>
-                <td>{moment(created_at).format("DD/MM/YYYY")}</td>
-                <td>$ {balance}</td>
-                <td>$ {amount}</td>
-                {date === null ? <td>Non généré</td> : <td>{date}</td>}
-                {mode === null ? <td>Non généré</td> : <td>{mode}</td>}
-              </tr>
-            </tbody>
+            {paiementHistory.map((paiement) => (
+              <tbody className="font-semibold bg-white" key={paiement.id}>
+                <tr>
+                  <td className={"flex items-center"}>
+                    {paiement.amount} {paiement.lastName}
+                    {paiementHistory.id}
+                  </td>
+                  {/* <td>{moment(created_at).format("DD/MM/YYYY")}</td> */}
+                  {/* <td>$ {balance}</td> */}
+                  {/* <td>$ {amount}</td> */}
+                  {/* {date === null ? <td>Non généré</td> : <td>{date}</td>} */}
+                  {/* {mode === null ? <td>Non généré</td> : <td>{mode}</td>} */}
+                </tr>
+              </tbody>
+            ))}
           </table>
         </div>
 
         <div className="flex justify-end items-center mt-10">
-          <NavLink to={"/update-paie/" + id}>
+          <NavLink to={"/update-paie/"}>
             <button
               className="btn border-none bg-primaryColor text-white 
 						hover:bg-slate-100 hover:text-primaryColor">
@@ -81,10 +74,7 @@ function ModalPaie({
             </button>
           </NavLink>
           <button
-            onClick={() => {
-              deletePaieID(id);
-              closeModalPaie;
-            }}
+            // onClick={() => deletePaieID(paiementId.id)}
             className="btn bg-supportingColor3 border-none ml-10 text-white 
 						hover:bg-slate-100 hover:text-supportingColor3">
             Delete

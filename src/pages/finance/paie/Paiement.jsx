@@ -13,23 +13,16 @@ export function Paiement() {
   const [classes, setClasses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedStudent, setSelectStudent] = useState(null);
-  const [isModalPaieShow, setIsModalPaieShow] = useState(false);
-
-  const openIsModalPaieShow = () => {
-    setIsModalPaieShow(true);
-  };
-
-  const closeIsModalPaieShow = () => {
-    setIsModalPaieShow(false);
-  };
+  const [selectedPaiement, setSelectedPaiement] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const getStudents = async () => {
+    const getPaiement = async () => {
       try {
         const { data, error } = await supabase
           .from("generated_paiement")
           .select(`*, students (*)`)
+          .order("created_at", { ascending: false })
           .textSearch(search);
 
         if (error) {
@@ -44,7 +37,7 @@ export function Paiement() {
         console.log(error.message);
       }
     };
-    return () => getStudents();
+    return () => getPaiement();
   }, [search]);
 
   const collectionOptions = classes.map((category) => ({
@@ -74,6 +67,14 @@ export function Paiement() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleShowModalPaiement = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModalPaiement = () => {
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -134,7 +135,6 @@ export function Paiement() {
             </li>
           </ul>
         </div>
-
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <div className={"flex justify-between mb-5"}>
             <h2 className="font-medium text-supportingColor1 mb-5">
@@ -175,7 +175,6 @@ export function Paiement() {
             />
           </div>
         </div>
-
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
           <h2 className="mb-5 font-medium">Liste paiement générer</h2>
           {filterStudents.length > 0 ? (
@@ -234,10 +233,8 @@ export function Paiement() {
                           <button
                             onClick={() => {
                               if (student) {
-                                setSelectStudent(student);
-                                openIsModalPaieShow();
-                              } else {
-                                console.log("Erreur technique !");
+                                handleShowModalPaiement();
+                                setSelectedPaiement(student);
                               }
                             }}
                             className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
@@ -255,9 +252,9 @@ export function Paiement() {
           )}
         </div>
         <ModalPaie
-          selectedStudents={selectedStudent}
-          showModalPaie={isModalPaieShow}
-          closeModalPaie={closeIsModalPaieShow}
+          paiementId={selectedPaiement}
+          onClose={handleCloseModalPaiement}
+          onOpen={showModal}
           deletePaieID={handleDelete}
         />
       </div>

@@ -1,5 +1,5 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
-import { Button, DatePicker, Modal } from "antd";
+import { DatePicker, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
@@ -259,7 +259,7 @@ export function Inscription() {
                   </span>
                 </div>
                 <DatePicker
-                  onChange={(e) => setBirth(e.target.value)}
+                  onChange={(date) => setBirth(date)}
                   placeholder="Date de naissance"
                   className="input bg-slate-100 border-primaryColor border-2"
                 />
@@ -771,14 +771,12 @@ export function Inscription() {
               </label>
             </div>
           </div>
-          <div className="text-center">
-            <Button
-              className="btn bg-primaryColor text-white border-none
-                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100"
-              type="submit">
-              Soumettre le formulaire
-            </Button>
-          </div>
+          <button
+            type="submit"
+            className="btn bg-primaryColor text-white border-none
+                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
+            Soumettre le formulaire
+          </button>
         </form>
       </div>
     </>
