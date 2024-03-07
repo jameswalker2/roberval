@@ -25,19 +25,19 @@ export function Paiement() {
           .order("created_at", { ascending: false })
           .textSearch(search);
 
-        if (error) {
-          throw error;
-        } else {
+        if (data) {
           setStudentsP(data);
           setClasses([
             ...new Set(data.map((student) => student.students.classe)),
           ]);
+        } else {
+          throw error;
         }
       } catch (error) {
-        console.log(error.message);
+        console.log(error);
       }
     };
-    return () => getPaiement();
+    getPaiement();
   }, [search]);
 
   const collectionOptions = classes.map((category) => ({
@@ -76,7 +76,7 @@ export function Paiement() {
   const handleCloseModalPaiement = () => {
     setShowModal(false);
   };
-
+  ``;
   useEffect(() => {
     const expenseChannel = supabase
       .channel("custom-all-channel")

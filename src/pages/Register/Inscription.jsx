@@ -43,12 +43,14 @@ export function Inscription() {
   const [availableClasses, setAvailableClasses] = useState([]);
 
   // const validationSchema = Yup.object().shape({
-  //   firstName: Yup.string().required('Le nom est requis'),
-  //   lastName: Yup.string().required('Le prénom est requis'),
+  //   firstName: Yup.string().required("Le nom est requis"),
+  //   lastName: Yup.string().required("Le prénom est requis"),
   //   // birth: Yup.date().required('La date est requis'),
-  //   gender: Yup.boolean().oneOf([true], 'Vous devez selectionner un genre'),
-  //   departmentBirth: Yup.string().required('Le département de naissance est requis'),
-  //   commonBirth: Yup.string().required('La commune de naissance est requis'),
+  //   gender: Yup.boolean().oneOf([true], "Vous devez selectionner un genre"),
+  //   departmentBirth: Yup.string().required(
+  //     "Le département de naissance est requis",
+  //   ),
+  //   commonBirth: Yup.string().required("La commune de naissance est requis"),
   //   adressBirth: Yup.string().required("L'adresse de naissance est requis"),
   // });
 
@@ -56,7 +58,18 @@ export function Inscription() {
     e.preventDefault();
 
     try {
-      // await validationSchema.validate({firstName, lastName, birth, gender, departmentBirth, commonBirth, adressBirth}, {abortEarly: false})
+      // await validationSchema.validate(
+      //   {
+      //     firstName,
+      //     lastName,
+      //     birth,
+      //     gender,
+      //     departmentBirth,
+      //     commonBirth,
+      //     adressBirth,
+      //   },
+      //   { abortEarly: false },
+      // );
 
       const { error } = await supabase
         .from("students")
@@ -93,24 +106,27 @@ export function Inscription() {
           otherPhone,
         })
         .single();
-      if (error) throw error;
-      Modal.success({
-        content: "Formulaire soumis avec succès!",
-        okButtonProps: {
-          type: "default",
-        },
-      });
+
+      if (error) {
+        throw error;
+      } else {
+        Modal.success({
+          content: "Formulaire soumis avec succès!",
+          okButtonProps: {
+            type: "default",
+          },
+        });
+      }
     } catch (error) {
-      // if (error.name === 'ValidationError') {
-      //   error.errors.forEach((validationError) => {
-      //   });
+      // if (error.name === "ValidationError") {
+      //   error.errors.forEach((validationError) => {});
       // }
       console.log(error.message);
     }
     e.target.reset(
       setFirstName(""),
       setLastName(""),
-      setBirth(""),
+      setBirth(null),
       setGender(""),
       setDepartmentBirth(""),
       setCommonBirth(""),
@@ -771,12 +787,14 @@ export function Inscription() {
               </label>
             </div>
           </div>
-          <button
-            type="submit"
-            className="btn bg-primaryColor text-white border-none
-                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
-            Soumettre le formulaire
-          </button>
+          <div className="text-center">
+            <button
+              type="submit"
+              className="btn bg-primaryColor text-white border-none
+            hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
+              Soumettre le formulaire
+            </button>
+          </div>
         </form>
       </div>
     </>
