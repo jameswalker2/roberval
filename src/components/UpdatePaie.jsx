@@ -25,6 +25,7 @@ export function UpdatePaie() {
   const [created_at, setCreated_at] = useState("");
   const [lastName, setLastName] = useState("");
   const [nouveauMontant, setNouveauMontant] = useState(0);
+  const [getId, setGetId] = useState("");
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -49,6 +50,7 @@ export function UpdatePaie() {
         setCreated_at(data.created_at);
         setUpdateMode(data.mode);
         setLastName(data.lastName);
+        setGetId(data.student_id);
       } else {
         navigate("/paiement", { replace: true });
         console.log(error);
@@ -57,13 +59,13 @@ export function UpdatePaie() {
 
     fetchStudent();
   }, [id, navigate]);
-  console.log(name);
+
   const handleUpdateFees = async (e) => {
     e.preventDefault();
 
     try {
       const { error } = await supabase
-        .from("paie")
+        .from("generated_paiement")
         .update({
           amount: montantTotal,
           balance: testAmount,
@@ -80,6 +82,28 @@ export function UpdatePaie() {
       } else {
         Modal.success("Paiement ajouter avec success !");
         window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const { error } = await supabase
+        .from("history_paiement")
+        .insert({
+          amount: montantTotal,
+          balance: testAmount,
+          versement,
+          statut,
+          mode,
+          date,
+          generated_id: getId,
+        })
+        .eq("id", id)
+        .select("id");
+
+      if (error) {
+        throw error;
       }
     } catch (error) {
       console.log(error);

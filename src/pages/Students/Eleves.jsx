@@ -149,7 +149,6 @@ export function Eleves() {
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Date de naissance</th>
-                    <th>Lieu de naissance</th>
                     <th>Sexe</th>
                     <th>classe</th>
                     <th>Adresse</th>
@@ -174,7 +173,6 @@ export function Eleves() {
                         <td>{student.firstName}</td>
                         <td>{student.lastName}</td>
                         <td>{formatDate(student.birth)}</td>
-                        <td>{student.adressBirth}</td>
                         <td>{student.gender}</td>
                         <td>{student.classe}</td>
                         <td>{student.adress}</td>
