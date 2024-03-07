@@ -1,5 +1,6 @@
 import { Empty, Pagination } from "antd";
 import { UserPlus } from "lucide-react";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../Config/SupabaseConfig.jsx";
@@ -34,7 +35,7 @@ export function Eleves() {
       }
     };
 
-    return () => fetchAllResults(currentPage);
+    fetchAllResults(currentPage);
   }, [currentPage, searchQuery]);
 
   const handleDelete = async (studentId) => {
@@ -56,19 +57,32 @@ export function Eleves() {
     }
   };
 
-  const collectionOptions = classe.map((category) => ({
-    value: category,
-    label: category,
-  }));
+  const collectionOptionsSorted = classe
+    .map((category) => ({
+      value: category,
+      label: category,
+    }))
+    .sort((a, b) => {
+      // Comparez les noms de classe en ignorant la casse
+      const nameA = a.label.toLowerCase();
+      const nameB = b.label.toLowerCase();
+
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return a.label.length - b.label.length;
+    });
 
   const filterStudents = selectedClasse
     ? allResults.filter((student) => student.classe === selectedClasse)
     : allResults;
-  const formatDate = (date) => new Date(date).toDateString();
 
   const startIndex = (currentPage - 1) * studentsPerPage;
   const endIndex = startIndex + studentsPerPage;
-  const paginatedStudents = allResults
+  const paginatedStudents = filterStudents
     .filter(
       (result) =>
         result.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -115,7 +129,7 @@ export function Eleves() {
               <option value="" className="text-gray-300">
                 Recherche par classe
               </option>
-              {collectionOptions.map((option) => (
+              {collectionOptionsSorted.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -126,19 +140,19 @@ export function Eleves() {
                 setSearchQuery(e.target.value);
               }}
               value={searchQuery}
-              className="input input-bordered bg-white border-primaryColor border-2 rounded-full w-[30rem] "
+              className="input input-bordered bg-white border-primaryColor border-2 rounded-lg w-[30rem] "
               type="search"
               id="search_bar"
-              placeholder="Cherchez avec le nom ou prénom de l'étudiant..."
+              placeholder="Cherchez avec le nom ou prénom de l'étudiant"
             />
           </div>
         </div>
 
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm ">
           <h2 className="font-medium text-supportingColor1 mb-5">
-            Liste des élèves - {allResults.length}
+            Liste des élèves
           </h2>
-          {allResults.length > 0 ? (
+          {paginatedStudents.length > 0 ? (
             <div>
               <table className="table table-xs md:table-fixed	">
                 <thead
@@ -167,12 +181,14 @@ export function Eleves() {
                         .includes(searchQuery.toLowerCase()),
                   )
                   .map((student) => (
-                    <tbody key={student.id} className="text-2xl font-semibold">
+                    <tbody
+                      key={student.id}
+                      className="text-supportingColor1 font-semibold">
                       <tr>
                         <td>0{student.id}</td>
                         <td>{student.firstName}</td>
                         <td>{student.lastName}</td>
-                        <td>{formatDate(student.birth)}</td>
+                        <td>{moment(student.birth).format("DD MMM YYYY")}</td>
                         <td>{student.gender}</td>
                         <td>{student.classe}</td>
                         <td>{student.adress}</td>
