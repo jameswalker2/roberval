@@ -140,6 +140,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="text"
 										placeholder="Écrivez ici..."
+										value={name}
 										onChange={(e) => setName(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs "
 								/>
@@ -153,6 +154,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="text"
 										placeholder="Écrivez ici..."
+										value={lastName}
 										onChange={(e) => setLastName(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs "
 								/>
@@ -166,6 +168,7 @@ function StaffsAdd({visible, onClose}) {
 								</div>
 								<DatePicker
 										onChange={(dateString) => setBirth(dateString)}
+										value={birth}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-96 max-w-xs "
 								/>
 							</label>
@@ -178,6 +181,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="text"
 										placeholder="Écrivez ici..."
+										value={adress}
 										onChange={(e) => setAdress(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs"
 								/>
@@ -191,6 +195,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="text"
 										placeholder="Écrivez ici..."
+										value={nif}
 										onChange={(e) => setNif(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs "
 								/>
@@ -204,6 +209,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="text"
 										placeholder="Écrivez ici..."
+										value={ninu}
 										onChange={(e) => setNinu(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs "
 								/>
@@ -218,6 +224,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="text"
 										placeholder="Écrivez ici..."
+										value={phone}
 										onChange={(e) => setPhone(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs "
 								/>
@@ -229,6 +236,7 @@ function StaffsAdd({visible, onClose}) {
                   </span>
 								</div>
 								<select
+										value={role}
 										onChange={(e) => setRole(e.target.value)}
 										name="role"
 										className="select focus:select-primary bg-gray-200 w-full max-w-xs">
@@ -256,6 +264,7 @@ function StaffsAdd({visible, onClose}) {
 								<input
 										type="email"
 										placeholder="Écrivez ici..."
+										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										className="input input-bordered focus:file-input-primary bg-gray-200 w-full max-w-xs "
 								/>
