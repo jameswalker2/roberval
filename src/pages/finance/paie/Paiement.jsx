@@ -63,6 +63,8 @@ export function Paiement() {
           content: "Vous n'êtes pas autorisé à effectuer cette opération",
           okButtonProps: { type: "default" },
         });
+      } else {
+        handleCloseModalPaiement();
       }
     } catch (error) {
       console.log(error);
@@ -186,6 +188,7 @@ export function Paiement() {
                   <th>Nom Complet</th>
                   <th>Date de création</th>
                   <th>Montant Avancée</th>
+                  <th>Bourse</th>
                   <th>Balance</th>
                   <th>Statut</th>
                   <th>Action</th>
@@ -211,6 +214,7 @@ export function Paiement() {
                       </td>
                       <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
                       <td>{student.amount}</td>
+                      <td>{student.bourse}</td>
                       <td>{student.balance}</td>
                       <td>
                         <p

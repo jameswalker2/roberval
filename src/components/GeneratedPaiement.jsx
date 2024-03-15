@@ -1,3 +1,4 @@
+import { Modal } from "antd";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
@@ -10,6 +11,7 @@ export function GeneratedPaiement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [amount, setAmount] = useState("");
+  const [bourse, setBourse] = useState("");
   const [balance, setBalance] = useState("");
   const [statut, setStatut] = useState("");
 
@@ -20,7 +22,7 @@ export function GeneratedPaiement() {
       const { data, error } = await supabase
         .from("students")
         .select()
-        .ilike("lastName", searchQuery);
+        .ilike("firstName", searchQuery);
 
       if (error) {
         throw error;
@@ -43,7 +45,8 @@ export function GeneratedPaiement() {
           .insert([
             {
               amount,
-              balance: testAmount,
+              bourse,
+              balance: ifBourse,
               statut,
               student_id: students_id,
             },
@@ -53,6 +56,12 @@ export function GeneratedPaiement() {
           throw error1;
         } else {
           setSearchResults([]);
+          Modal.success({
+            title: "Succès !",
+            content: "Paiement générer avec succès !",
+            okButtonProps: { type: "default" },
+          });
+          setSearchQuery("");
         }
       }
 
@@ -63,7 +72,8 @@ export function GeneratedPaiement() {
           .insert([
             {
               amount,
-              balance: testAmount,
+              bourse,
+              balance: ifBourse,
               statut,
               generated_id: students_id,
             },
@@ -125,7 +135,8 @@ export function GeneratedPaiement() {
     }
   }
 
-  let testAmount = getAmount - amount;
+  let reduceBalance = getAmount - amount;
+  let ifBourse = reduceBalance - bourse;
 
   return (
     <>
@@ -164,6 +175,7 @@ export function GeneratedPaiement() {
             <input
               type="text"
               className="input w-96 bg-slate-100 border-primaryColor border-2"
+              value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher avec le prénom de l'étudiant..."
             />
@@ -235,6 +247,22 @@ export function GeneratedPaiement() {
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
+                      Bourse
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    onChange={(e) => setBourse(e.target.value)}
+                    placeholder="Montant Annuel"
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
                       Balance Annuel
                     </span>
                   </div>
@@ -242,7 +270,7 @@ export function GeneratedPaiement() {
                     type="text"
                     value={balance}
                     onChange={(e) => setBalance(e.target.value)}
-                    placeholder={testAmount}
+                    placeholder={ifBourse}
                     className="input bg-slate-100 border-primaryColor border-2"
                   />
                   <div className="label">
