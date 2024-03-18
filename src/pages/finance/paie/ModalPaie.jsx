@@ -57,8 +57,9 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
             <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
               <tr>
                 <th>ID paiement</th>
-                <th>Balance</th>
                 <th>Valeur Avancée</th>
+                <th>Bourse</th>
+                <th>Balance</th>
                 <th>Date de paiement</th>
                 <th>Type de paiement</th>
               </tr>
@@ -67,8 +68,9 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
               <tbody className="font-semibold bg-white" key={paiement.id}>
                 <tr>
                   <td>{paiement.id}</td>
-                  <td>$ {paiement.balance}</td>
                   <td>$ {paiement.amount}</td>
+                  <td>$ {paiement.bourse}</td>
+                  <td>$ {paiement.balance}</td>
 
                   {paiement.date === null ? (
                     <td>Non généré</td>

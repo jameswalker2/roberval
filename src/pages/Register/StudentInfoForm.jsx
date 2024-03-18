@@ -1,230 +1,252 @@
-/* eslint-disable react/prop-types */
 import {DatePicker} from "antd";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import * as Yup from "yup";
+import {DateTime} from "luxon";
+import {useState} from "react";
 
-function StudentInfoForm({onSubmit}) {
+function StudentInfoForm({onInfoChange}) {
+	const [name, setName] = useState("");
+	const [birth, setBirth] = useState(null);
+	const [lastName, setLastName] = useState("");
+	const [department, setDepartment] = useState("");
+	const [common, setCommon] = useState("");
+	const [address, setAddress] = useState("");
+	const [gender, setGender] = useState("");
+	const [handicap, setHandicap] = useState("");
+	const [wtHandicap, setWtHandicap] = useState("");
 	
-	const validationSchema = Yup.object().shape({
-		firstName: Yup.string().required("Le nom est requis"),
-		lastName: Yup.string().required("Le prénom est requis"),
-		birth: Yup.date()
-		.nullable()
-		.required("La date de naissance est requise")
-		.max(new Date(), "La date de naissance ne peut pas être dans le futur"),
-		departement: Yup.string().required("Le département de naissance est requis"),
-		common: Yup.string().required("Le commune de naissance est requis"),
-		adress: Yup.string().required("Le lieu de naissance est requis"),
-		gender: Yup.string().required("Le sexe est requis"),
-	});
+	const handleChange = (fieldName, value) => {
+		switch (fieldName) {
+			case "name":
+				setName(value);
+				break;
+			case "lastName":
+				setLastName(value);
+				break;
+			case "birth":
+				setBirth(value);
+				break;
+			case "department":
+				setDepartment(value);
+				break;
+			case "common":
+				setCommon(value);
+				break;
+			case "address":
+				setAddress(value);
+				break;
+			case "gender":
+				setGender(value);
+				break;
+			case "handicap":
+				setHandicap(value);
+				break;
+			case "wtHandicap":
+				setWtHandicap(value);
+				break;
+			default:
+				break;
+		}
+		
+		onInfoChange(
+				name,
+				lastName,
+				birth ? birth.toISODate() : null,
+				department,
+				common,
+				address,
+				gender,
+				handicap,
+				wtHandicap
+		);
+	};
 	
+	console.log(birth)
 	return (
 			<div>
-				<div>
-					<h2 className="text-xl font-medium text-supportingColor1">
-						Informations Personnelles
-					</h2>
-					<p className="mb-10 font-normal text-primaryColor">
-						Les champs avec un astérisque <span className="text-red-600">*</span>{" "}
-						sont obligatoires
-					</p>
-				</div>
-				
-				<Formik
-						initialValues={{
-							firstName: '',
-							lastName: '',
-							birth: null,
-							department: '',
-							common: '',
-							gender: '',
-						}}
-						validationSchema={validationSchema}
-						onSubmit={onSubmit}>
-					<Form>
-						<div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
-							<div>
-								<h2 className="text-xl font-medium text-supportingColor1">
-									Informations Personnelles
-								</h2>
-								<p className="mb-10 font-normal text-primaryColor">
-									Les champs avec un astérisque{" "}
-									<span className="text-red-600">*</span> sont obligatoires
-								</p>
+				<div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
+					<div>
+						<h2 className="text-xl font-medium text-supportingColor1">
+							Informations Personnelles
+						</h2>
+						<p className="mb-10 font-normal text-primaryColor">
+							Les champs avec un astérisque{" "}
+							<span className="text-red-600">*</span> sont obligatoires
+						</p>
+					</div>
+					
+					<div className="flex flex-wrap ml-10">
+						<label className="form-control w-full max-w-xs mr-5 mb-10">
+							<div className="label">
+              <span className="label-text text-supportingColor1">
+                Nom <span className="text-red-600">*</span>
+              </span>
 							</div>
-							
-							<div className="flex flex-wrap ml-10">
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									<div className="label">
-                  <span className="label-text text-supportingColor1">
-                    <label htmlFor="firstName">
-                      Nom <span className="text-red-600">*</span>
-                    </label>
-                  </span>
-									</div>
-									<Field
-											type="text"
-											className="input bg-slate-100 border-primaryColor border-2"
-											name="firstName"
-											placeholder="Nom"
-									/>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="firstName" component="div"/>
-                  </span>
-									</div>
-								</label>
-								
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									<div className="label">
-                  <span className="label-text text-supportingColor1">
-                    <label htmlFor="lastName">
-                      Prénom <span className="text-red-600">*</span>
-                    </label>
-                  </span>
-									</div>
-									<Field
-											type="text"
-											className="input bg-slate-100 border-primaryColor border-2"
-											name="lastName"
-											placeholder="Nom"
-									/>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="lastName" component="div"/>
-                  </span>
-									</div>
-								</label>
-								
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									<div className="label">
-                  <span className="label-text text-supportingColor1">
-                    <label htmlFor="birth">
-                      Date de naissance <span className="text-red-600">*</span>
-                    </label>
-                  </span>
-									</div>
-									<Field name="birth" className="w-full">
-										{({field, form}) => (
-												<div>
-													<DatePicker
-															className="input w-full bg-slate-100 border-primaryColor border-2"
-															{...field}
-															placeholder="Date de naissance"
-															format="DD/MM/YYYY"
-															onChange={(date, dateString) =>
-																	form.setFieldValue(field.name, dateString)
-															}
-													/>
-												</div>
-										)}
-									</Field>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="birth" component="div"/>
-                  </span>
-									</div>
-								</label>
-								
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									<div className="label">
-                  <span className="label-text text-supportingColor1">
-                    <label htmlFor="departement">
-                      Département de naissance <span className="text-red-600">*</span>
-                    </label>
-                  </span>
-									</div>
-									<Field
-											type="text"
-											className="input bg-slate-100 border-primaryColor border-2"
-											name="departement"
-											placeholder="Département de naissance"
-									/>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="departement" component="div"/>
-                  </span>
-									</div>
-								</label>
-								
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									<div className="label">
-                  <span className="label-text text-supportingColor1">
-                    <label htmlFor="common">
-                      Commune de naissance <span className="text-red-600">*</span>
-                    </label>
-                  </span>
-									</div>
-									<Field
-											type="text"
-											className="input bg-slate-100 border-primaryColor border-2"
-											name="common"
-											placeholder="Commune de naissance"
-									/>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="common" component="div"/>
-                  </span>
-									</div>
-								</label>
-								
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									<div className="label">
-                  <span className="label-text text-supportingColor1">
-                    <label htmlFor="adress">
-                       Lieu de naissance <span className="text-red-600">*</span>
-                    </label>
-                  </span>
-									</div>
-									<Field
-											type="text"
-											className="input bg-slate-100 border-primaryColor border-2"
-											name="adress"
-											placeholder="Lieu de naissance"
-									/>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="adress" component="div"/>
-                  </span>
-									</div>
-								</label>
-								
-								<label className="form-control w-full max-w-xs mr-5 mb-10">
-									
-									<div className="flex items-center w-full max-w-xs mr-5 font-medium">
-										<h2 className="mr-2">
-											Sexe : <span className="text-red-600">*</span>
-										</h2>
-										
-										<label htmlFor="Garçon" className="mr-2">
-											Garçon
-											<Field
-													type="radio"
-													value="Garçon"
-													className="radio border-primaryColor border-2 w-5 h-5 mr-2"
-													name="gender"
-											/>
-										</label>
-										<label htmlFor="Fille" className="mr-2">
-											Fille
-											<Field
-													type="radio"
-													value="Fille"
-													className="radio border-primaryColor border-2 w-5 h-5 mr-2"
-													name="gender"
-											/>
-										</label>
-									</div>
-									<div className="label">
-                  <span className="label-text-alt text-red-500 text-sm">
-                    <ErrorMessage name="gender" component="div"/>
-                  </span>
-									</div>
-								</label>
+							<input
+									type="text"
+									value={name}
+									onChange={(e) => handleChange("name", e.target.value)}
+									placeholder="Nom"
+									className="input bg-slate-100 border-primaryColor border-2"
+							/>
+							<div className="label">
+								<span className="label-text-alt"></span>
 							</div>
+						</label>
+						<label className="form-control w-full max-w-xs mr-5 mb-2">
+							<div className="label">
+              <span className="label-text text-supportingColor1">
+                Prénom <span className="text-red-600">*</span>
+              </span>
+							</div>
+							<input
+									value={lastName}
+									onChange={(e) => handleChange("lastName", e.target.value)}
+									type="text"
+									placeholder="Prénom"
+									className="input bg-slate-100 border-primaryColor border-2"
+							/>
+							<div className="label">
+								<span className="label-text-alt"></span>
+							</div>
+						</label>
+						<label className="form-control w-full max-w-xs mr-5 mb-10">
+							<div className="label">
+              <span className="label-text text-supportingColor1">
+                Date de naissance <span className="text-red-600">*</span>
+              </span>
+							</div>
+							<DatePicker
+									placeholder="Date de naissance"
+									value={birth ? DateTime.fromObject(birth).toFormat("YYYY LLL DD") : null}
+									onChange={(date) => handleChange("birth", date)}
+									className="input bg-slate-100 border-primaryColor border-2"
+							/>
+							<div className="label">
+								<span className="label-text-alt"></span>
+							</div>
+						</label>
+						<label className="form-control w-full max-w-xs mr-5 mb-2">
+							<div className="label">
+              <span className="label-text text-supportingColor1">
+                Département de naissance
+                <span className="text-red-600">*</span>
+              </span>
+							</div>
+							<input
+									type="text"
+									value={department}
+									onChange={(e) => handleChange("department", e.target.value)}
+									placeholder="Département de naissance"
+									className="input bg-slate-100 border-primaryColor border-2"
+							/>
+							<div className="label">
+								<span className="label-text-alt"></span>
+							</div>
+						</label>
+						<label className="form-control w-full max-w-xs mr-5 mb-10">
+							<div className="label">
+              <span className="label-text text-supportingColor1">
+                Commune de naissance <span className="text-red-600">*</span>
+              </span>
+							</div>
+							<input
+									value={common}
+									onChange={(e) => handleChange("common", e.target.value)}
+									type="text"
+									placeholder="Commune de naissance "
+									className="input bg-slate-100 border-primaryColor border-2"
+							/>
+							<div className="label">
+								<span className="label-text-alt"></span>
+							</div>
+						</label>
+						<label className="form-control w-full max-w-xs mr-5 mb-10">
+							<div className="label">
+              <span className="label-text text-supportingColor1">
+                Lieu de naissance <span className="text-red-600">*</span>
+              </span>
+							</div>
+							<input
+									value={address}
+									onChange={(e) => handleChange("address", e.target.value)}
+									type="text"
+									placeholder="Lieu de naissance"
+									className="input bg-slate-100 border-primaryColor border-2"
+							/>
+							<div className="label">
+								<span className="label-text-alt"></span>
+							</div>
+						</label>
+						
+						<div className="flex items-center w-full max-w-xs mr-5 font-medium mb-2">
+							<h2 className="mr-2">
+								Sexe <span className="text-red-600">*</span> :
+							</h2>
+							<label htmlFor="Garçon" className="mr-2">
+								Garçon
+							</label>
+							<input
+									type="radio"
+									name="gender"
+									value="Garçon"
+									checked={gender === "Garçon"}
+									onChange={(e) => handleChange("gender", e.target.value)} // Nouveau
+									className="radio border-primaryColor border-2 w-5 h-5"
+							/>
+							<label htmlFor={"Fille"} className="mx-2">
+								Fille
+							</label>
+							<input
+									type="radio"
+									name="gender"
+									value="Fille"
+									checked={gender === "Fille"}
+									onChange={(e) => handleChange("gender", e.target.value)} // Nouveau
+									className="radio border-primaryColor border-2 w-5 h-5"
+							/>
 						</div>
-					</Form>
-				</Formik>
+						<select
+								name="wthandicap"
+								// disabled={!isHandicapEnabled}
+								value={wtHandicap}
+								onChange={(e) => handleChange("wtHandicap", e.target.value)}
+								className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
+							<option value={""} className="text-gray-400">
+								Quel type handicap ?
+							</option>
+							<option value="Moteur">Moteur</option>
+							<option value="Sensoriel">Sensoriel</option>
+							<option value="Cognitif">Cognitif</option>
+							<option value="Psychique">Psychique</option>
+						</select>
+						
+						{/* Champs de handicap */}
+						<div className="flex items-center w-full max-w-xs mr-5 font-medium mb-2">
+							<h2 className="">{`Y a-t'il un handicap ?`}</h2>
+							<label htmlFor={"Oui"} className="mr-2">
+								Oui
+							</label>
+							<input
+									type="radio"
+									name="handicap"
+									value="Oui"
+									checked={handicap === "Oui"}
+									onChange={(e) => handleChange("handicap", e.target.value)} // Nouveau
+									className="radio border-primaryColor border-2 w-5 h-5"
+							/>
+							<label htmlFor={"Non"} className="mx-2">
+								Non
+							</label>
+							<input
+									type="radio"
+									name="handicap"
+									value="Non"
+									checked={handicap === "Non"}
+									onChange={(e) => handleChange("handicap", e.target.value)} // Nouveau
+									className="radio border-primaryColor border-2 w-5 h-5"
+							/>
+						</div>
+					</div>
+				</div>
 			</div>
 	);
 }
