@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../Config/SupabaseConfig.jsx";
@@ -10,92 +10,115 @@ import { NavBar } from "./Navbar/NavBar.jsx";
 export function GeneratedPaiement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [test, setTest] = useState(null);
   const [amount, setAmount] = useState("");
   const [bourse, setBourse] = useState("");
   const [balance, setBalance] = useState("");
   const [statut, setStatut] = useState("");
 
-  let getAmount = 0;
-
   const handleSearch = async () => {
     try {
       const { data, error } = await supabase
         .from("students")
-        .select()
-        .ilike("firstName", searchQuery);
+        .select("*")
+        .textSearch("firstName", searchQuery);
 
       if (error) {
         throw error;
       } else {
-        setSearchResults(data);
+        const formattedData = data.map((student) => ({
+          ...student,
+          selected: false,
+        }));
+        setSearchResults(formattedData);
       }
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const handleTransferData = async (e) => {
+  const toggleSelectStudentID = (studentId) => {
+    const updatedStudents = searchResults.map((student) => {
+      if (student.id === studentId) {
+        return { ...student, selected: !student.selected };
+      }
+      return { ...student, selected: false };
+    });
+    setSearchResults(updatedStudents);
+    setSelectedStudent(studentId);
+  };
+
+  const toggleSelectStudentClasse = (studentClasse) => {
+    const updatedStudents = searchResults.map((student) => {
+      if (student.id === studentClasse) {
+        return { ...student, selected: !student.selected };
+      }
+      return { ...student, selected: false };
+    });
+    setSearchResults(updatedStudents);
+    setSelectedStudent(studentClasse);
+    setTest(studentClasse);
+  };
+  const handleCollectFees = async (e) => {
     e.preventDefault();
+    const selectedStudentObj = searchResults.find(
+      (student) => student.id === selectedStudent,
+    );
 
     try {
-      for (const row of searchResults) {
-        const { students_id } = row;
-        const { error: error1 } = await supabase
-          .from("generated_paiement")
-          .insert([
-            {
-              amount,
-              bourse,
-              balance: ifBourse,
-              statut,
-              student_id: students_id,
-            },
-          ]);
+      const { students_id } = selectedStudentObj;
+      const { error: error1 } = await supabase
+        .from("generated_paiement")
+        .insert([
+          {
+            amount,
+            bourse,
+            balance: balance,
+            statut,
+            student_id: students_id,
+          },
+        ]);
 
-        if (error1) {
-          throw error1;
-        } else {
-          setSearchResults([]);
-          Modal.success({
-            title: "Succès !",
-            content: "Paiement générer avec succès !",
-            okButtonProps: { type: "default" },
-          });
-          setSearchQuery("");
-        }
+      if (error1) {
+        throw error1;
       }
 
-      for (const row of searchResults) {
-        const { students_id } = row;
-        const { error: error2 } = await supabase
-          .from("history_paiement")
-          .insert([
-            {
-              amount,
-              bourse,
-              balance: ifBourse,
-              statut,
-              generated_id: students_id,
-            },
-          ]);
+      const { error: error2 } = await supabase.from("history_paiement").insert([
+        {
+          amount,
+          bourse,
+          balance: balance,
+          statut,
+          generated_id: students_id,
+        },
+      ]);
 
-        if (error2) {
-          throw error2;
-        } else {
-          setSearchResults([]);
-        }
+      if (error2) {
+        throw error2;
       }
+
+      setSearchResults([]);
+      Modal.success({
+        title: "Succès !",
+        content: "Paiement généré avec succès !",
+        okButtonProps: { type: "default" },
+      });
+      setSearchQuery("");
     } catch (error) {
       console.log(error);
     }
-
-    setSearchQuery("");
   };
+  useEffect(() => {
+    calculateBalance();
+  }, [amount, bourse, test]);
 
-  for (const row of searchResults) {
-    const { classe: studentClass } = row;
+  const calculateBalance = () => {
+    if (!test) return;
 
-    switch (studentClass) {
+    let getAmount = 0;
+
+    switch (test) {
       case "1e Annee Kind":
       case "2e Annee Kind":
       case "3e Annee Kind":
@@ -128,15 +151,15 @@ export function GeneratedPaiement() {
       case "NS IV":
         getAmount = 10000;
         break;
-
       default:
         getAmount = 0;
         break;
     }
-  }
 
-  let reduceBalance = getAmount - amount;
-  let ifBourse = reduceBalance - bourse;
+    let reduceBalance = getAmount - amount;
+    let ifBourse = reduceBalance - bourse;
+    setBalance(ifBourse);
+  };
 
   return (
     <>
@@ -203,10 +226,11 @@ export function GeneratedPaiement() {
                     <th>Mère</th>
                     <th>Père</th>
                     <th>Phone</th>
+                    <th></th>
                   </tr>
                 </thead>
                 {searchResults.map((student) => (
-                  <tbody key={student}>
+                  <tbody key={student.students_id}>
                     <tr>
                       <td>{student.id}</td>
                       <td>{student.classe}</td>
@@ -215,6 +239,17 @@ export function GeneratedPaiement() {
                       <td>{student.lastMother}</td>
                       <td>{student.lastFather}</td>
                       <td>{student.phone}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          className="checkbox border-2 border-primaryColor"
+                          checked={student.selected}
+                          onChange={() => {
+                            toggleSelectStudentClasse(student.classe);
+                            toggleSelectStudentID(student.id);
+                          }}
+                        />
+                      </td>
                     </tr>
                   </tbody>
                 ))}
@@ -223,10 +258,10 @@ export function GeneratedPaiement() {
           )}
         </div>
 
-        {searchResults.length > 0 && (
+        {searchResults.some((student) => student.selected) && (
           <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
             <h2 className="font-medium">Information pour générer</h2>
-            <form onSubmit={handleTransferData}>
+            <form onSubmit={handleCollectFees}>
               <div className="flex flex-wrap items-center p-10">
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
@@ -236,7 +271,10 @@ export function GeneratedPaiement() {
                   </div>
                   <input
                     type="text"
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => {
+                      calculateBalance();
+                      setAmount(e.target.value);
+                    }}
                     placeholder="Montant Annuel"
                     className="input bg-slate-100 border-primaryColor border-2"
                   />
@@ -252,7 +290,10 @@ export function GeneratedPaiement() {
                   </div>
                   <input
                     type="text"
-                    onChange={(e) => setBourse(e.target.value)}
+                    onChange={(e) => {
+                      calculateBalance();
+                      setBourse(e.target.value);
+                    }}
                     placeholder="Montant Annuel"
                     className="input bg-slate-100 border-primaryColor border-2"
                   />
@@ -270,7 +311,7 @@ export function GeneratedPaiement() {
                     type="text"
                     value={balance}
                     onChange={(e) => setBalance(e.target.value)}
-                    placeholder={ifBourse}
+                    placeholder={balance}
                     className="input bg-slate-100 border-primaryColor border-2"
                   />
                   <div className="label">
@@ -281,7 +322,7 @@ export function GeneratedPaiement() {
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
-                      Montant Annuel
+                      Statut Annuel
                     </span>
                   </div>
                   <select

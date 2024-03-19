@@ -11,6 +11,7 @@ import "./Paiement.scss";
 export function Paiement() {
   const [studentsP, setStudentsP] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [paiement, setPaiement] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedPaiement, setSelectedPaiement] = useState(null);
@@ -30,6 +31,7 @@ export function Paiement() {
           setClasses([
             ...new Set(data.map((student) => student.students.classe)),
           ]);
+          setPaiement([...new Set(data.map((paie) => paie.statut))]);
         } else {
           throw error;
         }
@@ -39,15 +41,6 @@ export function Paiement() {
     };
     getPaiement();
   }, [search]);
-
-  const collectionOptions = classes.map((category) => ({
-    value: category,
-    label: category,
-  }));
-
-  const filterStudents = selectedCategory
-    ? studentsP.filter((student) => student === selectedCategory)
-    : studentsP;
 
   const handleDelete = async (paieId) => {
     try {
@@ -78,7 +71,15 @@ export function Paiement() {
   const handleCloseModalPaiement = () => {
     setShowModal(false);
   };
-  ``;
+
+  const collectionOptions = classes.map((category) => ({
+    value: category,
+    label: category,
+  }));
+
+  const filterStudents = selectedCategory
+    ? studentsP.filter((student) => student === selectedCategory)
+    : studentsP;
   useEffect(() => {
     const expenseChannel = supabase
       .channel("custom-all-channel")
@@ -151,6 +152,22 @@ export function Paiement() {
           </div>
 
           <div className={"flex justify-around"}>
+            <select
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
+              <option value="" className="text-gray-300">
+                Recherche par classe
+              </option>
+
+              {collectionOptions.map((option) => (
+                <option
+                  className="text-black"
+                  key={option.value}
+                  value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
             <select
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
