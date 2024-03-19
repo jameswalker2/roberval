@@ -11,7 +11,7 @@ export function GeneratedPaiement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const [test, setTest] = useState(null);
+  const [balanceStudent, setBalanceStudent] = useState(null);
   const [amount, setAmount] = useState("");
   const [bourse, setBourse] = useState("");
   const [balance, setBalance] = useState("");
@@ -58,7 +58,7 @@ export function GeneratedPaiement() {
     });
     setSearchResults(updatedStudents);
     setSelectedStudent(studentClasse);
-    setTest(studentClasse);
+    setBalanceStudent(studentClasse);
   };
   const handleCollectFees = async (e) => {
     e.preventDefault();
@@ -105,20 +105,24 @@ export function GeneratedPaiement() {
         okButtonProps: { type: "default" },
       });
       setSearchQuery("");
+      setBalance("");
+      setAmount("");
+      setBourse("");
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     calculateBalance();
-  }, [amount, bourse, test]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, bourse, balanceStudent]);
 
   const calculateBalance = () => {
-    if (!test) return;
+    if (!balanceStudent) return;
 
     let getAmount = 0;
 
-    switch (test) {
+    switch (balanceStudent) {
       case "1e Annee Kind":
       case "2e Annee Kind":
       case "3e Annee Kind":
