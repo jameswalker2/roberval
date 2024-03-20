@@ -183,8 +183,8 @@ export function Paiement() {
           <div className={"flex justify-around"}>
             <select
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
-              <option value="" className="text-gray-300">
+              className="select bg-white border-primaryColor border-2  w-full max-w-xs focus:select-primary">
+              <option value="" className="p-20 m-20 text-gray-300">
                 Recherche par classe
               </option>
 
@@ -199,7 +199,7 @@ export function Paiement() {
             </select>
             <select
               onChange={(e) => setSelectedPaie(e.target.value)}
-              className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
+              className="select bg-white border-primaryColor border-2  w-full max-w-xs focus:select-primary ">
               <option value="" className="text-gray-300">
                 Recherche par paiement
               </option>
@@ -213,6 +213,7 @@ export function Paiement() {
                 </option>
               ))}
             </select>
+
             <input
               placeholder="Recherche par nom"
               onChange={(e) => setSearch(e.target.value)}
