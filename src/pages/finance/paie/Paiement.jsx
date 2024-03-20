@@ -1,6 +1,6 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Empty, Modal } from "antd";
+import { Empty, Modal, Pagination } from "antd";
 import { FilePlus2 } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -8,13 +8,16 @@ import { NavLink } from "react-router-dom";
 import ModalPaie from "./ModalPaie";
 import "./Paiement.scss";
 
+const paiementPerPage = 20;
 export function Paiement() {
   const [studentsP, setStudentsP] = useState([]);
   const [classes, setClasses] = useState([]);
   const [paiement, setPaiement] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(false);
-  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedPaiement, setSelectedPaiement] = useState(null);
+  const [selectedPaie, setSelectedPaie] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -72,14 +75,40 @@ export function Paiement() {
     setShowModal(false);
   };
 
-  const collectionOptions = classes.map((category) => ({
+  const collectionOptionsClasse = classes.map((category) => ({
     value: category,
     label: category,
   }));
 
-  const filterStudents = selectedCategory
-    ? studentsP.filter((student) => student === selectedCategory)
-    : studentsP;
+  const collectionOptionsPaie = paiement.map((category) => ({
+    value: category,
+    label: category,
+  }));
+
+  const filterStudentsByCriteria = (
+    students,
+    selectedCategory,
+    selectedPaie,
+  ) => {
+    return students.filter((student) => {
+      const meetsCategoryCriteria =
+        !selectedCategory || student.students.classe === selectedCategory;
+      const meetsPaiementCriteria =
+        !selectedPaie || student.statut === selectedPaie;
+      return meetsCategoryCriteria && meetsPaiementCriteria;
+    });
+  };
+
+  // Appliquer les filtres et la pagination
+  const startIndex = (currentPage - 1) * paiementPerPage;
+  const endIndex = startIndex + paiementPerPage;
+  const filteredStudents = filterStudentsByCriteria(
+    studentsP,
+    selectedCategory,
+    selectedPaie,
+  );
+  const paginatedStudents = filteredStudents.slice(startIndex, endIndex);
+
   useEffect(() => {
     const expenseChannel = supabase
       .channel("custom-all-channel")
@@ -154,12 +183,12 @@ export function Paiement() {
           <div className={"flex justify-around"}>
             <select
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
-              <option value="" className="text-gray-300">
+              className="select bg-white border-primaryColor border-2  w-full max-w-xs focus:select-primary">
+              <option value="" className="p-20 m-20 text-gray-300">
                 Recherche par classe
               </option>
 
-              {collectionOptions.map((option) => (
+              {collectionOptionsClasse.map((option) => (
                 <option
                   className="text-black"
                   key={option.value}
@@ -169,13 +198,13 @@ export function Paiement() {
               ))}
             </select>
             <select
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="select select-bordered bg-primaryColor text-white w-full max-w-xs focus:select-primary ">
+              onChange={(e) => setSelectedPaie(e.target.value)}
+              className="select bg-white border-primaryColor border-2  w-full max-w-xs focus:select-primary ">
               <option value="" className="text-gray-300">
-                Recherche par classe
+                Recherche par paiement
               </option>
 
-              {collectionOptions.map((option) => (
+              {collectionOptionsPaie.map((option) => (
                 <option
                   className="text-black"
                   key={option.value}
@@ -184,10 +213,11 @@ export function Paiement() {
                 </option>
               ))}
             </select>
+
             <input
               placeholder="Recherche par nom"
-              value={search}
               onChange={(e) => setSearch(e.target.value)}
+              value={search}
               className="input input-bordered w-96 border-primaryColor border-2 rounded-lg bg-white
               focus:file-input-primaryColor"
               type="search"
@@ -196,78 +226,90 @@ export function Paiement() {
         </div>
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
           <h2 className="mb-5 font-medium">Liste paiement générer</h2>
-          {filterStudents.length > 0 ? (
-            <table className="table">
-              <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
-                <tr>
-                  <th>ID</th>
-                  <th>Classe</th>
-                  <th>Nom Complet</th>
-                  <th>Date de création</th>
-                  <th>Montant Avancée</th>
-                  <th>Bourse</th>
-                  <th>Balance</th>
-                  <th>Statut</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              {filterStudents
-                .filter(
-                  (resultL) =>
-                    resultL.students.firstName
-                      .toLowerCase()
-                      .includes(search.toLowerCase()) ||
-                    resultL.students.lastName
-                      .toLowerCase()
-                      .includes(search.toLowerCase()),
-                )
-                .map((student) => (
-                  <tbody key={student.id} className="scroll">
-                    <tr>
-                      <td>0{student.students.id}</td>
-                      <td>{student.students.classe}</td>
-                      <td>
-                        {student.students.firstName} {student.students.lastName}
-                      </td>
-                      <td>{moment(student.created_at).format("DD/MM/YYYY")}</td>
-                      <td>{student.amount}</td>
-                      <td>{student.bourse}</td>
-                      <td>{student.balance}</td>
-                      <td>
-                        <p
-                          style={{
-                            backgroundColor:
-                              student.statut === "Non Payé"
-                                ? "#FD6477"
-                                : student.statut === "Avance"
-                                ? "#FFBF5A"
-                                : "#5AD374",
-                          }}
-                          className={
-                            "text-white text-center p-1 rounded-lg font-medium"
-                          }>
-                          {student.statut}
-                        </p>
-                      </td>
-                      <td>
-                        <span>
-                          <button
-                            onClick={() => {
-                              if (student) {
-                                handleShowModalPaiement();
-                                setSelectedPaiement(student);
-                              }
+          {paginatedStudents.length > 0 ? (
+            <div>
+              <table className="table">
+                <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
+                  <tr>
+                    <th>ID</th>
+                    <th>Classe</th>
+                    <th>Nom Complet</th>
+                    <th>Date de création</th>
+                    <th>Montant Avancée</th>
+                    <th>Bourse</th>
+                    <th>Balance</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                {paginatedStudents
+                  .filter(
+                    (result) =>
+                      result.students.firstName
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                      result.students.lastName
+                        .toLowerCase()
+                        .includes(search.toLowerCase()),
+                  )
+                  .map((student) => (
+                    <tbody key={student.student_id} className="scroll">
+                      <tr>
+                        <td>0{student.students.id}</td>
+                        <td>{student.students.classe}</td>
+                        <td>
+                          {student.students.firstName}{" "}
+                          {student.students.lastName}
+                        </td>
+                        <td>
+                          {moment(student.created_at).format("DD/MM/YYYY")}
+                        </td>
+                        <td>{student.amount}</td>
+                        <td>{student.bourse}</td>
+                        <td>{student.balance}</td>
+                        <td>
+                          <p
+                            style={{
+                              backgroundColor:
+                                student.statut === "Non Payé"
+                                  ? "#FD6477"
+                                  : student.statut === "Avance"
+                                  ? "#FFBF5A"
+                                  : "#5AD374",
                             }}
-                            className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
+                            className={
+                              "text-white text-center p-1 rounded-lg font-medium"
+                            }>
+                            {student.statut}
+                          </p>
+                        </td>
+                        <td>
+                          <span>
+                            <button
+                              onClick={() => {
+                                if (student) {
+                                  handleShowModalPaiement();
+                                  setSelectedPaiement(student);
+                                }
+                              }}
+                              className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
                             hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
-                            Détails
-                          </button>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                ))}
-            </table>
+                              Détails
+                            </button>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
+              </table>
+              <Pagination
+                current={currentPage}
+                pageSize={paiementPerPage}
+                total={filteredStudents.length}
+                onChange={(page) => setCurrentPage(page)}
+                className="text-center mt-10"
+              />
+            </div>
           ) : (
             <Empty description={"Aucune paiement générer"} />
           )}

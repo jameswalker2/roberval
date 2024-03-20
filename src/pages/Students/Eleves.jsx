@@ -154,13 +154,10 @@ export function Eleves() {
               ))}
             </select>
             <input
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
+              onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}
               className="input input-bordered bg-white border-primaryColor border-2 rounded-lg w-[30rem] "
               type="search"
-              id="search_bar"
               placeholder="Cherchez avec le nom ou prénom de l'étudiant"
             />
           </div>
@@ -195,58 +192,48 @@ export function Eleves() {
                     <th>Actions</th>
                   </tr>
                 </thead>
-                {paginatedStudents
-                  .filter(
-                    (result) =>
-                      result.firstName
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()) ||
-                      result.lastName
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                  )
-                  .map((student) => (
-                    <tbody
-                      key={student.id}
-                      className="text-supportingColor1 font-semibold">
-                      <tr>
-                        <td>0{student.id}</td>
-                        <td>{student.firstName}</td>
-                        <td>{student.lastName}</td>
-                        <td>{moment(student.birth).format("DD MMM YYYY")}</td>
-                        <td>{student.gender}</td>
-                        <td>{student.classe}</td>
-                        <td>{student.adress}</td>
-                        <td>{student.phone}</td>
-                        <td>
-                          <span className="actions">
-                            <div className="dropdown dropdown-end">
-                              <div
-                                tabIndex={0}
-                                role="button"
-                                className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
+                {paginatedStudents.map((student) => (
+                  <tbody
+                    key={student.id}
+                    className="text-supportingColor1 font-semibold">
+                    <tr>
+                      <td>0{student.id}</td>
+                      <td>{student.firstName}</td>
+                      <td>{student.lastName}</td>
+                      <td>{moment(student.birth).format("DD MMM YYYY")}</td>
+                      <td>{student.gender}</td>
+                      <td>{student.classe}</td>
+                      <td>{student.adress}</td>
+                      <td>{student.phone}</td>
+                      <td>
+                        <span className="actions">
+                          <div className="dropdown dropdown-end">
+                            <div
+                              tabIndex={0}
+                              role="button"
+                              className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor 
 																hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
-                                Détails
-                              </div>
-                              <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
-                                <li className="text-supportingColor4 hover:bg-slate-100 rounded-box">
-                                  <NavLink to={"/edit/" + student.id}>
-                                    Modifier
-                                  </NavLink>
-                                </li>
-                                <li className="text-red-600 hover:bg-slate-100 rounded-box cursor-pointer">
-                                  <button
-                                    onClick={() => handleDelete(student.id)}>
-                                    Supprimer
-                                  </button>
-                                </li>
-                              </ul>
+                              Détails
                             </div>
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  ))}
+                            <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-32">
+                              <li className="text-supportingColor4 hover:bg-slate-100 rounded-box">
+                                <NavLink to={"/edit/" + student.id}>
+                                  Modifier
+                                </NavLink>
+                              </li>
+                              <li className="text-red-600 hover:bg-slate-100 rounded-box cursor-pointer">
+                                <button
+                                  onClick={() => handleDelete(student.id)}>
+                                  Supprimer
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
               </table>
               <Pagination
                 current={currentPage}
