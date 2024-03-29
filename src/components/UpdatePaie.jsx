@@ -1,4 +1,4 @@
-import { Empty, Modal } from "antd";
+import { Modal } from "antd";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
@@ -212,138 +212,132 @@ export function UpdatePaie() {
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          {statut === "Payé" ? (
-            <Empty description={"Paiement déjà effectué"} />
-          ) : (
-            <div>
-              <h2>Paiement info</h2>
-              <form onSubmit={handleUpdateFees}>
-                <div className="flex flex-wrap items-center p-10">
-                  <label className="form-control w-full max-w-xs mr-5 mb-2">
-                    <div className="label">
-                      <span className="label-text text-supportingColor1">
-                        Montant
-                      </span>
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Montant Avancé"
-                      value={nouveauMontant}
-                      onChange={handleNouveauMontantChange}
-                      className="input bg-slate-100 border-primaryColor border-2"
-                    />
-                    <div className="label">
-                      <span className="label-text-alt"></span>
-                    </div>
-                  </label>
+          <div>
+            <h2>Paiement info</h2>
+            <form onSubmit={handleUpdateFees}>
+              <div className="flex flex-wrap items-center p-10">
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Montant
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Montant Avancé"
+                    value={nouveauMontant}
+                    onChange={handleNouveauMontantChange}
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
 
-                  <label className="form-control w-full max-w-xs mr-5 mb-2">
-                    <div className="label">
-                      <span className="label-text text-supportingColor1">
-                        Balance
-                      </span>
-                    </div>
-                    <input
-                      type="text"
-                      value={testAmount}
-                      placeholder="Balance"
-                      onChange={(e) => setUpdateBalance(e.target.value)}
-                      className="input bg-slate-100 border-primaryColor border-2"
-                    />
-                    <div className="label">
-                      <span className="label-text-alt"></span>
-                    </div>
-                  </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Balance
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={testAmount}
+                    placeholder="Balance"
+                    onChange={(e) => setUpdateBalance(e.target.value)}
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
 
-                  <label className="form-control w-full max-w-xs mr-5 mb-2">
-                    <div className="label">
-                      <span className="label-text text-supportingColor1">
-                        Quel versement ?
-                      </span>
-                    </div>
-                    <select
-                      value={versement}
-                      className="select bg-slate-100 border-primaryColor border-2"
-                      onChange={(e) => setUpdateVersement(e.target.value)}>
-                      <option value="">Versement</option>
-                      <option value="Versement 1">Versement 1</option>
-                      <option value="Versement 2">Versement 2</option>
-                      <option value="Versement 3">Versement 3</option>
-                      <option value="Versement arierer">
-                        Versement arierer
-                      </option>
-                    </select>
-                    <div className="label">
-                      <span className="label-text-alt"></span>
-                    </div>
-                  </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Quel versement ?
+                    </span>
+                  </div>
+                  <select
+                    value={versement}
+                    className="select bg-slate-100 border-primaryColor border-2"
+                    onChange={(e) => setUpdateVersement(e.target.value)}>
+                    <option value="">Versement</option>
+                    <option value="Versement 1">Versement 1</option>
+                    <option value="Versement 2">Versement 2</option>
+                    <option value="Versement 3">Versement 3</option>
+                    <option value="Versement arierer">Versement arierer</option>
+                  </select>
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
 
-                  <label className="form-control w-full max-w-xs mr-5 mb-2">
-                    <div className="label">
-                      <span className="label-text text-supportingColor1">
-                        Quel est le statut ?
-                      </span>
-                    </div>
-                    <select
-                      value={statut}
-                      onChange={(e) => setUpdateStatut(e.target.value)}
-                      className="select bg-slate-100 border-primaryColor border-2">
-                      <option value="">Statut</option>
-                      <option value="Non Payé">Non Payé</option>
-                      <option value="Avance">Avance</option>
-                      <option value="Payé">Payé</option>
-                    </select>
-                    <div className="label">
-                      <span className="label-text-alt"></span>
-                    </div>
-                  </label>
-                  <label className="form-control w-full max-w-xs mr-5 mb-2">
-                    <div className="label">
-                      <span className="label-text text-supportingColor1">
-                        Le type de paiement
-                      </span>
-                    </div>
-                    <select
-                      value={mode}
-                      onChange={(e) => setUpdateMode(e.target.value)}
-                      className="select bg-slate-100 border-primaryColor border-2">
-                      <option value="">Mode de paiement</option>
-                      <option value="Cash">Cash</option>
-                      <option value="Banque">Banque</option>
-                      <option value="Chèque">Chèque</option>
-                    </select>
-                    <div className="label">
-                      <span className="label-text-alt"></span>
-                    </div>
-                  </label>
-                  <label className="form-control w-full max-w-xs mr-5 mb-2">
-                    <div className="label">
-                      <span className="label-text text-supportingColor1">
-                        La date du paiement ?
-                      </span>
-                    </div>
-                    <input
-                      value={date}
-                      type="date"
-                      className="input bg-slate-100 border-primaryColor border-2"
-                      onChange={(e) => setDate(e.target.value)}
-                    />
-                    <div className="label">
-                      <span className="label-text-alt"></span>
-                    </div>
-                  </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Quel est le statut ?
+                    </span>
+                  </div>
+                  <select
+                    value={statut}
+                    onChange={(e) => setUpdateStatut(e.target.value)}
+                    className="select bg-slate-100 border-primaryColor border-2">
+                    <option value="">Statut</option>
+                    <option value="Non Payé">Non Payé</option>
+                    <option value="Avance">Avance</option>
+                    <option value="Payé">Payé</option>
+                  </select>
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Le type de paiement
+                    </span>
+                  </div>
+                  <select
+                    value={mode}
+                    onChange={(e) => setUpdateMode(e.target.value)}
+                    className="select bg-slate-100 border-primaryColor border-2">
+                    <option value="">Mode de paiement</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Banque">Banque</option>
+                    <option value="Chèque">Chèque</option>
+                  </select>
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      La date du paiement ?
+                    </span>
+                  </div>
+                  <input
+                    value={date}
+                    type="date"
+                    className="input bg-slate-100 border-primaryColor border-2"
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
 
-                  <button
-                    className="btn bg-primaryColor text-white border-none 
+                <button
+                  className="btn bg-primaryColor text-white border-none 
                 hover:bg-slate-100 hover:text-primaryColor font-normal"
-                    type="submit">
-                    Ajouter paiement
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-          <h2>Résultat</h2>
+                  type="submit">
+                  Ajouter paiement
+                </button>
+              </div>
+            </form>
+          </div>
+          {/* <h2>Résultat</h2>
           <table className="table">
             <thead key="thead" className="text-color1">
               <tr>
@@ -366,7 +360,7 @@ export function UpdatePaie() {
                 <td>{statut}</td>
               </tr>
             </tbody>
-          </table>
+          </table> */}
         </div>
       </div>
     </>
