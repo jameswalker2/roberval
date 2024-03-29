@@ -64,6 +64,7 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                 <th>Balance</th>
                 <th>Date de paiement</th>
                 <th>Type de paiement</th>
+                <th>Versement</th>
               </tr>
             </thead>
             {paiementHistory.map((paiement) => (
@@ -79,10 +80,17 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                   ) : (
                     <td>{moment(paiement.date).format("DD/MM/YYYY")}</td>
                   )}
+
                   {paiement.mode === null ? (
                     <td>Non généré</td>
                   ) : (
                     <td>{paiement.mode}</td>
+                  )}
+
+                  {paiement.versement === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>{paiement.versement}</td>
                   )}
                 </tr>
               </tbody>

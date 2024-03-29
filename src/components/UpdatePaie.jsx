@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { DatePicker, Modal } from "antd";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
@@ -13,7 +13,7 @@ export function UpdatePaie() {
   const [balance, setUpdateBalance] = useState("");
   const [versement, setUpdateVersement] = useState("");
   const [statut, setUpdateStatut] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [mode, setUpdateMode] = useState("");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -24,6 +24,7 @@ export function UpdatePaie() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
+  const [bourse, setBourse] = useState("");
   const [nouveauMontant, setNouveauMontant] = useState(0);
   const [getId, setGetId] = useState("");
 
@@ -49,9 +50,9 @@ export function UpdatePaie() {
         setUpdateBalance(data.balance);
         setUpdateVersement(data.versement);
         setUpdateStatut(data.statut);
-        setDate(data.date);
         setUpdateMode(data.mode);
         setGetId(data.student_id);
+        setBourse(data.bourse);
         console.log(data);
       } else {
         navigate("/paiement", { replace: true });
@@ -82,7 +83,10 @@ export function UpdatePaie() {
       if (error) {
         throw error;
       } else {
-        Modal.success("Paiement ajouter avec success !");
+        Modal.success({
+          content: "Paiement ajouter avec success !",
+          okButtonProps: { type: "default" },
+        });
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (error) {
@@ -100,6 +104,7 @@ export function UpdatePaie() {
           mode,
           date,
           generated_id: getId,
+          bourse,
         })
         .eq("id", id)
         .select("id");
@@ -295,7 +300,7 @@ export function UpdatePaie() {
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
-                      Le type de paiement
+                      Le type de paiement ?
                     </span>
                   </div>
                   <select
@@ -317,11 +322,10 @@ export function UpdatePaie() {
                       La date du paiement ?
                     </span>
                   </div>
-                  <input
+                  <DatePicker
                     value={date}
-                    type="date"
                     className="input bg-slate-100 border-primaryColor border-2"
-                    onChange={(e) => setDate(e.target.value)}
+                    onChange={(date) => setDate(date)}
                   />
                   <div className="label">
                     <span className="label-text-alt"></span>
