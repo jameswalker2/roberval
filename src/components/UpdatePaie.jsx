@@ -1,7 +1,7 @@
 import { Modal } from "antd";
+import { User } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { FaUserGraduate } from "react-icons/fa6";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../Config/SupabaseConfig.jsx";
 import { NavBar } from "./Navbar/NavBar.jsx";
@@ -31,7 +31,7 @@ export function UpdatePaie() {
     const fetchStudent = async () => {
       const { data, error } = await supabase
         .from("generated_paiement")
-        .select()
+        .select(`*, students (*)`)
         .eq("id", id)
         .single();
 
@@ -51,6 +51,7 @@ export function UpdatePaie() {
         setUpdateMode(data.mode);
         setLastName(data.lastName);
         setGetId(data.student_id);
+        console.log(data);
       } else {
         navigate("/paiement", { replace: true });
         console.log(error);
@@ -163,44 +164,33 @@ export function UpdatePaie() {
           </ul>
         </div>
 
-        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div id="stud_info">
-            <h2>info de l&apos;édutiant</h2>
-            <div id="icon_fees">
-              <FaUserGraduate id="icon" />
+        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm flex">
+          <div>
+            <div className="bg-gray-300 w-40 h-40 mb-3 rounded-lg">
+              <User size={160} strokeWidth={1} />
             </div>
-            <div id="info">
-              <span id="list_info">
-                <h3 className={"font-semibold"}>Nom Complet</h3>
-                <p>{name}</p>
-              </span>
-              <span id="list_info">
-                <h3 className={"font-semibold"}>Nom du Père</h3>
-                <p>{fatherName}</p>
-              </span>
-              <span id="list_info">
-                <h3 className={"font-semibold"}>Nom de la mère</h3>
-                <p>{motherName}</p>
-              </span>
-              <span id="list_info">
-                <h3 className={"font-semibold"}>Personne Responsable</h3>
-                <p>{linkPerson}</p>
-              </span>
+            <div className="">
+              <h2 className="font-medium text-xl">Nom Complet{name}</h2>
+              <h3 className="font-medium text-primaryColor">Classe{name}</h3>
             </div>
-            <div id="info">
-              <span id="list_info">
-                <h3 className={"font-semibold"}>Téléphone</h3>
-                <p>{phone}</p>
-              </span>
-              <span id="list_info">
-                <h3 className={"font-semibold"}>Classe</h3>
-                <p>{classe}</p>
-              </span>
-              <span id="list_info">
-                <h3 className={"font-semibold"}>ID</h3>
-                <p>0{id}</p>
-              </span>
-            </div>
+          </div>
+          <div className="ml-40">
+            <span className="flex">
+              <h2 className="font-medium mr-5">ID inscription :</h2>
+              <p>{id}</p>
+            </span>
+            <span className="flex">
+              <h2 className="font-medium mr-5">Date inscription :</h2>
+              <p>{id}</p>
+            </span>
+            <span className="flex">
+              <h2 className="font-medium mr-5">ID Inscription :</h2>
+              <p>{id}</p>
+            </span>
+            <span className="flex">
+              <h2 className="font-medium mr-5">ID Inscription :</h2>
+              <p>{id}</p>
+            </span>
           </div>
         </div>
 
