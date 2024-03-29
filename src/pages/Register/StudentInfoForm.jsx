@@ -1,17 +1,18 @@
 import { DatePicker } from "antd";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function StudentInfoForm({ onInfoChange }) {
   const [name, setName] = useState("");
   const [birth, setBirth] = useState(null);
   const [lastName, setLastName] = useState("");
-  const [department, setDepartment] = useState("");
-  const [common, setCommon] = useState("");
-  const [address, setAddress] = useState("");
+  const [departmentBirth, setDepartmentBirth] = useState("");
+  const [commonBirth, setCommonBirth] = useState("");
+  const [addressBirth, setAddressBirth] = useState("");
   const [gender, setGender] = useState("");
   const [handicap, setHandicap] = useState("");
   const [wtHandicap, setWtHandicap] = useState("");
+  const [isHandicapEnabled, setIsHandicapEnabled] = useState(false);
 
   const handleChange = (fieldName, value) => {
     switch (fieldName) {
@@ -29,14 +30,14 @@ function StudentInfoForm({ onInfoChange }) {
           setBirth(null);
         }
         break;
-      case "department":
-        setDepartment(value);
+      case "departmentBirth":
+        setDepartmentBirth(value);
         break;
-      case "common":
-        setCommon(value);
+      case "commonBirth":
+        setCommonBirth(value);
         break;
-      case "address":
-        setAddress(value);
+      case "addressBirth":
+        setAddressBirth(value);
         break;
       case "gender":
         setGender(value);
@@ -47,25 +48,25 @@ function StudentInfoForm({ onInfoChange }) {
       case "wtHandicap":
         setWtHandicap(value);
         break;
-      default:
-        break;
     }
   };
-  onInfoChange(
-    name,
-    lastName,
-    birth,
-    department,
-    common,
-    address,
-    gender,
-    handicap,
-    wtHandicap,
-  );
+  useEffect(() => {
+    onInfoChange(
+      name,
+      lastName,
+      birth,
+      departmentBirth,
+      commonBirth,
+      addressBirth,
+      gender,
+      handicap,
+      wtHandicap,
+    );
+  });
 
   const handleInputChange = (date) => {
     if (date) {
-      const luxonDate = DateTime.fromJSDate(date.$d).toFormat("yyy - LLL - DD"); // Access underlying Date object
+      const luxonDate = DateTime.fromJSDate(date.$d).toFormat("yyy - LLL - DD");
       setBirth(luxonDate);
       console.log(luxonDate);
     } else {
@@ -146,8 +147,8 @@ function StudentInfoForm({ onInfoChange }) {
             </div>
             <input
               type="text"
-              value={department}
-              onChange={(e) => handleChange("department", e.target.value)}
+              value={departmentBirth}
+              onChange={(e) => handleChange("departmentBirth", e.target.value)}
               placeholder="Département de naissance"
               className="input bg-slate-100 border-primaryColor border-2"
             />
@@ -162,8 +163,8 @@ function StudentInfoForm({ onInfoChange }) {
               </span>
             </div>
             <input
-              value={common}
-              onChange={(e) => handleChange("common", e.target.value)}
+              value={commonBirth}
+              onChange={(e) => handleChange("commonBirth", e.target.value)}
               type="text"
               placeholder="Commune de naissance "
               className="input bg-slate-100 border-primaryColor border-2"
@@ -179,8 +180,8 @@ function StudentInfoForm({ onInfoChange }) {
               </span>
             </div>
             <input
-              value={address}
-              onChange={(e) => handleChange("address", e.target.value)}
+              value={addressBirth}
+              onChange={(e) => handleChange("addressBirth", e.target.value)}
               type="text"
               placeholder="Lieu de naissance"
               className="input bg-slate-100 border-primaryColor border-2"
@@ -217,25 +218,10 @@ function StudentInfoForm({ onInfoChange }) {
               className="radio border-primaryColor border-2 w-5 h-5"
             />
           </div>
-          <select
-            name="wthandicap"
-            // disabled={!isHandicapEnabled}
-            value={wtHandicap}
-            onChange={(e) => handleChange("wtHandicap", e.target.value)}
-            className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
-            <option value={""} className="text-gray-400">
-              Quel type handicap ?
-            </option>
-            <option value="Moteur">Moteur</option>
-            <option value="Sensoriel">Sensoriel</option>
-            <option value="Cognitif">Cognitif</option>
-            <option value="Psychique">Psychique</option>
-          </select>
 
-          {/* Champs de handicap */}
           <div className="flex items-center w-full max-w-xs mr-5 font-medium mb-2">
             <h2 className="">{`Y a-t'il un handicap ?`}</h2>
-            <label htmlFor={"Oui"} className="mr-2">
+            <label htmlFor={"Oui"} className="mx-2">
               Oui
             </label>
             <input
@@ -243,8 +229,11 @@ function StudentInfoForm({ onInfoChange }) {
               name="handicap"
               value="Oui"
               checked={handicap === "Oui"}
-              onChange={(e) => handleChange("handicap", e.target.value)} // Nouveau
-              className="radio border-primaryColor border-2 w-5 h-5"
+              onChange={(e) => {
+                handleChange("handicap", e.target.value);
+                setIsHandicapEnabled(e.target.value === "Oui");
+              }}
+              className="radio border-primaryColor border-2 mr-2 w-5 h-5"
             />
             <label htmlFor={"Non"} className="mx-2">
               Non
@@ -254,10 +243,38 @@ function StudentInfoForm({ onInfoChange }) {
               name="handicap"
               value="Non"
               checked={handicap === "Non"}
-              onChange={(e) => handleChange("handicap", e.target.value)} // Nouveau
+              onChange={(e) => {
+                handleChange("handicap", e.target.value);
+                setIsHandicapEnabled(e.target.value === "Oui");
+              }}
               className="radio border-primaryColor border-2 w-5 h-5"
             />
           </div>
+
+          <label className="form-control w-full max-w-xs mr-5 mb-10">
+            <div className="label">
+              <span className="label-text text-supportingColor1">
+                Handicap <span className="text-red-600">*</span>
+              </span>
+            </div>
+            <select
+              name="wthandicap"
+              disabled={!isHandicapEnabled}
+              value={wtHandicap}
+              onChange={(e) => handleChange("wtHandicap", e.target.value)}
+              className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
+              <option value={""} className="text-gray-400">
+                Quel type handicap ?
+              </option>
+              <option value="Moteur">Moteur</option>
+              <option value="Sensoriel">Sensoriel</option>
+              <option value="Cognitif">Cognitif</option>
+              <option value="Psychique">Psychique</option>
+            </select>
+            <div className="label">
+              <span className="label-text-alt"></span>
+            </div>
+          </label>
         </div>
       </div>
     </div>

@@ -270,11 +270,13 @@ export function Income() {
                     </tr>
                   </thead>
                   {incomes
-                    .filter((expense) =>
-                      expense.name
-                        .toLowerCase()
-                        .includes(searchIncome.toLowerCase()),
-                    )
+                    // .filter(
+                    //   (expense) =>
+                    //     expense.name
+                    //       .toLowerCase()
+                    //       .includes(searchIncome.toLowerCase()) ||
+                    //     console.log(expense),
+                    // )
                     .map((expense) => (
                       <tbody key={expense.id}>
                         <tr>
