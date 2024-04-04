@@ -1,59 +1,73 @@
 import { Empty } from "antd";
-import moment from "moment";
+import { CategoryScale } from "chart.js";
+import Chart from "chart.js/auto";
 import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
+import { Line } from "react-chartjs-2";
 import { supabase } from "../../Config/SupabaseConfig";
 
-function Charts() {
-  const [chartIncome, setChartIncome] = useState([]);
+Chart.register(CategoryScale);
 
-  const incomes = {
-    stroke: {
-      curve: "smooth",
-    },
-    chart: {
-      id: "basic-bar",
-    },
-    label: {
-      show: true,
-    },
-    series: [
-      {
-        name: "Revenu",
-        data: chartIncome.map((nums) => nums.amount),
-        color: "#00ff00",
-      },
-    ],
-    xaxis: {
-      categories: chartIncome.map((dates) =>
-        moment(dates.date).format("DD/MMM/YYYY"),
-      ),
-    },
-  };
+function Charts() {
+  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
     async function fetchDataChart() {
-      const incomeData = await supabase.from("income").select("date, amount");
-      if (incomeData.data) {
-        setChartIncome(incomeData.data.map((entry) => entry));
+      const { data: incomeData, error: incomeError } = await supabase
+        .from("income")
+        .select("date, amount");
+      const { data: expenseData, error: expenseError } = await supabase
+        .from("expense")
+        .select("date, amount");
+
+      if (incomeError || expenseError) {
+        console.error("Error fetching data:", incomeError || expenseError);
+      } else {
+        const incomeLabels = incomeData.map((entry) => entry.date);
+        const incomeAmounts = incomeData.map((entry) => entry.amount);
+        const expenseAmounts = expenseData.map((entry) => entry.amount);
+
+        setChartData({
+          labels: incomeLabels,
+          datasets: [
+            {
+              label: "Revenu",
+              data: incomeAmounts,
+              fill: true,
+              backgroundColor: "rgb(10, 700, 122, 0.2)",
+              borderColor: "rgb(10, 700, 122)",
+              borderWidth: 2,
+            },
+            {
+              label: "Dépense",
+              data: expenseAmounts,
+              fill: true,
+              backgroundColor: "rgba(255, 99, 132, 0.2)",
+              borderColor: "rgb(255, 99, 132)",
+              borderWidth: 2,
+            },
+          ],
+        });
       }
     }
 
     fetchDataChart();
-  }, [chartIncome]);
+  }, []);
 
   return (
     <div>
-      {chartIncome.length > 0 ? (
-        <div className="flex">
-          <Chart
-            type="area"
-            options={incomes}
-            series={incomes.series}
-            width={"550"}
-            height={"320"}
-          />
-        </div>
+      {chartData.labels.length > 0 ? (
+        <Line
+          data={chartData}
+          options={{
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            maintainAspectRatio: false,
+            responsive: true,
+          }}
+        />
       ) : (
         <Empty />
       )}
