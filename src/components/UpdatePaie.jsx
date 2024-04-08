@@ -115,26 +115,6 @@ export function UpdatePaie() {
     } catch (error) {
       console.log(error);
     }
-
-    try {
-      const { error } = await supabase
-        .from("income")
-        .insert({
-          amount: montantTotal,
-          mode,
-          date,
-          name: lastName,
-          what: "Frais Scolaire",
-        })
-        .eq("id", id)
-        .select("id");
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
   };
 
   const handleNouveauMontantChange = (e) => {
@@ -341,30 +321,6 @@ export function UpdatePaie() {
               </div>
             </form>
           </div>
-          {/* <h2>Résultat</h2>
-          <table className="table">
-            <thead key="thead" className="text-color1">
-              <tr>
-                <th className="expand_bar">Versement</th>
-                <th className="expand_bar">Date de création</th>
-                <th className="expand_bar_2">Montant Avancée</th>
-                <th className="expand_bar_2">Balance</th>
-                <th className="expand_bar_2">Date</th>
-                <th className="expand_bar_2">Mode de paiement</th>
-                <th className="expand_bar_2">Statut</th>
-              </tr>
-            </thead>
-            <tbody key="f" className="scroll">
-              <tr>
-                <td>{versement}</td>
-                <td>{montantTotal}</td>
-                <td>{testAmount}</td>
-                <td>{date}</td>
-                <td>{mode}</td>
-                <td>{statut}</td>
-              </tr>
-            </tbody>
-          </table> */}
         </div>
       </div>
     </>
