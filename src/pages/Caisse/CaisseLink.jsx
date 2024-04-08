@@ -123,7 +123,7 @@ function CaisseLink() {
                   series={incomes.series}
                   type="area"
                   height={100}
-                  width={160}
+                  width={150}
                 />
               </div>
             </div>
@@ -149,7 +149,7 @@ function CaisseLink() {
                   series={expenses.series}
                   type="area"
                   height={100}
-                  width={160}
+                  width={150}
                 />
               </div>
             </div>
@@ -175,7 +175,7 @@ function CaisseLink() {
                   series={gain.series}
                   type="area"
                   height={100}
-                  width={160}
+                  width={150}
                 />
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { Empty, Pagination } from "antd";
+import dayjs from "dayjs";
 import { UserPlus } from "lucide-react";
-import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../Config/SupabaseConfig.jsx";
@@ -183,7 +183,7 @@ export function Eleves() {
                     <th>ID</th>
                     <th>Nom</th>
                     <th>Prénom</th>
-                    <th>Date de naissance</th>
+                    <th>Date naissance</th>
                     <th>Sexe</th>
                     <th>classe</th>
                     <th>Adresse</th>
@@ -199,10 +199,10 @@ export function Eleves() {
                       <td>0{student.id}</td>
                       <td>{student.firstName}</td>
                       <td>{student.lastName}</td>
-                      <td>{moment(student.birth).format("DD MMM YYYY")}</td>
+                      <td>{dayjs(student.birth).format("DD MMM YYYY")}</td>
                       <td>{student.gender}</td>
                       <td>{student.classe}</td>
-                      <td>{student.adress}</td>
+                      <td>{student.address}</td>
                       <td>{student.phone}</td>
                       <td>
                         <span className="actions">

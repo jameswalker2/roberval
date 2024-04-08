@@ -9,61 +9,88 @@ import { supabase } from "../../Config/SupabaseConfig";
 Chart.register(CategoryScale);
 
 function Charts() {
-  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  const [chartData, setChartData] = useState({
+    labels: [], // Initialise un tableau vide pour les étiquettes
+    datasets: [
+      {
+        label: "Revenu",
+        data: [],
+        fill: true,
+        backgroundColor: "rgba(10, 700, 122, 0.2)",
+        borderColor: "rgb(10, 700, 122)",
+        borderWidth: 2,
+      },
+      {
+        label: "Dépense",
+        data: [],
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        borderWidth: 2,
+      },
+    ],
+  });
 
   useEffect(() => {
     async function fetchDataChart() {
-      const { data: incomeData, error: incomeError } = await supabase
-        .from("income")
-        .select("date, amount");
-      const { data: expenseData, error: expenseError } = await supabase
-        .from("expense")
-        .select("date, amount");
+      try {
+        const { data: incomeData, error: incomeError } = await supabase
+          .from("income")
+          .select("date, amount");
+        const { data: expenseData, error: expenseError } = await supabase
+          .from("expense")
+          .select("date, amount");
 
-      if (incomeError || expenseError) {
-        console.error("Error fetching data:", incomeError || expenseError);
-      } else {
-        const incomeLabels = incomeData.map((entry) =>
-          dayjs(entry.date).format("MMM"),
-        );
-        const expenseLabels = expenseData.map((entry) =>
-          dayjs(entry.date).format("MMM"),
-        );
-        const incomeAmounts = incomeData.map((entry) => entry.amount);
-        const expenseAmounts = expenseData.map((entry) => entry.amount);
-        const myIncomeLabels = incomeLabels.filter((label) =>
-          dayjs(label).isSameOrBefore(dayjs(new Date())),
-        );
-        // const myExpenseLabels = expenseLabels.filter((label) =>
-        //   dayjs(label).isSameOrBefore(dayjs(new Date())),
-        // );
-        console.log(incomeLabels);
-        setChartData({
-          labels: myIncomeLabels,
-          datasets: [
-            {
-              label: "Revenu",
-              data: incomeAmounts,
-              fill: true,
-              backgroundColor: "rgb(10, 700, 122, 0.2)",
-              borderColor: "rgb(10, 700, 122)",
-              borderWidth: 2,
-            },
-            {
-              label: "Dépense",
-              data: expenseAmounts,
-              fill: true,
-              backgroundColor: "rgba(255, 99, 132, 0.2)",
-              borderColor: "rgb(255, 99, 132)",
-              borderWidth: 2,
-            },
-          ],
-        });
+        if (incomeError || expenseError) {
+          console.error(
+            "Erreur lors de la récupération des données :",
+            incomeError || expenseError,
+          );
+        } else {
+          const incomeLabels = incomeData.map((entry) =>
+            dayjs(entry.date).format("MMMM"),
+          );
+          const expenseLabels = expenseData.map((entry) =>
+            dayjs(entry.date).format("MMMM"),
+          );
+          const incomeAmounts = incomeData.map((entry) => entry.amount);
+          const expenseAmounts = expenseData.map((entry) => entry.amount);
+
+          const allLabels = [...new Set([...incomeLabels, ...expenseLabels])];
+
+          const incomeByMonth = Array(allLabels.length).fill(0);
+          const expenseByMonth = Array(allLabels.length).fill(0);
+
+          incomeLabels.forEach((label, index) => {
+            const monthIndex = allLabels.indexOf(label);
+            incomeByMonth[monthIndex] += incomeAmounts[index];
+          });
+          expenseLabels.forEach((label, index) => {
+            const monthIndex = allLabels.indexOf(label);
+            expenseByMonth[monthIndex] += expenseAmounts[index];
+          });
+
+          setChartData({
+            labels: allLabels,
+            datasets: [
+              {
+                ...chartData.datasets[0],
+                data: incomeByMonth,
+              },
+              {
+                ...chartData.datasets[1],
+                data: expenseByMonth,
+              },
+            ],
+          });
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
       }
     }
 
     fetchDataChart();
-  }, []);
+  });
 
   return (
     <div>

@@ -161,7 +161,7 @@ export function Expense() {
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
           <div className="flex justify-between items-center">
-            <h2 className="font-medium text-xl text-supportingColor1">
+            <h2 className="font-medium text-supportingColor1">
               Ajouter un nouveau dépense
             </h2>
             <button

@@ -43,14 +43,12 @@ export function Dashboard() {
             </div>
             <ChartsIncome />
           </Card>
-          {/* <Card className={"w-[45%] h-96 ml-16"}>
-							<h4 className="text-supportingColor1 font-medium text-[20px] ">
-								Dépense
-							</h4>
-							<div>
-								<ChartsExpense/>
-							</div>
-						</Card> */}
+          {/* <CaisseLink /> */}
+          <div className="w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm mt-10">
+            <div>
+              <h4>Tableau de notification</h4>
+            </div>
+          </div>
         </div>
       </div>
     </>
