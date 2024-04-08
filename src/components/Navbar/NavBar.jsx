@@ -4,7 +4,6 @@ import {
   Banknote,
   BarChartBig,
   GraduationCap,
-  Landmark,
   LayoutDashboard,
   School,
   Users,
@@ -72,6 +71,12 @@ export function NavBar() {
                   Staffs
                 </Link>
               </li>
+            </ul>
+          </li>
+          {/*  */}
+          <li>
+            <h2 className="menu-title text-supportingColor1">Finance</h2>
+            <ul>
               <li className="mb-2 text-[16px] font-normal">
                 <Link
                   to={"/paiement"}
@@ -96,24 +101,7 @@ export function NavBar() {
                   Payroll
                 </Link>
               </li>
-            </ul>
-          </li>
-          {/*  */}
-          <li>
-            <h2 className="menu-title text-supportingColor1">Finance</h2>
-            <ul>
-              <li className="mb-2 text-[16px] font-normal">
-                <Link
-                  to={"/caisse"}
-                  className={`flex items-center ${
-                    isActive("/caisse")
-                      ? "bg-white text-primaryColor hover:bg-slate-200"
-                      : ""
-                  }`}>
-                  <Landmark />
-                  Caisse
-                </Link>
-              </li>
+
               <li className="mb-2 text-[16px] font-normal">
                 <Link
                   to={"/income"}
@@ -138,7 +126,23 @@ export function NavBar() {
                   Dépense
                 </Link>
               </li>
-
+            </ul>
+          </li>
+          <li>
+            <h2 className="menu-title text-supportingColor1">Compte</h2>
+            <ul>
+              {/* <li className="mb-2 text-[16px] font-normal">
+                <Link
+                  to={"/caisse"}
+                  className={`flex items-center ${
+                    isActive("/caisse")
+                      ? "bg-white text-primaryColor hover:bg-slate-200"
+                      : ""
+                  }`}>
+                  <Landmark />
+                  Banque
+                </Link>
+              </li> */}
               <li className="mb-2 text-[16px] font-normal">
                 <Link
                   to={"/gain"}

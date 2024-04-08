@@ -2,12 +2,10 @@ import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { Avatar, Card } from "antd";
 import Meta from "antd/es/card/Meta.js";
 import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
 import "./Caisse.scss";
-import CaisseLink from "./CaisseLink.jsx";
 
 export function Caisse() {
   const [recentTransactions, setRecentTransactions] = useState([]);
@@ -111,22 +109,11 @@ export function Caisse() {
           </ul>
         </div>
 
-        <div>
-          <CaisseLink />
-        </div>
-
         <div className="flex flex-wrap">
           <div className="w-[62.5%] p-4 rounded-lg bg-white mt-10 shadow-sm">
             <h2 className="font-medium text-supportingColor1">
               Balance revenu/dépense
             </h2>
-            <Chart
-              options={state.options}
-              series={state.series}
-              type="area"
-              width={"95%"}
-              height={300}
-            />
           </div>
 
           <div className="w-[30%] p-4 rounded-lg bg-white ml-8 mt-10 shadow-sm">

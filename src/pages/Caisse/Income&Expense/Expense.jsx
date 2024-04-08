@@ -1,7 +1,6 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
 import { Button, DatePicker, Empty, Modal } from "antd";
-import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -13,6 +12,7 @@ export function Expense() {
   const [mode, setMode] = useState("");
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const fetchExpense = async () => {
@@ -47,14 +47,30 @@ export function Expense() {
     ]);
 
     if (error) {
+      Modal.error({
+        title: "Désolé, quelque chose s'est mal passé !",
+        content:
+          "Veuillez réessayer ou contacter notre équipe pour une maintenance",
+        okButtonProps: {
+          type: "default",
+        },
+      });
       console.log(error);
+    } else {
+      Modal.success({
+        content: "Dépense ajouter avec success !",
+        okButtonProps: { type: "default" },
+      });
+      setShow(false);
     }
 
-    setName("");
-    setType("");
-    setMode("");
-    setDate("");
-    setAmount("");
+    e.target.reset([
+      setName(""),
+      setType(""),
+      setMode(""),
+      setDate(""),
+      setAmount(""),
+    ]);
   };
 
   const handleDeleteExpense = async (expenseID) => {
@@ -144,97 +160,113 @@ export function Expense() {
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div>
-            <h2 className="mb-10 font-medium text-xl text-supportingColor1">
+          <div className="flex justify-between items-center">
+            <h2 className="font-medium text-supportingColor1">
               Ajouter un nouveau dépense
             </h2>
+            <button
+              type="submit"
+              onClick={() => setShow(true)}
+              className="btn bg-primaryColor text-white border-none
+                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28">
+              Ajouter
+            </button>
           </div>
 
-          <div>
-            <div className="flex flex-wrap ml-10">
-              <label className="form-control w-full max-w-xs mr-10">
-                <div className="label">
-                  <span className="label-text text-supportingColor1">Nom</span>
+          {!show ? (
+            ""
+          ) : (
+            <div>
+              <form onSubmit={handleAddExpense}>
+                <div className="flex flex-wrap justify-between mt-10">
+                  <label className="form-control w-full max-w-xs ">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Nom
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setName(e.target.value)}
+                      type="text"
+                      placeholder="Nom"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs ">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Type de dépense
+                      </span>
+                    </div>
+                    <select
+                      onChange={(e) => setType(e.target.value)}
+                      defaultValue=""
+                      className="select bg-slate-100 border-primaryColor border-2">
+                      <option value="" className="text-gray-300">
+                        Type
+                      </option>
+                      <option value="Fournitures scolaire">
+                        Fournitures scolaire
+                      </option>
+                      <option value="Matérielles de travail">
+                        Matérielles de travail
+                      </option>
+                      <option value="Autres">Autres</option>
+                    </select>
+                  </label>
+                  <label className="form-control w-full max-w-xs  mb-5">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Mode de Paiement
+                      </span>
+                    </div>
+                    <select
+                      onChange={(e) => setMode(e.target.value)}
+                      defaultValue=""
+                      className="select bg-slate-100 border-primaryColor border-2">
+                      <option value="" className="text-gray-300">
+                        Mode de paiement
+                      </option>
+                      <option value="Cash">Cash</option>
+                      <option value="Chèque">Chèque</option>
+                      <option value="Bank">Bank</option>
+                    </select>
+                  </label>
+                  <label className="form-control w-full max-w-xs  mb-5">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Date
+                      </span>
+                    </div>
+                    <DatePicker
+                      onChange={(date) => setDate(date)}
+                      placeholder="Date dépense"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs  ">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Montant
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setAmount(e.target.value)}
+                      type="text"
+                      placeholder="Montant"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    className="btn bg-primaryColor text-white border-none
+                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
+                    Soumettre
+                  </button>
                 </div>
-                <input
-                  onChange={(e) => setName(e.target.value)}
-                  type="text"
-                  placeholder="Nom"
-                  className="input bg-slate-100 border-primaryColor border-2"
-                />
-              </label>
-              <label className="form-control w-full max-w-xs mr-10">
-                <div className="label">
-                  <span className="label-text text-supportingColor1">
-                    Type de dépense
-                  </span>
-                </div>
-                <select
-                  onChange={(e) => setType(e.target.value)}
-                  defaultValue=""
-                  className="select bg-slate-100 border-primaryColor border-2">
-                  <option value="" className="text-gray-300">
-                    Type
-                  </option>
-                  <option value="Fournitures scolaire">
-                    Fournitures scolaire
-                  </option>
-                  <option value="Matérielles de travail">
-                    Matérielles de travail
-                  </option>
-                  <option value="Autres">Autres</option>
-                </select>
-              </label>
-              <label className="form-control w-full max-w-xs mr-10 mb-5">
-                <div className="label">
-                  <span className="label-text text-supportingColor1">
-                    Mode de Paiement
-                  </span>
-                </div>
-                <select
-                  onChange={(e) => setMode(e.target.value)}
-                  defaultValue=""
-                  className="select bg-slate-100 border-primaryColor border-2">
-                  <option value="" className="text-gray-300">
-                    Mode de paiement
-                  </option>
-                  <option value="Cash">Cash</option>
-                  <option value="Chèque">Chèque</option>
-                  <option value="Bank">Bank</option>
-                </select>
-              </label>
-              <label className="form-control w-full max-w-xs mr-10 mb-5">
-                <div className="label">
-                  <span className="label-text text-supportingColor1">Date</span>
-                </div>
-                <DatePicker
-                  onChange={(date) => setDate(date)}
-                  placeholder="Date dépense"
-                  className="input bg-slate-100 border-primaryColor border-2"
-                />
-              </label>
-              <label className="form-control w-full max-w-xs mr-10 ">
-                <div className="label">
-                  <span className="label-text text-supportingColor1">
-                    Montant
-                  </span>
-                </div>
-                <input
-                  onChange={(e) => setAmount(e.target.value)}
-                  type="number"
-                  placeholder="Montant"
-                  className="input bg-slate-100 border-primaryColor border-2"
-                />
-              </label>
-              <Button
-                type="submit"
-                onClick={handleAddExpense}
-                className="btn bg-primaryColor text-white border-none
-                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
-                Ajouter
-              </Button>
+              </form>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
@@ -242,15 +274,12 @@ export function Expense() {
             <h2 className="text-supportingColor1 font-medium ">
               Liste de dépenses
             </h2>
-            <label className="input border-primaryColor bg-white border-2 flex items-center gap-2">
-              <input
-                type="text"
-                className="grow bg-white"
-                onChange={(e) => setSearchExpense(e.target.value)}
-                placeholder="Search"
-              />
-              <Search size={20} className="text-primaryColor" />
-            </label>
+            <input
+              type="search"
+              className="input bg-white border-2 border-primaryColor focus:file-input-primary  h-9 w-96 max-w-xs ml-60"
+              onChange={(e) => setSearchExpense(e.target.value)}
+              placeholder="Recherche rapide"
+            />
           </div>
           <div>
             <div className="overflow-x-auto">

@@ -157,9 +157,17 @@ export function Staffs() {
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <h2 className="font-medium text-supportingColor1 mb-5">
-            Selectionner les critères
-          </h2>
+          <div className="flex justify-between items-center mb-5">
+            <h2 className="font-medium text-supportingColor1 mb-5">
+              Selectionner les critères
+            </h2>
+            <button
+              onClick={openModal}
+              className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+              <CopyPlus />
+              Nouveau Membre
+            </button>
+          </div>
           <div className="flex items-center justify-around">
             <select
               onChange={(e) => setSelectedRole(e.target.value)}
@@ -180,12 +188,6 @@ export function Staffs() {
               placeholder="Rechercher avec le nom"
               type="search"
             />
-            <button
-              onClick={openModal}
-              className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
-              <CopyPlus />
-              Nouveau Membre
-            </button>
           </div>
         </div>
 

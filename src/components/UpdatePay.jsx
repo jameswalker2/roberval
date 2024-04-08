@@ -80,26 +80,6 @@ export function UpdatePay() {
     } catch (error) {
       console.log(error);
     }
-
-    try {
-      const { error } = await supabase
-        .from("expense")
-        .insert({
-          amount: montantTotal,
-          mode,
-          date,
-          name: lastName,
-          what: "Payroll",
-        })
-        .eq("id", id)
-        .select("id");
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
   };
 
   const handleNouveauMontantChange = (e) => {

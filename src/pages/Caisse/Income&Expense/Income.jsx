@@ -12,6 +12,7 @@ export function Income() {
   const [mode, setMode] = useState("");
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState();
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const fetchIncome = async () => {
@@ -46,7 +47,21 @@ export function Income() {
     ]);
 
     if (error) {
+      Modal.error({
+        title: "Désolé, quelque chose s'est mal passé !",
+        content:
+          "Veuillez réessayer ou contacter notre équipe pour une maintenance",
+        okButtonProps: {
+          type: "default",
+        },
+      });
       console.log(error);
+    } else {
+      Modal.success({
+        content: "Revenu ajouter avec success !",
+        okButtonProps: { type: "default" },
+      });
+      setShow(false);
     }
 
     e.target.reset([
@@ -147,102 +162,112 @@ export function Income() {
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div>
-            <h2 className="mb-10 font-medium text-xl text-supportingColor1">
+          <div className="flex justify-between items-center">
+            <h2 className="font-medium  text-supportingColor1">
               Ajouter un nouveau revenu
             </h2>
+            <button
+              type="submit"
+              onClick={() => setShow(true)}
+              className="btn bg-primaryColor text-white border-none
+                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28">
+              Ajouter
+            </button>
           </div>
 
-          <div>
-            <div className="flex flex-wrap ml-10">
+          {!show ? (
+            ""
+          ) : (
+            <div>
               <form onSubmit={handleAddIncome}>
-                <label className="form-control w-full max-w-xs mr-10">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Nom
-                    </span>
-                  </div>
-                  <input
-                    onChange={(e) => setName(e.target.value)}
-                    type="text"
-                    placeholder="Nom"
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                </label>
-                <label className="form-control w-full max-w-xs mr-10">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Type de dépense
-                    </span>
-                  </div>
-                  <select
-                    onChange={(e) => setType(e.target.value)}
-                    defaultValue=""
-                    className="select bg-slate-100 border-primaryColor border-2">
-                    <option value="" className="text-gray-300">
-                      Type
-                    </option>
-                    <option value="Frais Scolaire">Frais Scolaire</option>
-                    <option value="Donnation">Donnation</option>
-                    <option value="Autres">Autres</option>
-                  </select>
-                </label>
-                <label className="form-control w-full max-w-xs mr-10 mb-5">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Mode de Paiement
-                    </span>
-                  </div>
-                  <select
-                    onChange={(e) => setMode(e.target.value)}
-                    defaultValue=""
-                    className="select bg-slate-100 border-primaryColor border-2">
-                    <option value="" className="text-gray-300">
-                      Mode de paiement
-                    </option>
-                    <option value="Cash">Cash</option>
-                    <option value="Chèque">Chèque</option>
-                    <option value="Bank">Bank</option>
-                  </select>
-                </label>
-                <label className="form-control w-full max-w-xs mr-10 mb-5">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Date
-                    </span>
-                  </div>
-                  <DatePicker
-                    onChange={(date) => setDate(date)}
-                    placeholder="Date revenu"
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                </label>
-                <label className="form-control w-full max-w-xs mr-10 ">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Montant
-                    </span>
-                  </div>
-                  <input
-                    onChange={(e) => setAmount(e.target.value)}
-                    type="number"
-                    placeholder="Montant"
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                </label>
-                <button
-                  type="submit"
-                  className="btn bg-primaryColor text-white border-none
+                <div className="flex flex-wrap justify-between mt-10">
+                  <label className="form-control w-full max-w-xs ">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Nom
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setName(e.target.value)}
+                      type="text"
+                      placeholder="Nom"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs ">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Type de dépense
+                      </span>
+                    </div>
+                    <select
+                      onChange={(e) => setType(e.target.value)}
+                      defaultValue=""
+                      className="select bg-slate-100 border-primaryColor border-2">
+                      <option value="" className="text-gray-300">
+                        Type
+                      </option>
+                      <option value="Donnation">Donnation</option>
+                      <option value="Autres">Autres</option>
+                    </select>
+                  </label>
+                  <label className="form-control w-full max-w-xs  mb-5">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Mode de Paiement
+                      </span>
+                    </div>
+                    <select
+                      onChange={(e) => setMode(e.target.value)}
+                      defaultValue=""
+                      className="select bg-slate-100 border-primaryColor border-2">
+                      <option value="" className="text-gray-300">
+                        Mode de paiement
+                      </option>
+                      <option value="Cash">Cash</option>
+                      <option value="Chèque">Chèque</option>
+                      <option value="Bank">Bank</option>
+                    </select>
+                  </label>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Date
+                      </span>
+                    </div>
+                    <DatePicker
+                      onChange={(date) => setDate(date)}
+                      placeholder="Date revenu"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs  ">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Montant
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setAmount(e.target.value)}
+                      type="text"
+                      placeholder="Montant"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    className="btn bg-primaryColor text-white border-none
                 hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
-                  Ajouter
-                </button>
+                    Soumettre
+                  </button>
+                </div>
               </form>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div className="flex mb-10 items-center">
+          <div className="flex justify-between mb-10 items-center">
             <h2 className="text-supportingColor1 font-medium">
               Liste de revenus
             </h2>
@@ -250,7 +275,7 @@ export function Income() {
               onChange={(e) => setSearchIncome(e.target.value)}
               type="search"
               placeholder="Recherche rapide"
-              className="input input-bordered focus:file-input-primary bg-gray-200 h-9 w-96 max-w-xs ml-60"
+              className="input bg-white border-2 border-primaryColor focus:file-input-primary  h-9 w-96 max-w-xs ml-60"
             />
           </div>
           {/**/}

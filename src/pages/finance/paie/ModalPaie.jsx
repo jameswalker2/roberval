@@ -10,12 +10,14 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
   const [id, setId] = useState(null);
   const [name, setName] = useState(null);
   const [lastName, setLastName] = useState(null);
+  const [statut, setStatut] = useState(null);
 
   useEffect(() => {
     if (paiementId) {
       setId(paiementId.id);
       setName(paiementId.students.firstName);
       setLastName(paiementId.students.lastName);
+      setStatut(paiementId.statut);
     }
   }, [paiementId]);
 
@@ -62,6 +64,7 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                 <th>Balance</th>
                 <th>Date de paiement</th>
                 <th>Type de paiement</th>
+                <th>Versement</th>
               </tr>
             </thead>
             {paiementHistory.map((paiement) => (
@@ -77,10 +80,17 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                   ) : (
                     <td>{moment(paiement.date).format("DD/MM/YYYY")}</td>
                   )}
+
                   {paiement.mode === null ? (
                     <td>Non généré</td>
                   ) : (
                     <td>{paiement.mode}</td>
+                  )}
+
+                  {paiement.versement === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>{paiement.versement}</td>
                   )}
                 </tr>
               </tbody>
@@ -89,13 +99,17 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
         </div>
 
         <div className="flex justify-end items-center mt-10">
-          <NavLink to={"/update-paie/" + id}>
-            <button
-              className="btn border-none bg-primaryColor text-white 
-						hover:bg-slate-100 hover:text-primaryColor">
-              Ajouter Paiement
-            </button>
-          </NavLink>
+          {statut === "Payé" ? (
+            ""
+          ) : (
+            <NavLink to={"/update-paie/" + id}>
+              <button
+                className="btn border-none bg-primaryColor text-white 
+              hover:bg-slate-100 hover:text-primaryColor">
+                Ajouter Paiement
+              </button>
+            </NavLink>
+          )}
           <button
             onClick={() => deletePaieID(id)}
             className="btn bg-supportingColor3 border-none ml-10 text-white 
