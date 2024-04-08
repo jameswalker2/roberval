@@ -33,14 +33,11 @@ export function Dashboard() {
               </div>
               <div>
                 <select
-                  className="w-40 h-8 rounded-full px-2 bg-white border-primaryColor border-2"
+                  className="w-20 h-6 rounded-full px-2 bg-white border-primaryColor border-2"
                   name=""
                   id="">
-                  <option value="">Dernière semaine</option>
-                  <option value="">Mois prochain</option>
-                  <option value="">Ce mois</option>
-                  <option value="">0</option>
-                  <option value="">0</option>
+                  <option value="">2023</option>
+                  <option value="">2024</option>
                 </select>
               </div>
             </div>

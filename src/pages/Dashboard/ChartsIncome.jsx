@@ -1,6 +1,7 @@
 import { Empty } from "antd";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { supabase } from "../../Config/SupabaseConfig";
@@ -22,12 +23,23 @@ function Charts() {
       if (incomeError || expenseError) {
         console.error("Error fetching data:", incomeError || expenseError);
       } else {
-        const incomeLabels = incomeData.map((entry) => entry.date);
+        const incomeLabels = incomeData.map((entry) =>
+          dayjs(entry.date).format("MMM"),
+        );
+        const expenseLabels = expenseData.map((entry) =>
+          dayjs(entry.date).format("MMM"),
+        );
         const incomeAmounts = incomeData.map((entry) => entry.amount);
         const expenseAmounts = expenseData.map((entry) => entry.amount);
-
+        const myIncomeLabels = incomeLabels.filter((label) =>
+          dayjs(label).isSameOrBefore(dayjs(new Date())),
+        );
+        // const myExpenseLabels = expenseLabels.filter((label) =>
+        //   dayjs(label).isSameOrBefore(dayjs(new Date())),
+        // );
+        console.log(incomeLabels);
         setChartData({
-          labels: incomeLabels,
+          labels: myIncomeLabels,
           datasets: [
             {
               label: "Revenu",
@@ -57,6 +69,7 @@ function Charts() {
     <div>
       {chartData.labels.length > 0 ? (
         <Line
+          className="h-96 w-96 "
           data={chartData}
           options={{
             plugins: {
