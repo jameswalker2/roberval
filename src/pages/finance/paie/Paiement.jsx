@@ -31,10 +31,40 @@ export function Paiement() {
 
         if (data) {
           setStudentsP(data);
-          setClasses([
-            ...new Set(data.map((student) => student.students.classe)),
-          ]);
-          setPaiement([...new Set(data.map((paie) => paie.statut))]);
+          const sortedStatut = ["Non payé", "Avance", "Payé"];
+          setPaiement(sortedStatut);
+          const sortedClasse = [
+            "1e Annee Kind",
+            "2e Annee Kind",
+            "3e Annee Kind",
+            "1e Annee Fond",
+            "2e Annee Fond",
+            "3e Annee Fond",
+            "4e Annee Fond",
+            "5e Annee Fond",
+            "6e Annee Fond",
+            "7e Annee Fond",
+            "8e Annee Fond",
+            "9e Annee Fond",
+            "NS I",
+            "NS II",
+            "NS III",
+            "NS IV",
+          ];
+
+          const kindYears = sortedClasse.filter((classe) =>
+            classe.includes("Kind"),
+          );
+          const fondYears = sortedClasse.filter((classe) =>
+            classe.includes("Fond"),
+          );
+          const nsYears = sortedClasse.filter((classe) =>
+            classe.includes("NS"),
+          );
+
+          const sortedClasseCombined = [...kindYears, ...fondYears, ...nsYears];
+
+          setClasses(sortedClasseCombined);
         } else {
           throw error;
         }
@@ -85,11 +115,7 @@ export function Paiement() {
     label: category,
   }));
 
-  const filterStudentsByCriteria = (
-    students,
-    selectedCategory,
-    selectedPaie,
-  ) => {
+  const filterPaieByCriteria = (students, selectedCategory, selectedPaie) => {
     return students.filter((student) => {
       const meetsCategoryCriteria =
         !selectedCategory || student.students.classe === selectedCategory;
@@ -99,15 +125,14 @@ export function Paiement() {
     });
   };
 
-  // Appliquer les filtres et la pagination
   const startIndex = (currentPage - 1) * paiementPerPage;
   const endIndex = startIndex + paiementPerPage;
-  const filteredStudents = filterStudentsByCriteria(
+  const filterPaie = filterPaieByCriteria(
     studentsP,
     selectedCategory,
     selectedPaie,
   );
-  const paginatedStudents = filteredStudents.slice(startIndex, endIndex);
+  const paginatedPaie = filterPaie.slice(startIndex, endIndex);
 
   useEffect(() => {
     const expenseChannel = supabase
@@ -225,8 +250,15 @@ export function Paiement() {
           </div>
         </div>
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-          <h2 className="mb-5 font-medium">Liste paiement générer</h2>
-          {paginatedStudents.length > 0 ? (
+          <div className="mb-5">
+            <h2 className=" font-medium">Liste paiement générer</h2>
+            <p className="text-primaryColor text-sm">
+              Total de{" "}
+              <span className="font-semibold">{filterPaie.length}</span> sur{" "}
+              <span className="font-semibold">{studentsP.length}</span> lignes
+            </p>
+          </div>
+          {paginatedPaie.length > 0 ? (
             <div>
               <table className="table">
                 <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
@@ -242,7 +274,7 @@ export function Paiement() {
                     <th>Action</th>
                   </tr>
                 </thead>
-                {paginatedStudents
+                {paginatedPaie
                   .filter(
                     (result) =>
                       result.students.firstName
@@ -305,7 +337,7 @@ export function Paiement() {
               <Pagination
                 current={currentPage}
                 pageSize={paiementPerPage}
-                total={filteredStudents.length}
+                total={filterPaie.length}
                 onChange={(page) => setCurrentPage(page)}
                 className="text-center mt-10"
               />

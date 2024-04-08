@@ -26,7 +26,6 @@ export function Eleves() {
 
         if (data) {
           setAllResults(data);
-          // setClasse([...new Set(data.map((student) => student.classe))]);
           const sortedClasse = [
             "1e Annee Kind",
             "2e Annee Kind",
