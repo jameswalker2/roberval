@@ -256,7 +256,6 @@ export function Income() {
                   </label>
                   <button
                     type="submit"
-                    // onClick={() => setShow(false)}
                     className="btn bg-primaryColor text-white border-none
                 hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
                     Soumettre
@@ -296,12 +295,10 @@ export function Income() {
                     </tr>
                   </thead>
                   {incomes
-                    .filter(
-                      (expense) =>
-                        expense.name
-                          .toLowerCase()
-                          .includes(searchIncome.toLowerCase()) ||
-                        console.log(expense),
+                    .filter((expense) =>
+                      expense.name
+                        .toLowerCase()
+                        .includes(searchIncome.toLowerCase()),
                     )
                     .map((expense) => (
                       <tbody key={expense.id}>
