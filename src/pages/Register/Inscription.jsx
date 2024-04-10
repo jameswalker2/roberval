@@ -122,7 +122,7 @@ export function Inscription() {
         classe: studentClasse,
         vacation: studentVacation,
         level: studentLevel,
-        //
+        birth: studentBirth,
         gender: studentGender,
         departmentBirth: studentDepartmentBirth,
         commonBirth: studentCommonBirth,
@@ -194,8 +194,6 @@ export function Inscription() {
             </li>
           </ul>
         </div>
-        <h1>{studentName}</h1>
-
         <StudentInfoForm onInfoChange={handleStudentInfo} />
         <StudentAddressForm onAddressInfoChange={handleStudentAddress} />
         <ParentInfoForm onParentInfoChange={handleStudentParent} />

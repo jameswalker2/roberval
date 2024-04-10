@@ -1,5 +1,5 @@
 import { DatePicker } from "antd";
-import { DateTime } from "luxon";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
 function StudentInfoForm({ onInfoChange }) {
@@ -23,12 +23,7 @@ function StudentInfoForm({ onInfoChange }) {
         setLastName(value);
         break;
       case "birth":
-        if (value instanceof Date) {
-          const luxonDate = DateTime.fromJSDate(value);
-          setBirth(luxonDate);
-        } else {
-          setBirth(null);
-        }
+        setBirth(value);
         break;
       case "departmentBirth":
         setDepartmentBirth(value);
@@ -63,16 +58,6 @@ function StudentInfoForm({ onInfoChange }) {
       wtHandicap,
     );
   });
-
-  const handleInputChange = (date) => {
-    if (date) {
-      const luxonDate = DateTime.fromJSDate(date.$d).toFormat("yyy - LLL - DD");
-      setBirth(luxonDate);
-      console.log(luxonDate);
-    } else {
-      setBirth(null);
-    }
-  };
 
   return (
     <div>
@@ -129,9 +114,8 @@ function StudentInfoForm({ onInfoChange }) {
               </span>
             </div>
             <DatePicker
+              onChange={(date) => setBirth(dayjs(date).format("DD  MMM  YYYY"))}
               placeholder="Date de naissance"
-              value={birth}
-              onChange={handleInputChange}
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
