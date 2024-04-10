@@ -5,11 +5,11 @@ import {
   BarChartBig,
   GraduationCap,
   LayoutDashboard,
-  School,
   Users,
   Wallet,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import logoRoberval from "../../assets/LOGO ROBERVAL-white.png";
 import "./NavBar.scss";
 
 export function NavBar() {
@@ -22,7 +22,7 @@ export function NavBar() {
     <>
       <div className="fixed w-56 h-[100%] bg-primaryColor">
         <span className="flex items-center p-5 text-white">
-          <School strokeWidth={1.5} className="w-8 h-8" />
+          <img style={{ width: 50 }} src={logoRoberval} alt="svg" />
           <h2 className="text-[20px] font-bold ml-5">Roberval</h2>
         </span>
         <ul className="menu w-56  text-white">
