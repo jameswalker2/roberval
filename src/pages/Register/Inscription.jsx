@@ -112,6 +112,7 @@ export function Inscription() {
     SetStudentPhone(phone);
     SetStudentOtherPhone(otherPhone);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
