@@ -2,11 +2,10 @@ import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export function EditStudentInfoForm({ onEditInfoChange }) {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -39,13 +38,10 @@ export function EditStudentInfoForm({ onEditInfoChange }) {
         setWtHandicap(data.wtHandicap);
       } else {
         console.log(error);
-        // navigate("/eleves", { replace: true });
       }
     };
     fetchStudent();
-  }, [id, navigate]);
-
-  console.log(birth);
+  }, [id]);
 
   const handleChange = (fieldName, value) => {
     switch (fieldName) {

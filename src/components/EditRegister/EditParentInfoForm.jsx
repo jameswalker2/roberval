@@ -23,7 +23,6 @@ function EditParentInfoForm({ onEditParentInfoChange }) {
         .single();
 
       if (data) {
-        console.log(data);
         setMotherName(data.firstMother);
         setMotherLastName(data.lastMother);
         setMotherJob(data.jobMother);

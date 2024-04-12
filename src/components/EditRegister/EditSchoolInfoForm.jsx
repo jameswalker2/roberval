@@ -19,7 +19,6 @@ function EditSchoolInfoForm({ onEditSchoolInfoChange }) {
         .single();
 
       if (data) {
-        console.log(data);
         setVacation(data.vacation);
         setLevel(data.level);
         setClasse(data.classe);

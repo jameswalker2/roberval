@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function SchoolInfoForm({ onSchoolInfoChange }) {
+function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
   const [vacation, setVacation] = useState("");
   const [level, setLevel] = useState("");
   const [classe, setClasse] = useState("");
@@ -61,6 +61,18 @@ function SchoolInfoForm({ onSchoolInfoChange }) {
   useEffect(() => {
     onSchoolInfoChange(vacation, level, classe);
   });
+
+  const handleReset = () => {
+    setVacation("");
+    setLevel("");
+    setClasse("");
+  };
+
+  useEffect(() => {
+    if (resetData) {
+      handleReset();
+    }
+  }, [resetData]);
 
   return (
     <div>

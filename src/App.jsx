@@ -13,10 +13,14 @@ import { Staffs } from "@/pages/Staffs/Staffs.jsx";
 import { Eleves } from "@/pages/Students/Eleves.jsx";
 import { Paiement } from "@/pages/finance/paie/Paiement";
 import { Payroll } from "@/pages/finance/pay/Payroll";
+import dayjs from "dayjs";
+import "dayjs/locale/fr";
 import { Route, Routes } from "react-router-dom";
 import { EditInscription } from "../src/components/EditRegister/EditInscription.jsx";
 import "./App.scss";
 import { GeneratedPaiement } from "./components/GeneratedPaiement";
+
+dayjs.locale("fr");
 
 function App() {
   return (

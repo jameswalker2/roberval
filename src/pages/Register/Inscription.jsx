@@ -41,6 +41,7 @@ export function Inscription() {
   const [studentEmail, SetStudentEmail] = useState("");
   const [studentPhone, SetStudentPhone] = useState("");
   const [studentOtherPhone, SetStudentOtherPhone] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const handleStudentInfo = (
     name,
@@ -160,10 +161,15 @@ export function Inscription() {
           },
         });
         window.scrollTo({ top: 0, behavior: "smooth" });
+        setSubmitted(true);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const resetData = () => {
+    setSubmitted(false);
   };
 
   return (
@@ -195,11 +201,26 @@ export function Inscription() {
             </li>
           </ul>
         </div>
-        <StudentInfoForm onInfoChange={handleStudentInfo} />
-        <StudentAddressForm onAddressInfoChange={handleStudentAddress} />
-        <ParentInfoForm onParentInfoChange={handleStudentParent} />
-        <SchoolInfoForm onSchoolInfoChange={handleStudentSchool} />
-        <OtherInfoForm onOtherInfoChange={handleStudentPerson} />
+        <StudentInfoForm
+          onInfoChange={handleStudentInfo}
+          resetData={submitted}
+        />
+        <StudentAddressForm
+          onAddressInfoChange={handleStudentAddress}
+          resetData={submitted}
+        />
+        <ParentInfoForm
+          onParentInfoChange={handleStudentParent}
+          resetData={submitted}
+        />
+        <SchoolInfoForm
+          onSchoolInfoChange={handleStudentSchool}
+          resetData={submitted}
+        />
+        <OtherInfoForm
+          onOtherInfoChange={handleStudentPerson}
+          resetData={submitted}
+        />
         <div className="text-center">
           <button
             onClick={handleSubmit}

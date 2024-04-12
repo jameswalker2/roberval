@@ -19,14 +19,12 @@ function EditStudentAddressForm({ onEditAddressInfoChange }) {
         .single();
 
       if (data) {
-        console.log(data);
         setAddress(data.address);
         setDepartment(data.department);
         setCommon(data.common);
         setCity(data.city);
       } else {
         console.log(error);
-        // navigate("/eleves", { replace: true });
       }
     };
     fetchStudent();

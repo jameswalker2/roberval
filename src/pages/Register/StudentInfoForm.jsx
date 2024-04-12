@@ -2,7 +2,7 @@ import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-function StudentInfoForm({ onInfoChange }) {
+function StudentInfoForm({ onInfoChange, resetData }) {
   const [name, setName] = useState("");
   const [birth, setBirth] = useState(null);
   const [lastName, setLastName] = useState("");
@@ -59,6 +59,25 @@ function StudentInfoForm({ onInfoChange }) {
     );
   });
 
+  const handleReset = () => {
+    setName("");
+    setLastName("");
+    setBirth("");
+    setDepartmentBirth("");
+    setCommonBirth("");
+    setCommonBirth("");
+    setAddressBirth("");
+    setGender("");
+    setHandicap("");
+    setWtHandicap("");
+  };
+
+  useEffect(() => {
+    if (resetData) {
+      handleReset();
+    }
+  }, [resetData]);
+
   return (
     <div>
       <div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
@@ -114,7 +133,7 @@ function StudentInfoForm({ onInfoChange }) {
               </span>
             </div>
             <DatePicker
-              onChange={(date) => setBirth(dayjs(date).format("DD  MMM  YYYY"))}
+              onChange={(date) => setBirth(dayjs(date))}
               placeholder="Date de naissance"
               className="input bg-slate-100 border-primaryColor border-2"
             />

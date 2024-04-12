@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function StudentAddressForm({ onAddressInfoChange }) {
+function StudentAddressForm({ onAddressInfoChange, resetData }) {
   const [address, setAddress] = useState("");
   const [department, setDepartment] = useState("");
   const [common, setCommon] = useState("");
@@ -28,6 +28,19 @@ function StudentAddressForm({ onAddressInfoChange }) {
   useEffect(() => {
     onAddressInfoChange(address, department, common, city);
   });
+
+  const handleReset = () => {
+    setAddress("");
+    setDepartment("");
+    setCommon("");
+    setCity("");
+  };
+
+  useEffect(() => {
+    if (resetData) {
+      handleReset();
+    }
+  }, [resetData]);
 
   return (
     <div>

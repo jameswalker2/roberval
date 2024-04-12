@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function ParentInfoForm({ onParentInfoChange }) {
+function ParentInfoForm({ onParentInfoChange, resetData }) {
   const [motherName, setMotherName] = useState("");
   const [motherLastName, setMotherLastName] = useState("");
   const [motherJob, setMotherJob] = useState("");
@@ -53,6 +53,23 @@ function ParentInfoForm({ onParentInfoChange }) {
       dFather,
     );
   });
+
+  const handleReset = () => {
+    setMotherName("");
+    setMotherLastName("");
+    setMotherJob("");
+    setDMother("");
+    setFatherName("");
+    setFatherLastName("");
+    setFatherJob("");
+    setDFather("");
+  };
+
+  useEffect(() => {
+    if (resetData) {
+      handleReset();
+    }
+  }, [resetData]);
 
   return (
     <div>

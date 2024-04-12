@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function OtherInfoForm({ onOtherInfoChange }) {
+function OtherInfoForm({ onOtherInfoChange, resetData }) {
   const [personLink, setPersonLink] = useState("");
   const [nif, setNif] = useState("");
   const [ninu, setNinu] = useState("");
@@ -36,6 +36,21 @@ function OtherInfoForm({ onOtherInfoChange }) {
   useEffect(() => {
     onOtherInfoChange(personLink, nif, ninu, email, phone, otherPhone);
   });
+
+  const handleReset = () => {
+    setPersonLink("");
+    setNif("");
+    setNinu("");
+    setEmail("");
+    setPhone("");
+    setOtherPhone("");
+  };
+
+  useEffect(() => {
+    if (resetData) {
+      handleReset();
+    }
+  }, [resetData]);
   return (
     <div>
       <div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
