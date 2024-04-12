@@ -199,7 +199,7 @@ export function Eleves() {
                       <td>0{student.id}</td>
                       <td>{student.firstName}</td>
                       <td>{student.lastName}</td>
-                      <td>{dayjs(student.birth).format("DD MMM YYYY")}</td>
+                      <td>{dayjs(student.birth).format("DD MMMM YYYY")}</td>
                       <td>{student.gender}</td>
                       <td>{student.classe}</td>
                       <td>{student.address}</td>

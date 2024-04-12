@@ -1,6 +1,4 @@
-import { Button, DatePicker } from "antd";
-import { Search } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Card, DatePicker } from "antd";
 import { useState } from "react";
 import { supabase } from "../../Config/SupabaseConfig";
 import { NavBar } from "../../components/Navbar/NavBar";
@@ -76,7 +74,7 @@ export default function Gain() {
     <>
       <NavBar />
       <div className="h-screen overflow-y-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
-        <div
+        {/* <div
           className={
             "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
             "text-supportingColor1 bg-white rounded-lg shadow-sm"
@@ -99,12 +97,35 @@ export default function Gain() {
               </NavLink>
             </li>
           </ul>
-        </div>
+        </div> */}
 
-        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div className="font-medium text-supportingColor1 mb-5">
-            <h2>Sélectionnez les critères</h2>
-          </div>
+        <div className="flex justify-center mt-[25%]">
+          <Card className="w-[30%] rounded-lg shadow-sm">
+            <div className="text-center mb-5">
+              <h2 className="font-semibold text-supportingColor1">
+                Que voulez vous calculer ?
+              </h2>
+            </div>
+            <div className="flex flex-wrap justify-between">
+              <button
+                className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
+              hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
+              hover:scale-110 duration-300">
+                Montant par période
+              </button>
+              <button
+                className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
+              hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
+              hover:scale-110 duration-300">
+                Montant annuel
+              </button>
+            </div>
+          </Card>
+        </div>
+        {/* <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
+            <div className="font-medium text-supportingColor1 mb-5">
+              <h2>Sélectionnez les critères</h2>
+            </div>
           <div className="flex flex-wrap justify-center">
             <RangePicker
               className="w-[40rem] border-primaryColor border-2 rounded-lg bg-white
@@ -154,7 +175,6 @@ export default function Gain() {
                 </tr>
               </tbody>
             </table>
-
           </div>
           {showResult && dateRange.length === 2 && (
             <div>
@@ -190,7 +210,7 @@ export default function Gain() {
               </table>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );

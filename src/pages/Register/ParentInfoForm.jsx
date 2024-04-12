@@ -95,7 +95,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
               type="text"
               value={motherName}
               onChange={(e) => handleChange("motherName", e.target.value)}
-              placeholder="Nom"
+              placeholder="Nom de la mère"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -112,7 +112,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
               type="text"
               value={motherLastName}
               onChange={(e) => handleChange("motherLastName", e.target.value)}
-              placeholder="Nom"
+              placeholder="Prénom de la mère"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -174,7 +174,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
               type="text"
               value={fatherName}
               onChange={(e) => handleChange("fatherName", e.target.value)}
-              placeholder="Nom"
+              placeholder="Nom du père"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -191,7 +191,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
               type="text"
               value={fatherLastName}
               onChange={(e) => handleChange("fatherLastName", e.target.value)}
-              placeholder="Nom"
+              placeholder="Prénom du père"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -227,7 +227,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
               name="statutFather"
               value="Décédé"
               checked={dFather === "Décédé"}
-              onChange={(e) => handleChange("dFather", e.target.value)} // Nouveau
+              onChange={(e) => handleChange("dFather", e.target.value)}
               className="radio border-primaryColor border-2 w-5 h-5"
             />
             <label htmlFor="Vivant" className="mx-2">
@@ -238,7 +238,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
               name="statutFather"
               value="Vivant"
               checked={dFather === "Vivant"}
-              onChange={(e) => handleChange("dFather", e.target.value)} // Nouveau
+              onChange={(e) => handleChange("dFather", e.target.value)}
               className="radio border-primaryColor border-2 w-5 h-5"
             />
           </div>

@@ -76,7 +76,7 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
               type="text"
               value={personLink}
               onChange={(e) => handleChange("person", e.target.value)}
-              placeholder="Nom"
+              placeholder="Nom ou lien parenté"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -92,7 +92,7 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
               type="text"
               value={nif}
               onChange={(e) => handleChange("nif", e.target.value)}
-              placeholder="Nom"
+              placeholder="Nif"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -108,7 +108,7 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
               type="text"
               value={ninu}
               onChange={(e) => handleChange("ninu", e.target.value)}
-              placeholder="Occupation de la mère"
+              placeholder="Ninu"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -124,7 +124,7 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
               type="text"
               value={email}
               onChange={(e) => handleChange("email", e.target.value)}
-              placeholder="Occupation de la mère"
+              placeholder="Email"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -142,7 +142,7 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
               type="text"
               value={phone}
               onChange={(e) => handleChange("phone", e.target.value)}
-              placeholder="Occupation de la mère"
+              placeholder="Téléphone"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
@@ -160,7 +160,7 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
               type="text"
               value={otherPhone}
               onChange={(e) => handleChange("other", e.target.value)}
-              placeholder="Occupation de la mère"
+              placeholder="Téléphone additionnel"
               className="input bg-slate-100 border-primaryColor border-2"
             />
             <div className="label">
