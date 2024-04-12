@@ -1,12 +1,38 @@
+import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function OtherInfoForm({ onOtherInfoChange, resetData }) {
+function EditOtherInfoForm({ onEditOtherInfoChange }) {
+  const { id } = useParams();
+
   const [personLink, setPersonLink] = useState("");
   const [nif, setNif] = useState("");
   const [ninu, setNinu] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [otherPhone, setOtherPhone] = useState("");
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (data) {
+        setPersonLink(data.linkPerson);
+        setNif(data.nif);
+        setNinu(data.ninu);
+        setEmail(data.email);
+        setPhone(data.phone);
+        setOtherPhone(data.otherPhone);
+      } else {
+        console.log(error);
+      }
+    };
+    fetchStudent();
+  }, [id]);
 
   const handleChange = (fieldName, value) => {
     switch (fieldName) {
@@ -34,23 +60,9 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
   };
 
   useEffect(() => {
-    onOtherInfoChange(personLink, nif, ninu, email, phone, otherPhone);
+    onEditOtherInfoChange(personLink, nif, ninu, email, phone, otherPhone);
   });
 
-  const handleReset = () => {
-    setPersonLink("");
-    setNif("");
-    setNinu("");
-    setEmail("");
-    setPhone("");
-    setOtherPhone("");
-  };
-
-  useEffect(() => {
-    if (resetData) {
-      handleReset();
-    }
-  }, [resetData]);
   return (
     <div>
       <div className="bg-white p-4 rounded-lg mt-10 mb-5 w-[95%]">
@@ -173,4 +185,4 @@ function OtherInfoForm({ onOtherInfoChange, resetData }) {
   );
 }
 
-export default OtherInfoForm;
+export default EditOtherInfoForm;

@@ -1,6 +1,10 @@
+import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function ParentInfoForm({ onParentInfoChange, resetData }) {
+function EditParentInfoForm({ onEditParentInfoChange }) {
+  const { id } = useParams();
+
   const [motherName, setMotherName] = useState("");
   const [motherLastName, setMotherLastName] = useState("");
   const [motherJob, setMotherJob] = useState("");
@@ -9,6 +13,30 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
   const [fatherLastName, setFatherLastName] = useState("");
   const [fatherJob, setFatherJob] = useState("");
   const [dFather, setDFather] = useState("");
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (data) {
+        setMotherName(data.firstMother);
+        setMotherLastName(data.lastMother);
+        setMotherJob(data.jobMother);
+        setDMother(data.statutMother);
+        setFatherName(data.firstFather);
+        setFatherLastName(data.lastFather);
+        setFatherJob(data.jobFather);
+        setDFather(data.statutFather);
+      } else {
+        console.log(error);
+      }
+    };
+    fetchStudent();
+  }, [id]);
 
   const handleChange = (fieldName, value) => {
     switch (fieldName) {
@@ -42,7 +70,7 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
   };
 
   useEffect(() => {
-    onParentInfoChange(
+    onEditParentInfoChange(
       motherName,
       motherLastName,
       motherJob,
@@ -53,23 +81,6 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
       dFather,
     );
   });
-
-  const handleReset = () => {
-    setMotherName("");
-    setMotherLastName("");
-    setMotherJob("");
-    setDMother("");
-    setFatherName("");
-    setFatherLastName("");
-    setFatherJob("");
-    setDFather("");
-  };
-
-  useEffect(() => {
-    if (resetData) {
-      handleReset();
-    }
-  }, [resetData]);
 
   return (
     <div>
@@ -248,4 +259,4 @@ function ParentInfoForm({ onParentInfoChange, resetData }) {
   );
 }
 
-export default ParentInfoForm;
+export default EditParentInfoForm;

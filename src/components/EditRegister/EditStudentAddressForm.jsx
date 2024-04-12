@@ -1,10 +1,34 @@
+import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function StudentAddressForm({ onAddressInfoChange, resetData }) {
+function EditStudentAddressForm({ onEditAddressInfoChange }) {
+  const { id } = useParams();
+
   const [address, setAddress] = useState("");
   const [department, setDepartment] = useState("");
   const [common, setCommon] = useState("");
   const [city, setCity] = useState("");
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (data) {
+        setAddress(data.address);
+        setDepartment(data.department);
+        setCommon(data.common);
+        setCity(data.city);
+      } else {
+        console.log(error);
+      }
+    };
+    fetchStudent();
+  }, [id]);
 
   const handleChange = (fieldName, value) => {
     switch (fieldName) {
@@ -26,21 +50,8 @@ function StudentAddressForm({ onAddressInfoChange, resetData }) {
   };
 
   useEffect(() => {
-    onAddressInfoChange(address, department, common, city);
+    onEditAddressInfoChange(address, department, common, city);
   });
-
-  const handleReset = () => {
-    setAddress("");
-    setDepartment("");
-    setCommon("");
-    setCity("");
-  };
-
-  useEffect(() => {
-    if (resetData) {
-      handleReset();
-    }
-  }, [resetData]);
 
   return (
     <div>
@@ -132,4 +143,4 @@ function StudentAddressForm({ onAddressInfoChange, resetData }) {
     </div>
   );
 }
-export default StudentAddressForm;
+export default EditStudentAddressForm;

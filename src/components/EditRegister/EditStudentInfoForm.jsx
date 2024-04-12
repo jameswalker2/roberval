@@ -1,11 +1,15 @@
+import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function StudentInfoForm({ onInfoChange, resetData }) {
+export function EditStudentInfoForm({ onEditInfoChange }) {
+  const { id } = useParams();
+
   const [name, setName] = useState("");
-  const [birth, setBirth] = useState(null);
   const [lastName, setLastName] = useState("");
+  const [birth, setBirth] = useState(null);
   const [departmentBirth, setDepartmentBirth] = useState("");
   const [commonBirth, setCommonBirth] = useState("");
   const [addressBirth, setAddressBirth] = useState("");
@@ -13,6 +17,31 @@ function StudentInfoForm({ onInfoChange, resetData }) {
   const [handicap, setHandicap] = useState("");
   const [wtHandicap, setWtHandicap] = useState("");
   const [isHandicapEnabled, setIsHandicapEnabled] = useState(false);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (data) {
+        setName(data.firstName);
+        setLastName(data.lastName);
+        setBirth(data.birth);
+        setDepartmentBirth(data.departmentBirth);
+        setCommonBirth(data.commonBirth);
+        setAddressBirth(data.addressBirth);
+        setGender(data.gender);
+        setHandicap(data.handicap);
+        setWtHandicap(data.wtHandicap);
+      } else {
+        console.log(error);
+      }
+    };
+    fetchStudent();
+  }, [id]);
 
   const handleChange = (fieldName, value) => {
     switch (fieldName) {
@@ -45,8 +74,9 @@ function StudentInfoForm({ onInfoChange, resetData }) {
         break;
     }
   };
+
   useEffect(() => {
-    onInfoChange(
+    onEditInfoChange(
       name,
       lastName,
       birth,
@@ -58,25 +88,6 @@ function StudentInfoForm({ onInfoChange, resetData }) {
       wtHandicap,
     );
   });
-
-  const handleReset = () => {
-    setName("");
-    setLastName("");
-    setBirth("");
-    setDepartmentBirth("");
-    setCommonBirth("");
-    setCommonBirth("");
-    setAddressBirth("");
-    setGender("");
-    setHandicap("");
-    setWtHandicap("");
-  };
-
-  useEffect(() => {
-    if (resetData) {
-      handleReset();
-    }
-  }, [resetData]);
 
   return (
     <div>
@@ -133,7 +144,8 @@ function StudentInfoForm({ onInfoChange, resetData }) {
               </span>
             </div>
             <DatePicker
-              onChange={(date) => setBirth(dayjs(date))}
+              value={dayjs(birth)}
+              onChange={(date) => setBirth(dayjs(date).format("DD  MMM  YYYY"))}
               placeholder="Date de naissance"
               className="input bg-slate-100 border-primaryColor border-2"
             />
@@ -284,4 +296,4 @@ function StudentInfoForm({ onInfoChange, resetData }) {
   );
 }
 
-export default StudentInfoForm;
+export default EditStudentInfoForm;

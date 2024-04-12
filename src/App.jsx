@@ -1,5 +1,4 @@
 import { AddPay } from "@/components/AddPay.jsx";
-import { Edit } from "@/components/Edit.jsx";
 import { UpdatePaie } from "@/components/UpdatePaie.jsx";
 import { UpdatePay } from "@/components/UpdatePay.jsx";
 import { Login } from "@/pages/AuthConfig/Login.jsx";
@@ -14,9 +13,14 @@ import { Staffs } from "@/pages/Staffs/Staffs.jsx";
 import { Eleves } from "@/pages/Students/Eleves.jsx";
 import { Paiement } from "@/pages/finance/paie/Paiement";
 import { Payroll } from "@/pages/finance/pay/Payroll";
+import dayjs from "dayjs";
+import "dayjs/locale/fr";
 import { Route, Routes } from "react-router-dom";
+import { EditInscription } from "../src/components/EditRegister/EditInscription.jsx";
 import "./App.scss";
 import { GeneratedPaiement } from "./components/GeneratedPaiement";
+
+dayjs.locale("fr");
 
 function App() {
   return (
@@ -30,7 +34,7 @@ function App() {
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/staffs" element={<Staffs />} />
         <Route path="/eleves" element={<Eleves />} />
-        <Route path="/edit/:id" element={<Edit />} />
+        <Route path="/edit/:id" element={<EditInscription />} />
         <Route path="/addpaie" element={<GeneratedPaiement />} />
         <Route path="/update-paie/:id" element={<UpdatePaie />} />
         <Route path="/addpay" element={<AddPay />} />

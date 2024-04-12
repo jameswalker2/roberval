@@ -1,10 +1,33 @@
+import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
+function EditSchoolInfoForm({ onEditSchoolInfoChange }) {
+  const { id } = useParams();
+
   const [vacation, setVacation] = useState("");
   const [level, setLevel] = useState("");
   const [classe, setClasse] = useState("");
   const [availableClasses, setAvailableClasses] = useState([]);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (data) {
+        setVacation(data.vacation);
+        setLevel(data.level);
+        setClasse(data.classe);
+      } else {
+        console.log(error);
+      }
+    };
+    fetchStudent();
+  }, [id]);
 
   useEffect(() => {
     switch (level) {
@@ -59,20 +82,8 @@ function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
   };
 
   useEffect(() => {
-    onSchoolInfoChange(vacation, level, classe);
+    onEditSchoolInfoChange(vacation, level, classe);
   });
-
-  const handleReset = () => {
-    setVacation("");
-    setLevel("");
-    setClasse("");
-  };
-
-  useEffect(() => {
-    if (resetData) {
-      handleReset();
-    }
-  }, [resetData]);
 
   return (
     <div>
@@ -147,4 +158,4 @@ function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
   );
 }
 
-export default SchoolInfoForm;
+export default EditSchoolInfoForm;

@@ -1,16 +1,20 @@
 import { Modal } from "antd";
 import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { NavLink } from "react-router-dom";
-import { supabase } from "../../Config/SupabaseConfig";
-import { NavBar } from "../../components/Navbar/NavBar";
-import OtherInfoForm from "./OtherInfoForm";
-import ParentInfoForm from "./ParentInfoForm";
-import SchoolInfoForm from "./SchoolInfoForm";
-import StudentAddressForm from "./StudentAddressForm";
-import StudentInfoForm from "./StudentInfoForm";
+import { NavLink, useParams } from "react-router-dom";
+import { supabase } from "../../Config/SupabaseConfig.jsx";
+import { NavBar } from "../Navbar/NavBar.jsx";
+import EditOtherInfoForm from "./EditOtherInfoForm.jsx";
+import EditParentInfoForm from "./EditParentInfoForm.jsx";
+import EditSchoolInfoForm from "./EditSchoolInfoForm.jsx";
+import EditStudentAddressForm from "./EditStudentAddressForm.jsx";
+import EditStudentInfoForm from "./EditStudentInfoForm.jsx";
 
-export function Inscription() {
+// import * as Yup from "yup";
+
+export function EditInscription() {
+  const { id } = useParams();
+
   const [studentName, setStudentName] = useState("");
   const [studentLastname, setStudentLastname] = useState("");
   const [studentBirth, setStudentBirth] = useState("");
@@ -41,9 +45,8 @@ export function Inscription() {
   const [studentEmail, SetStudentEmail] = useState("");
   const [studentPhone, SetStudentPhone] = useState("");
   const [studentOtherPhone, SetStudentOtherPhone] = useState("");
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleStudentInfo = (
+  const editHandleStudentInfo = (
     name,
     lastName,
     birth,
@@ -65,14 +68,14 @@ export function Inscription() {
     setStudentWtHandicap(wtHandicap);
   };
 
-  const handleStudentAddress = (address, department, common, city) => {
+  const editHandleStudentAddress = (address, department, common, city) => {
     SetStudentAddress(address);
     SetStudentDepartment(department);
     SetStudentCommon(common);
     SetStudentCity(city);
   };
 
-  const handleStudentParent = (
+  const editHandleStudentParent = (
     motherName,
     motherLastName,
     motherJob,
@@ -92,13 +95,13 @@ export function Inscription() {
     SetStudentDFather(dFather);
   };
 
-  const handleStudentSchool = (vacation, level, classe) => {
+  const editHandleStudentSchool = (vacation, level, classe) => {
     SetStudentVacation(vacation);
     SetStudentLevel(level);
     SetStudentClasse(classe);
   };
 
-  const handleStudentPerson = (
+  const editHandleStudentPerson = (
     personLink,
     nif,
     ninu,
@@ -114,62 +117,93 @@ export function Inscription() {
     SetStudentOtherPhone(otherPhone);
   };
 
-  const handleSubmit = async (e) => {
+  const handleUdapteStudents = async (e) => {
     e.preventDefault();
 
     try {
-      const { error } = await supabase.from("students").insert({
-        firstName: studentName,
-        lastName: studentLastname,
-        classe: studentClasse,
-        vacation: studentVacation,
-        level: studentLevel,
-        birth: studentBirth,
-        gender: studentGender,
-        departmentBirth: studentDepartmentBirth,
-        commonBirth: studentCommonBirth,
-        addressBirth: studentAddressBirth,
-        handicap: studentHandicap,
-        wtHandicap: studentWtHandicap,
-        address: studentAddress,
-        department: studentDepartment,
-        common: studentCommon,
-        city: studentCity,
-        firstMother: studentMotherName,
-        lastMother: studentMotherLastName,
-        jobMother: studentMotherJob,
-        statutMother: studentDMother,
-        firstFather: studentFatherName,
-        lastFather: studentFatherLastName,
-        jobFather: studentFatherJob,
-        statutFather: studentDFather,
-        linkPerson: studentPersonLink,
-        nif: studentNif,
-        ninu: studentNinu,
-        email: studentEmail,
-        phone: studentPhone,
-        otherPhone: studentOtherPhone,
-      });
+      const { error } = await supabase
+        .from("students")
+        .update({
+          firstName: studentName,
+          lastName: studentLastname,
+          classe: studentClasse,
+          vacation: studentVacation,
+          level: studentLevel,
+          birth: studentBirth,
+          gender: studentGender,
+          departmentBirth: studentDepartmentBirth,
+          commonBirth: studentCommonBirth,
+          addressBirth: studentAddressBirth,
+          handicap: studentHandicap,
+          wtHandicap: studentWtHandicap,
+          address: studentAddress,
+          department: studentDepartment,
+          common: studentCommon,
+          city: studentCity,
+          firstMother: studentMotherName,
+          lastMother: studentMotherLastName,
+          jobMother: studentMotherJob,
+          statutMother: studentDMother,
+          firstFather: studentFatherName,
+          lastFather: studentFatherLastName,
+          jobFather: studentFatherJob,
+          statutFather: studentDFather,
+          linkPerson: studentPersonLink,
+          nif: studentNif,
+          ninu: studentNinu,
+          email: studentEmail,
+          phone: studentPhone,
+          otherPhone: studentOtherPhone,
+        })
+        .eq("id", id)
+        .select("id");
 
       if (error) {
         throw error;
       } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
         Modal.success({
           content: "Formulaire soumis avec succès!",
           okButtonProps: {
             type: "default",
           },
         });
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        setSubmitted(true);
       }
     } catch (error) {
       console.log(error);
     }
-  };
+    console.log("It's ok");
 
-  const resetData = () => {
-    setSubmitted(false);
+    setStudentName("");
+    setStudentLastname("");
+    setStudentBirth("");
+    setStudentDepartmentBirth("");
+    setStudentCommonBirth("");
+    setStudentAddressBirth("");
+    setStudentGender("");
+    setStudentHandicap("");
+    setStudentWtHandicap("");
+    SetStudentAddress("");
+    SetStudentDepartment("");
+    SetStudentCommon("");
+    SetStudentCity("");
+    SetStudentmotherName("");
+    SetStudentMotherLastName("");
+    SetStudentMotherJob("");
+    SetStudentDMother("");
+    SetStudentFatherName("");
+    SetStudentFatherLastName("");
+    SetStudentFatherJob("");
+    SetStudentDFather("");
+    SetStudentVacation("");
+    SetStudentLevel("");
+    SetStudentClasse("");
+    SetStudentPersonLink("");
+    SetStudentNif("");
+    SetStudentNinu("");
+    SetStudentEmail("");
+    SetStudentPhone("");
+    SetStudentOtherPhone("");
   };
 
   return (
@@ -184,10 +218,12 @@ export function Inscription() {
             "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
             "text-supportingColor1 bg-white rounded-lg shadow-sm"
           }>
-          <NavLink className="text-3xl text-primaryColor" to={"/dashboard"}>
+          <NavLink className="text-3xl text-primaryColor" to={"/eleves"}>
             <BiArrowBack id="back" />
           </NavLink>
-          <h1 className="font-semibold text-2xl">Inscription</h1>
+          <h1 className="font-semibold text-2xl">
+            {studentName} {studentLastname}
+          </h1>
           <ul>
             <li>
               <NavLink className="text-supportingColor1" to={"/dashboard"}>
@@ -201,29 +237,17 @@ export function Inscription() {
             </li>
           </ul>
         </div>
-        <StudentInfoForm
-          onInfoChange={handleStudentInfo}
-          resetData={submitted}
+        <EditStudentInfoForm onEditInfoChange={editHandleStudentInfo} />
+        <EditStudentAddressForm
+          onEditAddressInfoChange={editHandleStudentAddress}
         />
-        <StudentAddressForm
-          onAddressInfoChange={handleStudentAddress}
-          resetData={submitted}
-        />
-        <ParentInfoForm
-          onParentInfoChange={handleStudentParent}
-          resetData={submitted}
-        />
-        <SchoolInfoForm
-          onSchoolInfoChange={handleStudentSchool}
-          resetData={submitted}
-        />
-        <OtherInfoForm
-          onOtherInfoChange={handleStudentPerson}
-          resetData={submitted}
-        />
+        <EditParentInfoForm onEditParentInfoChange={editHandleStudentParent} />
+        <EditSchoolInfoForm onEditSchoolInfoChange={editHandleStudentSchool} />
+        <EditOtherInfoForm onEditOtherInfoChange={editHandleStudentPerson} />
+
         <div className="text-center">
           <button
-            onClick={handleSubmit}
+            onClick={handleUdapteStudents}
             className="btn bg-primaryColor text-white border-none
             hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
             Soumettre le formulaire
@@ -233,5 +257,3 @@ export function Inscription() {
     </>
   );
 }
-
-export default Inscription;
