@@ -9,7 +9,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import logoRoberval from "../../assets/LOGO ROBERVAL-white.png";
+import logoRoberval from "../../assets/logoRoberval.png";
 import "./NavBar.scss";
 
 export function NavBar() {
