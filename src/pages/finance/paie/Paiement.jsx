@@ -31,7 +31,7 @@ export function Paiement() {
 
         if (data) {
           setStudentsP(data);
-          const sortedStatut = ["Non payé", "Avance", "Payé"];
+          const sortedStatut = ["Non Payé", "Avance", "Payé"];
           setPaiement(sortedStatut);
           const sortedClasse = [
             "1e Annee Kind",
