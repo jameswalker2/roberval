@@ -19,7 +19,7 @@ export function Login() {
 
   return (
     <>
-      <div className="h-screen bg-primaryColor">
+      <div className="h-screen bg-gradient-to-t from-indigo-700 to-primaryColor">
         <Toaster position={"top-center"} />
         <div className="absolute flex left-[15%] top-[10%] w-[70%] h-[80%] bg-white p-2 rounded-lg ">
           <div className=" bg-supportingColor4 rounded-lg w-[60%] flex justify-center ">
