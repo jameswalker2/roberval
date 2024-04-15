@@ -1,10 +1,10 @@
-import { Card } from "antd";
+import { DatePicker } from "antd";
 import { useState } from "react";
+import { Line } from "react-chartjs-2";
 import { NavBar } from "../../components/Navbar/NavBar";
-import AnnualCalcul from "./AnnualCalcul";
-import PeriodCalcul from "./PeriodCalcul";
+import CaisseLink from "./CaisseLink";
 
-// const { RangePicker } = DatePicker;
+const { RangePicker } = DatePicker;
 
 export default function Gain() {
   const [dateRange, setDateRange] = useState([]);
@@ -19,6 +19,35 @@ export default function Gain() {
   const [showAnnual, setShowAnnual] = useState(false);
   const [hidePeriod, setHidePeriod] = useState(false);
   const [test, setTest] = useState(false);
+  const [chartDataG, setChartDataG] = useState({
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Revenu",
+        data: [1200, 1500, 1800, 1400, 2000, 2200],
+        fill: true,
+        backgroundColor: "rgba(10, 700, 122, 0.2)",
+        borderColor: "rgb(10, 700, 122)",
+        borderWidth: 2,
+      },
+      {
+        label: "Dépense",
+        data: [100, 500, 1800, 100, 10000, 200],
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        borderWidth: 2,
+      },
+      {
+        label: "Perte",
+        data: [1000, 1000, 1000, 1000, 1000, 1000],
+        fill: true,
+        backgroundColor: "rgba(255, 215, 132, 0.2)",
+        borderColor: "rgb(255, 99, 15)",
+        borderWidth: 2,
+      },
+    ],
+  });
 
   const hide = () => {
     setHidePeriod(false);
@@ -79,6 +108,25 @@ export default function Gain() {
   //   setProfit(totalIncome - totalExpense);
   // };
 
+  const options = {
+    scales: {
+      x: {
+        display: true,
+      },
+      y: {
+        beginAtZero: true,
+        display: true,
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    maintainAspectRatio: false,
+    responsive: true,
+  };
+
   const handleResetHideP = (hideP) => {
     if (hideP) {
       setShowPeriod(false);
@@ -94,63 +142,52 @@ export default function Gain() {
   return (
     <>
       <NavBar />
-
       <div className="h-screen overflow-y-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
-        {!showPeriod && !showAnnual ? (
-          <div className="flex justify-center mt-[25%]">
-            <Card className="w-[30%] rounded-lg shadow-sm">
-              <div className="text-center mb-5">
-                <h2 className="font-semibold text-supportingColor1">
-                  Que voulez vous calculer ?
-                </h2>
-              </div>
-              <div className="flex flex-wrap justify-between">
-                <button
-                  onClick={() => setShowPeriod(true)}
-                  className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
-            hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
-            hover:scale-110 duration-300">
-                  Montant par période
-                </button>
-                <button
-                  onClick={() => setShowAnnual(true)}
-                  className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
-            hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
-            hover:scale-110 duration-300">
-                  Montant annuel
-                </button>
-              </div>
-            </Card>
+        <div className="w-[95%] p-4 text-supportingColor1 bg-white rounded-lg shadow-sm mb-10">
+          <h1 className="font-semibold text-2xl">Dashboard profit & perte</h1>
+        </div>
+
+        <div
+          className="w-[95%] p-4 text-supportingColor1 bg-white rounded-lg shadow-sm 
+        flex items-center justify-between">
+          <div>
+            <h2>Total Balance :</h2>
+            <p className="text-4xl font-semibold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+              500,000 Ht
+            </p>
           </div>
-        ) : (
-          ""
-        )}
-
-        {!showPeriod ? "" : <PeriodCalcul resetHideP={handleResetHideP} />}
-        {!showAnnual ? "" : <AnnualCalcul resetHideA={handleResetHideA} />}
-
-        {/* <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-            <div className="font-medium text-supportingColor1 mb-5">
-              <h2>Sélectionnez les critères</h2>
-            </div>
-          <div className="flex flex-wrap justify-center">
+          <div className="flex items-center">
             <RangePicker
-              className="w-[40rem] border-primaryColor border-2 rounded-lg bg-white
+              className="w-60 h-10 mr-5 border-primaryColor border-2 rounded-lg bg-white
               focus:file-input-primaryColor"
             />
-            <Button
+            <button
               type="search"
-              className="btn btn-xs text-xs h-10 w-32 ml-20 border-none text-white bg-primaryColor
+              className="btn btn-xs text-xs h-10 w-24 border-none text-white bg-primaryColor
               hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100">
-              <Search size={20} />
               Search
-            </Button>
+            </button>
           </div>
         </div>
 
-        <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div className="font-medium text-supportingColor1 mb-5">
-            <h2>Profit et perte</h2>
+        <div className="w-[95%] mt-10 flex justify-between">
+          <CaisseLink />
+          <div className="w-[80%] p-4 bg-white rounded-lg shadow-sm">
+            <div className="mb-5">Dashboard</div>
+            <div>
+              <Line
+                className="h-80 w-40 "
+                data={chartDataG}
+                options={options}
+              />
+            </div>
+            <div className="text-center">dsfd</div>
+          </div>
+        </div>
+
+        <div className="w-[95%] p-4 mt-10 bg-white rounded-lg shadow-sm">
+          <div className="font- text-supportingColor1 mb-5">
+            <h2>Plus détails</h2>
           </div>
           <div className="overflow-y-hidden overflow-x-auto h-auto mt-10 rounded-lg bg-white p-4">
             <table className="table table-xs">
@@ -217,7 +254,7 @@ export default function Gain() {
               </table>
             </div>
           )}
-        </div> */}
+        </div>
       </div>
     </>
   );
