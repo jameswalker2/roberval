@@ -1,9 +1,10 @@
-import { Card, DatePicker } from "antd";
+import { Card } from "antd";
 import { useState } from "react";
-import { supabase } from "../../Config/SupabaseConfig";
 import { NavBar } from "../../components/Navbar/NavBar";
+import AnnualCalcul from "./AnnualCalcul";
+import PeriodCalcul from "./PeriodCalcul";
 
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 
 export default function Gain() {
   const [dateRange, setDateRange] = useState([]);
@@ -14,114 +15,120 @@ export default function Gain() {
   const [totalExpense, setTotalExpense] = useState(0);
   const [profit, setProfit] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [showPeriod, setShowPeriod] = useState(false);
+  const [showAnnual, setShowAnnual] = useState(false);
+  const [hidePeriod, setHidePeriod] = useState(false);
+  const [test, setTest] = useState(false);
 
-  const handleSearch = async () => {
-    if (dateRange.length === 2) {
-      try {
-        const { data: income, error: incomeError } = await supabase
-          .from("income")
-          .select()
-          .gt("date", dateRange[0])
-          .lte("date", dateRange[1]);
+  const hide = () => {
+    setHidePeriod(false);
+  };
 
-        if (incomeError) {
-          throw incomeError;
-        } else {
-          setDataIncome(income);
-          calculateTotalIncome(income);
-        }
+  // const handleSearch = async () => {
+  //   if (dateRange.length === 2) {
+  //     try {
+  //       const { data: income, error: incomeError } = await supabase
+  //         .from("income")
+  //         .select()
+  //         .gt("date", dateRange[0])
+  //         .lte("date", dateRange[1]);
 
-        const { data: expense, error: expenseError } = await supabase
-          .from("expense")
-          .select()
-          .gte("date", dateRange[0])
-          .lte("date", dateRange[1]);
+  //       if (incomeError) {
+  //         throw incomeError;
+  //       } else {
+  //         setDataIncome(income);
+  //         calculateTotalIncome(income);
+  //       }
 
-        if (expenseError) {
-          throw expenseError;
-        } else {
-          setDataExpense(expense);
-          calculateTotalExpense(expense);
-        }
-        setShowResult(true);
-        setProfit(totalIncome - totalExpense);
-      } catch (error) {
-        console.log(error.message);
-      }
+  //       const { data: expense, error: expenseError } = await supabase
+  //         .from("expense")
+  //         .select()
+  //         .gte("date", dateRange[0])
+  //         .lte("date", dateRange[1]);
+
+  //       if (expenseError) {
+  //         throw expenseError;
+  //       } else {
+  //         setDataExpense(expense);
+  //         calculateTotalExpense(expense);
+  //       }
+  //       setShowResult(true);
+  //       setProfit(totalIncome - totalExpense);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   }
+  // };
+
+  // const calculateTotalIncome = (data) => {
+  //   let total = 0;
+  //   data.forEach((item) => {
+  //     total += item.amount;
+  //     setDate(item.date);
+  //   });
+  //   setTotalIncome(total);
+  //   setProfit(totalIncome - totalExpense);
+  // };
+
+  // const calculateTotalExpense = (data) => {
+  //   let total = 0;
+  //   data.forEach((item) => {
+  //     total += item.amount;
+  //   });
+  //   setTotalExpense(total);
+  //   setProfit(totalIncome - totalExpense);
+  // };
+
+  const handleResetHideP = (hideP) => {
+    if (hideP) {
+      setShowPeriod(false);
     }
   };
 
-  const calculateTotalIncome = (data) => {
-    let total = 0;
-    data.forEach((item) => {
-      total += item.amount;
-      setDate(item.date);
-    });
-    setTotalIncome(total);
-    setProfit(totalIncome - totalExpense);
-  };
-
-  const calculateTotalExpense = (data) => {
-    let total = 0;
-    data.forEach((item) => {
-      total += item.amount;
-    });
-    setTotalExpense(total);
-    setProfit(totalIncome - totalExpense);
+  const handleResetHideA = (hideA) => {
+    if (hideA) {
+      setShowAnnual(false);
+    }
   };
 
   return (
     <>
       <NavBar />
-      <div className="h-screen overflow-y-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
-        {/* <div
-          className={
-            "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
-            "text-supportingColor1 bg-white rounded-lg shadow-sm"
-          }>
-          <h1 className="font-semibold text-2xl">Staffs</h1>
-          <ul>
-            <li>
-              <NavLink className="text-supportingColor1" to={"/dashboard"}>
-                Dashboard
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className="text-supportingColor1" to={"/caisse"}>
-                Caisse
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className="text-supportingColor1" to={"/gain"}>
-                Profit & Perte
-              </NavLink>
-            </li>
-          </ul>
-        </div> */}
 
-        <div className="flex justify-center mt-[25%]">
-          <Card className="w-[30%] rounded-lg shadow-sm">
-            <div className="text-center mb-5">
-              <h2 className="font-semibold text-supportingColor1">
-                Que voulez vous calculer ?
-              </h2>
-            </div>
-            <div className="flex flex-wrap justify-between">
-              <button
-                className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
-              hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
-              hover:scale-110 duration-300">
-                Montant par période
-              </button>
-              <button
-                className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
-              hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
-              hover:scale-110 duration-300">
-                Montant annuel
-              </button>
-            </div>
-          </Card>
-        </div>
+      <div className="h-screen overflow-y-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
+        {!showPeriod && !showAnnual ? (
+          <div className="flex justify-center mt-[25%]">
+            <Card className="w-[30%] rounded-lg shadow-sm">
+              <div className="text-center mb-5">
+                <h2 className="font-semibold text-supportingColor1">
+                  Que voulez vous calculer ?
+                </h2>
+              </div>
+              <div className="flex flex-wrap justify-between">
+                <button
+                  onClick={() => setShowPeriod(true)}
+                  className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
+            hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
+            hover:scale-110 duration-300">
+                  Montant par période
+                </button>
+                <button
+                  onClick={() => setShowAnnual(true)}
+                  className="btn btn-xs h-10 w-40 text-primaryColor bg-primaryColor bg-opacity-15 border-none
+            hover:bg-primaryColor hover:bg-opacity-15 transition ease-in-out delay-15 hover:-translate-y-1
+            hover:scale-110 duration-300">
+                  Montant annuel
+                </button>
+              </div>
+            </Card>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {!showPeriod ? "" : <PeriodCalcul resetHideP={handleResetHideP} />}
+        {!showAnnual ? "" : <AnnualCalcul resetHideA={handleResetHideA} />}
+
         {/* <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
             <div className="font-medium text-supportingColor1 mb-5">
               <h2>Sélectionnez les critères</h2>

@@ -71,7 +71,7 @@ function CardLink() {
             className="w-64 bg-color2 mt-10 mr-[60px] shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg">Total Eleves</h2>
+              <h2 className="text-[15px]">Total Eleves</h2>
               <GraduationCap
                 size={40}
                 strokeWidth={1.5}
@@ -86,7 +86,7 @@ function CardLink() {
             className="w-64 mt-10 mr-[60px] shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg">Total Staffs</h2>
+              <h2 className="text-[15px]">Total Staffs</h2>
 
               <Users
                 size={40}
@@ -102,7 +102,7 @@ function CardLink() {
             className="w-64 mt-10 mr-[60px] shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg">Total Professeurs</h2>
+              <h2 className="text-[15px]">Total Professeurs</h2>
               <Users
                 size={40}
                 strokeWidth={1.5}
@@ -120,7 +120,7 @@ function CardLink() {
             className="w-64 mt-10 shadow-sm transition ease-in-out delay-15 
             hover:-translate-y-1 hover:scale-110 duration-300">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg">Total Inscription</h2>
+              <h2 className="text-[15px]">Total Inscription</h2>
               <FolderKanban
                 size={40}
                 strokeWidth={1.5}
