@@ -1,6 +1,8 @@
 import { DatePicker } from "antd";
-import { useState } from "react";
+import { Circle } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { supabase } from "../../Config/SupabaseConfig";
 import { NavBar } from "../../components/Navbar/NavBar";
 import CaisseLink from "./CaisseLink";
 
@@ -24,7 +26,7 @@ export default function Gain() {
     datasets: [
       {
         label: "Revenu",
-        data: [1200, 1500, 1800, 1400, 2000, 2200],
+        data: [1200, 9500, 1800, 1400, 2000, 2200],
         fill: true,
         backgroundColor: "rgba(10, 700, 122, 0.2)",
         borderColor: "rgb(10, 700, 122)",
@@ -32,7 +34,7 @@ export default function Gain() {
       },
       {
         label: "Dépense",
-        data: [100, 500, 1800, 100, 10000, 200],
+        data: [100, 500, 1800, 100, 7000, 200],
         fill: true,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgb(255, 99, 132)",
@@ -40,18 +42,107 @@ export default function Gain() {
       },
       {
         label: "Perte",
-        data: [1000, 1000, 1000, 1000, 1000, 1000],
+        data: [10000, 10000, 10000, 10000, 10000, 10000],
         fill: true,
         backgroundColor: "rgba(255, 215, 132, 0.2)",
-        borderColor: "rgb(255, 99, 15)",
+        borderColor: "rgb(255, 215, 32)",
         borderWidth: 2,
       },
     ],
   });
 
+  const options = {
+    scales: {
+      x: {
+        display: true,
+      },
+      y: {
+        beginAtZero: true,
+        display: true,
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    maintainAspectRatio: false,
+    responsive: true,
+  };
+
   const hide = () => {
     setHidePeriod(false);
   };
+
+  const handleResetHideP = (hideP) => {
+    if (hideP) {
+      setShowPeriod(false);
+    }
+  };
+
+  const handleResetHideA = (hideA) => {
+    if (hideA) {
+      setShowAnnual(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleFetchData = async () => {
+      try {
+        const { data: classes, error: classesError } = await supabase
+          .from("classes")
+          .select("*");
+
+        if (classes) {
+          // Group classes by classeAmount
+          const groupedClasses = classes.reduce((acc, curr) => {
+            if (!acc[curr.classeAmount]) {
+              acc[curr.classeAmount] = [];
+            }
+            acc[curr.classeAmount].push(curr);
+            return acc;
+          }, {});
+
+          let totalStudentsTotalAmount = 0;
+
+          // Iterate over grouped classes
+          for (const classeAmount in groupedClasses) {
+            const classesWithSameAmount = groupedClasses[classeAmount];
+
+            // Calculate total students for classes with the same classeAmount
+            let totalStudents = 0;
+            for (const cls of classesWithSameAmount) {
+              const { data: students, error: studentsError } = await supabase
+                .from("students")
+                .select("*")
+                .eq("", cls.id);
+
+              if (students) {
+                totalStudents += students.length;
+              } else {
+                throw studentsError;
+              }
+            }
+
+            // Multiply total students by classeAmount and add to total
+            totalStudentsTotalAmount += totalStudents * parseInt(classeAmount);
+            console.log(classeAmount);
+          }
+
+          // console.log(
+          //   "Total students multiplied by classeAmount:",
+          //   totalStudentsTotalAmount,
+          // );
+        } else {
+          throw classesError;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    handleFetchData();
+  });
 
   // const handleSearch = async () => {
   //   if (dateRange.length === 2) {
@@ -108,37 +199,6 @@ export default function Gain() {
   //   setProfit(totalIncome - totalExpense);
   // };
 
-  const options = {
-    scales: {
-      x: {
-        display: true,
-      },
-      y: {
-        beginAtZero: true,
-        display: true,
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    maintainAspectRatio: false,
-    responsive: true,
-  };
-
-  const handleResetHideP = (hideP) => {
-    if (hideP) {
-      setShowPeriod(false);
-    }
-  };
-
-  const handleResetHideA = (hideA) => {
-    if (hideA) {
-      setShowAnnual(false);
-    }
-  };
-
   return (
     <>
       <NavBar />
@@ -151,7 +211,7 @@ export default function Gain() {
           className="w-[95%] p-4 text-supportingColor1 bg-white rounded-lg shadow-sm 
         flex items-center justify-between">
           <div>
-            <h2>Total Balance :</h2>
+            <h2>Votre Balance :</h2>
             <p className="text-4xl font-semibold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
               500,000 Ht
             </p>
@@ -172,8 +232,8 @@ export default function Gain() {
 
         <div className="w-[95%] mt-10 flex justify-between">
           <CaisseLink />
-          <div className="w-[80%] p-4 bg-white rounded-lg shadow-sm">
-            <div className="mb-5">Dashboard</div>
+          <div className="w-[70%] p-4 bg-white rounded-lg shadow-sm">
+            <div className="mb-5">Analise annuel</div>
             <div>
               <Line
                 className="h-80 w-40 "
@@ -181,7 +241,20 @@ export default function Gain() {
                 options={options}
               />
             </div>
-            <div className="text-center">dsfd</div>
+            <div className="flex flex-auto justify-center mt-5 mb-0">
+              <h4 className="text-supportingColor1 flex items-center ">
+                <Circle className="text-supportingColor2 bg-supportingColor2 rounded-full w-2 h-2 mr-2" />
+                Revenu
+              </h4>
+              <h4 className="text-supportingColor1 flex items-center ">
+                <Circle className="text-supportingColor3 bg-supportingColor3 rounded-full w-2 h-2 mr-2 ml-5" />
+                Dépense
+              </h4>
+              <h4 className="text-supportingColor1 flex items-center ">
+                <Circle className="text-supportingColor4 bg-supportingColor4 rounded-full w-2 h-2 mr-2 ml-5" />
+                Montant prévu
+              </h4>
+            </div>
           </div>
         </div>
 

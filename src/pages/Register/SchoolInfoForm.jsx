@@ -8,32 +8,23 @@ function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
 
   useEffect(() => {
     switch (level) {
-      case "Prescolaire":
+      case "PRESCOLAIRE":
         setAvailableClasses([
-          "1e Annee Kind",
-          "2e Annee Kind",
-          "3e Annee Kind",
+          "PRESCOLAIRE 1",
+          "PRESCOLAIRE 2",
+          "PRESCOLAIRE 3",
         ]);
         break;
-      case "Fondamental I":
-        setAvailableClasses([
-          "1e Annee Fond",
-          "2e Annee Fond",
-          "3e Annee Fond",
-          "4e Annee Fond",
-        ]);
+      case "FONDAMENTAL 1":
+        setAvailableClasses(["1 AF", "2 AF", "3 AF", "4 AF"]);
         break;
-      case "Fondamental II":
-        setAvailableClasses(["5e Annee Fond", "6e Annee Fond"]);
+      case "FONDAMENTAL 2":
+        setAvailableClasses(["5 AF", "6 AF"]);
         break;
-      case "Fondamental III":
-        setAvailableClasses([
-          "7e Annee Fond",
-          "8e Annee Fond",
-          "9e Annee Fond",
-        ]);
+      case "Fondamental 3":
+        setAvailableClasses(["7 AF", "8 AF", "9 AF"]);
         break;
-      case "Secondaire":
+      case "SECONDAIRE":
         setAvailableClasses(["NS I", "NS II", "NS III", "NS IV"]);
         break;
       default:
