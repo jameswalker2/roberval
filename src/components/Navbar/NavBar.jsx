@@ -20,7 +20,7 @@ export function NavBar() {
   };
   return (
     <>
-      <div className="fixed w-56 h-[100%] bg-primaryColor">
+      <div className="fixed w-56 h-[100%] bg-gradient-to-t from-indigo-700 to-primaryColor">
         <span className="flex items-center p-5 text-white">
           <img style={{ width: 50 }} src={logoRoberval} alt="svg" />
           <h2 className="text-[20px] font-bold ml-5">Roberval</h2>

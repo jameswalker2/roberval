@@ -1,7 +1,6 @@
 import { useAuth } from "@/pages/AuthConfig/AuthContext.jsx";
-import { Modal } from "antd";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import imageRoberval from "../../assets/welcom_to_roberval.svg";
@@ -20,8 +19,8 @@ export function Login() {
 
   return (
     <>
-      <div className="h-screen bg-primaryColor">
-        <Toaster position={"top-right"} />
+      <div className="h-screen bg-gradient-to-t from-indigo-700 to-primaryColor">
+        <Toaster position={"top-center"} />
         <div className="absolute flex left-[15%] top-[10%] w-[70%] h-[80%] bg-white p-2 rounded-lg ">
           <div className=" bg-supportingColor4 rounded-lg w-[60%] flex justify-center ">
             <img style={{ width: 500 }} src={imageRoberval} alt="svg" />
@@ -39,14 +38,13 @@ export function Login() {
                     setErrors(error.errors);
                   } else {
                     setTimeout(() => {
-                      Modal.error({
-                        content:
-                          "Email ou Password est incorrect, Essayer à nouveau",
-                        okButtonProps: {
-                          type: "default",
+                      toast.error(
+                        "Email ou password est incorrect, essayer à nouveau !",
+                        {
+                          style: { minWidth: "500px" },
                         },
-                      });
-                    }, 1000);
+                      );
+                    });
                   }
                 } finally {
                   setSubmitting(false);
@@ -58,7 +56,7 @@ export function Login() {
                     <h1 className="text-[30px] capitalize font-bold ">
                       Se connecter
                     </h1>
-                    <h2 className="text-md mb-10  font-normal">
+                    <h2 className="text-md mb-20  font-normal">
                       Entrez votre email et votre mot de passe
                     </h2>
                     <div className="form-control w-full max-w-xs mb-5">

@@ -44,9 +44,19 @@ export function Dashboard() {
             <ChartsIncome />
           </Card>
           {/* <CaisseLink /> */}
-          <div className="w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm mt-10">
+          <div className="w-[47%] h-16 p-4 mr-3 text-supportingColor1 bg-white rounded-lg shadow-sm mt-10">
+            <div className="mb-10">
+              <h4>Notification</h4>
+            </div>
+            <div className="flex">
+              <div>avatar</div>
+              <div></div>
+            </div>
+          </div>
+
+          <div className="w-[47%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm mt-10">
             <div>
-              <h4>Tableau de notification</h4>
+              <h4>Notifications</h4>
             </div>
           </div>
         </div>
