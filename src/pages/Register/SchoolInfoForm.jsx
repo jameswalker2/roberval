@@ -21,7 +21,7 @@ function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
       case "FONDAMENTAL 2":
         setAvailableClasses(["5 AF", "6 AF"]);
         break;
-      case "Fondamental 3":
+      case "FONDAMENTAL 3":
         setAvailableClasses(["7 AF", "8 AF", "9 AF"]);
         break;
       case "SECONDAIRE":
@@ -102,11 +102,11 @@ function SchoolInfoForm({ onSchoolInfoChange, resetData }) {
               <option
                 value={"0"}
                 className="text-gray-400">{`Niveau d'enseignement`}</option>
-              <option value="Prescolaire">Prescolaire</option>
-              <option value="Fondamental I">Fondamental I</option>
-              <option value="Fondamental II">Fondamental II</option>
-              <option value="Fondamental III">Fondamental III</option>
-              <option value="Secondaire">Secondaire</option>
+              <option value="PRESCOLAIRE">PRESCOLAIRE</option>
+              <option value="FONDAMENTAL 1">FONDAMENTAL 1</option>
+              <option value="FONDAMENTAL 2">FONDAMENTAL 2</option>
+              <option value="FONDAMENTAL 3">FONDAMENTAL 3</option>
+              <option value="SECONDAIRE">SECONDAIRE</option>
             </select>
             <div className="label">
               <span className="label-text-alt"></span>
