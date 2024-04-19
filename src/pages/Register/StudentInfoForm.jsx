@@ -62,7 +62,7 @@ function StudentInfoForm({ onInfoChange, resetData }) {
   const handleReset = () => {
     setName("");
     setLastName("");
-    setBirth("");
+    setBirth(null);
     setDepartmentBirth("");
     setCommonBirth("");
     setCommonBirth("");
@@ -133,6 +133,7 @@ function StudentInfoForm({ onInfoChange, resetData }) {
               </span>
             </div>
             <DatePicker
+              value={birth}
               onChange={(date) => setBirth(dayjs(date))}
               placeholder="Date de naissance"
               className="input bg-slate-100 border-primaryColor border-2"

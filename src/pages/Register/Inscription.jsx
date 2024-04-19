@@ -162,14 +162,13 @@ export function Inscription() {
         });
         window.scrollTo({ top: 0, behavior: "smooth" });
         setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 0);
       }
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const resetData = () => {
-    setSubmitted(false);
   };
 
   return (
