@@ -34,18 +34,18 @@ export function Paiement() {
           const sortedStatut = ["Non Payé", "Avance", "Payé"];
           setPaiement(sortedStatut);
           const sortedClasse = [
-            "1e Annee Kind",
-            "2e Annee Kind",
-            "3e Annee Kind",
-            "1e Annee Fond",
-            "2e Annee Fond",
-            "3e Annee Fond",
-            "4e Annee Fond",
-            "5e Annee Fond",
-            "6e Annee Fond",
-            "7e Annee Fond",
-            "8e Annee Fond",
-            "9e Annee Fond",
+            "PRESCOLAIRE 1",
+            "PRESCOLAIRE 2",
+            "PRESCOLAIRE 3",
+            "1 AF",
+            "2 AF",
+            "3 AF",
+            "4 AF",
+            "5 AF",
+            "6 AF",
+            "7 AF",
+            "8 AF",
+            "9 AF",
             "NS I",
             "NS II",
             "NS III",
@@ -53,10 +53,10 @@ export function Paiement() {
           ];
 
           const kindYears = sortedClasse.filter((classe) =>
-            classe.includes("Kind"),
+            classe.includes("PRESCOLAIRE"),
           );
           const fondYears = sortedClasse.filter((classe) =>
-            classe.includes("Fond"),
+            classe.includes("AF"),
           );
           const nsYears = sortedClasse.filter((classe) =>
             classe.includes("NS"),
