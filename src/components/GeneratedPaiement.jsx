@@ -123,26 +123,26 @@ export function GeneratedPaiement() {
     let getAmount = 0;
 
     switch (balanceStudent) {
-      case "1e Annee Kind":
-      case "2e Annee Kind":
-      case "3e Annee Kind":
+      case "1 AK":
+      case "2 AK":
+      case "3 AK":
         getAmount = 6500;
         break;
-      case "1e Annee Fond":
-      case "2e Annee Fond":
-      case "3e Annee Fond":
+      case "1 AF":
+      case "2 AF":
+      case "3 AF":
         getAmount = 4500;
         break;
-      case "4e Annee Fond":
-      case "5e Annee Fond":
-      case "6e Annee Fond":
+      case "4 AF":
+      case "5 AF":
+      case "6 AF":
         getAmount = 5000;
         break;
-      case "7e Annee Fond":
-      case "8e Annee Fond":
+      case "7 AF":
+      case "8 AF":
         getAmount = 6500;
         break;
-      case "9e Annee Fond":
+      case "9 AF":
         getAmount = 7000;
         break;
       case "NS I":
