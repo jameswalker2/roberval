@@ -123,9 +123,9 @@ export function GeneratedPaiement() {
     let getAmount = 0;
 
     switch (balanceStudent) {
-      case "1 AK":
-      case "2 AK":
-      case "3 AK":
+      case "PRESCOLAIRE 1":
+      case "PRESCOLAIRE 2":
+      case "PRESCOLAIRE 3":
         getAmount = 6500;
         break;
       case "1 AF":
