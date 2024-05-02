@@ -31,30 +31,21 @@ function EditSchoolInfoForm({ onEditSchoolInfoChange }) {
 
   useEffect(() => {
     switch (level) {
-      case "Prescolaire":
+      case "PRESCOLAIRE":
         setAvailableClasses([
-          "1e Annee Kind",
-          "2e Annee Kind",
-          "3e Annee Kind",
+          "PRESCOLAIRE 1",
+          "PRESCOLAIRE 2",
+          "PRESCOLAIRE 3",
         ]);
         break;
-      case "Fondamental I":
-        setAvailableClasses([
-          "1e Annee Fond",
-          "2e Annee Fond",
-          "3e Annee Fond",
-          "4e Annee Fond",
-        ]);
+      case "FONDAMENTAL I":
+        setAvailableClasses(["1 AF", "2 AF", "3 AF", "4 AF"]);
         break;
-      case "Fondamental II":
-        setAvailableClasses(["5e Annee Fond", "6e Annee Fond"]);
+      case "FONDAMENTAL II":
+        setAvailableClasses(["5 AF", "6 AF"]);
         break;
-      case "Fondamental III":
-        setAvailableClasses([
-          "7e Annee Fond",
-          "8e Annee Fond",
-          "9e Annee Fond",
-        ]);
+      case "FONDAMENTAL III":
+        setAvailableClasses(["7 AF", "8 AF", "9 AF"]);
         break;
       case "Secondaire":
         setAvailableClasses(["NS I", "NS II", "NS III", "NS IV"]);
@@ -122,10 +113,10 @@ function EditSchoolInfoForm({ onEditSchoolInfoChange }) {
               <option
                 value={"0"}
                 className="text-gray-400">{`Niveau d'enseignement`}</option>
-              <option value="Prescolaire">Prescolaire</option>
-              <option value="Fondamental I">Fondamental I</option>
-              <option value="Fondamental II">Fondamental II</option>
-              <option value="Fondamental III">Fondamental III</option>
+              <option value="PRESCOLAIRE">PRESCOLAIRE</option>
+              <option value="FONDAMENTAL I">FONDAMENTAL I</option>
+              <option value="FONDAMENTAL II">FONDAMENTAL II</option>
+              <option value="FONDAMENTAL III">FONDAMENTAL III</option>
               <option value="Secondaire">Secondaire</option>
             </select>
             <div className="label">
