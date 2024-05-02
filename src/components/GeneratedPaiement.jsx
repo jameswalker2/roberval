@@ -98,6 +98,19 @@ export function GeneratedPaiement() {
         throw error2;
       }
 
+      const { error: error3 } = await supabase.from("income").insert([
+        {
+          amount,
+          nameID: students_id,
+          type: "Frais Scolaire",
+          what: "Frais Scolaire",
+        },
+      ]);
+
+      if (error3) {
+        throw error3;
+      }
+
       setSearchResults([]);
       Modal.success({
         title: "Succès !",

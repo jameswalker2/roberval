@@ -1,29 +1,33 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Button, DatePicker, Empty, Modal } from "antd";
+import { Button, DatePicker, Empty, Modal, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const incomePerPage = 20;
 export function Income() {
   const [incomes, setIncomes] = useState([]);
-  const [searchIncome, setSearchIncome] = useState("");
+  const [incomesType, setIncomesType] = useState([]);
+  // const [searchIncome, setSearchIncome] = useState("");
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [mode, setMode] = useState("");
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState();
+  const [what, setWhat] = useState("");
   const [show, setShow] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedIncome, setSelectedIncome] = useState(false);
 
   useEffect(() => {
     const fetchIncome = async () => {
       try {
-        const { data } = await supabase
-          .from("income")
-          .select("*")
-          .textSearch(searchIncome);
+        const { data } = await supabase.from("income").select("*");
+        // .textSearch(searchIncome);
 
         if (data) {
           setIncomes(data);
+          setIncomesType([...new Set(data.map((income) => income.type))]);
         }
       } catch (error) {
         console.log(error);
@@ -31,7 +35,7 @@ export function Income() {
     };
 
     return () => fetchIncome();
-  }, [searchIncome]);
+  }, []);
 
   const handleAddIncome = async (e) => {
     e.preventDefault();
@@ -43,6 +47,7 @@ export function Income() {
         mode,
         date,
         amount,
+        what,
       },
     ]);
 
@@ -97,6 +102,19 @@ export function Income() {
       console.log(error.message);
     }
   };
+
+  const collectionOptionsSorted = incomesType.map((category) => ({
+    value: category,
+    label: category,
+  }));
+
+  const filterStaffs = selectedIncome
+    ? incomes.filter((income) => income.type === selectedIncome)
+    : incomes;
+
+  const startIndex = (currentPage - 1) * incomePerPage;
+  const endIndex = startIndex + incomePerPage;
+  const paginatedIncome = filterStaffs.slice(startIndex, endIndex);
 
   useEffect(() => {
     const incomeChannel = supabase
@@ -197,7 +215,7 @@ export function Income() {
                   <label className="form-control w-full max-w-xs ">
                     <div className="label">
                       <span className="label-text text-supportingColor1">
-                        Type de dépense
+                        Type de revenu
                       </span>
                     </div>
                     <select
@@ -208,6 +226,9 @@ export function Income() {
                         Type
                       </option>
                       <option value="Donnation">Donnation</option>
+                      <option value="Activité Scolaire">
+                        Activité Scolaire
+                      </option>
                       <option value="Autres">Autres</option>
                     </select>
                   </label>
@@ -254,12 +275,27 @@ export function Income() {
                       className="input bg-slate-100 border-primaryColor border-2"
                     />
                   </label>
-                  <button
-                    type="submit"
-                    className="btn bg-primaryColor text-white border-none
-                hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
-                    Soumettre
-                  </button>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Description
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setWhat(e.target.value)}
+                      type="text"
+                      placeholder="Description"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs ml-[90%]">
+                    <button
+                      type="submit"
+                      className="btn bg-primaryColor text-white border-none 
+                      hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9">
+                      Soumettre
+                    </button>
+                  </label>
                 </div>
               </form>
             </div>
@@ -271,62 +307,72 @@ export function Income() {
             <h2 className="text-supportingColor1 font-medium">
               Liste de revenus
             </h2>
-            <input
-              onChange={(e) => setSearchIncome(e.target.value)}
-              type="search"
-              placeholder="Recherche rapide"
-              className="input bg-white border-2 border-primaryColor focus:file-input-primary  h-9 w-96 max-w-xs ml-60"
-            />
+            <select
+              onChange={(e) => setSelectedIncome(e.target.value)}
+              className="select max-w-xs w-96 mr-0 bg-white border-primaryColor border-2 text-supportingColor1">
+              <option value="" className="text-gray-300">
+                Recherche par role
+              </option>
+              {collectionOptionsSorted.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           {/**/}
           <div>
             <div className="overflow-x-auto">
-              {incomes.length > 0 ? (
-                <table className="table">
-                  <thead className="text-supportingColor1">
-                    <tr>
-                      <th>ID</th>
-                      <th>Nom</th>
-                      <th>Type de dépense</th>
-                      <th>Mode de Paiement</th>
-                      <th>Date</th>
-                      <th>Montant</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  {incomes
-                    .filter((expense) =>
-                      expense.name
-                        .toLowerCase()
-                        .includes(searchIncome.toLowerCase()),
-                    )
-                    .map((expense) => (
-                      <tbody key={expense.id}>
-                        <tr>
-                          <th>0{expense.id}</th>
-                          <td>{expense.name}</td>
-                          <td>
-                            {expense.type}
-                            {expense.what}
-                          </td>
-                          <td>{expense.mode}</td>
-                          <td>{expense.date}</td>
-                          <td>{expense.amount}</td>
-                          <td>
-                            <Button
-                              onClick={() => handleDeleteIncome(expense.id)}
-                              type="submit"
-                              className={
-                                "btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 " +
-                                "hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
-                              }>
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    ))}
-                </table>
+              {paginatedIncome.length > 0 ? (
+                <div>
+                  <table className="table">
+                    <thead className="text-supportingColor1">
+                      <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Type de revenu</th>
+                        <th>Mode de Paiement</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    {paginatedIncome
+                      // .filter((income) => income.type !== "Frais Scolaire")
+                      .map((income) => (
+                        <tbody key={income.id}>
+                          <tr>
+                            <th>0{income.id}</th>
+                            <td>{income.name}</td>
+                            <td>{income.type}</td>
+                            <td>{income.mode}</td>
+                            <td>{income.date}</td>
+                            <td>{income.amount}</td>
+                            <td>{income.what}</td>
+                            <td>
+                              <Button
+                                onClick={() => handleDeleteIncome(income.id)}
+                                type="submit"
+                                className={
+                                  "btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 " +
+                                  "hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
+                                }>
+                                Delete
+                              </Button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      ))}
+                  </table>
+                  <Pagination
+                    current={currentPage}
+                    pageSize={incomePerPage}
+                    total={incomes.length}
+                    onChange={(page) => setCurrentPage(page)}
+                    className="text-center mt-10"
+                  />
+                </div>
               ) : (
                 <Empty description={"Aucune donnée disponible"} />
               )}

@@ -27,13 +27,14 @@ export function UpdatePaie() {
   const [bourse, setBourse] = useState("");
   const [nouveauMontant, setNouveauMontant] = useState(0);
   const [getId, setGetId] = useState("");
+  const [ID, setID] = useState("");
 
   useEffect(() => {
     const fetchStudent = async () => {
       const { data, error } = await supabase
         .from("generated_paiement")
         .select(`*, students (*)`)
-        .eq("id", id)
+        .eq("student_id", id)
         .single();
 
       if (data) {
@@ -53,7 +54,7 @@ export function UpdatePaie() {
         setUpdateMode(data.mode);
         setGetId(data.student_id);
         setBourse(data.bourse);
-        console.log(data);
+        setID(data.id);
       } else {
         navigate("/paiement", { replace: true });
         console.log(error);
@@ -67,7 +68,7 @@ export function UpdatePaie() {
     e.preventDefault();
 
     try {
-      const { error } = await supabase
+      const { error1 } = await supabase
         .from("generated_paiement")
         .update({
           amount: montantTotal,
@@ -77,27 +78,27 @@ export function UpdatePaie() {
           mode,
           date,
         })
-        .eq("id", id)
+        .eq("student_id", id)
         .select("id");
 
-      if (error) {
-        throw error;
-      } else {
-        Modal.success({
-          content: "Paiement ajouter avec success !",
-          okButtonProps: { type: "default" },
-        });
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      if (error1) {
+        throw error1;
       }
-    } catch (error) {
-      console.log(error);
-    }
 
-    try {
-      const { error } = await supabase
+      const { error2 } = await supabase
+        .from("income")
+        .update({ amount: montantTotal })
+        .eq("nameID", id)
+        .select("id");
+
+      if (error2) {
+        throw error2;
+      }
+
+      const { error3 } = await supabase
         .from("history_paiement")
         .insert({
-          amount: montantTotal,
+          amount: nouveauMontant,
           balance: testAmount,
           versement,
           statut,
@@ -109,12 +110,18 @@ export function UpdatePaie() {
         .eq("id", id)
         .select("id");
 
-      if (error) {
-        throw error;
+      if (error3) {
+        throw error3;
+      } else {
+        Modal.success({
+          content: "Paiement ajouter avec success !",
+          okButtonProps: { type: "default" },
+        });
       }
     } catch (error) {
       console.log(error);
     }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleNouveauMontantChange = (e) => {
@@ -165,7 +172,7 @@ export function UpdatePaie() {
           <div className="ml-40">
             <span className="flex justify-between mb-5">
               <h2 className="font-semibold mr-40">ID inscription :</h2>
-              <p>{id}</p>
+              <p>{ID}</p>
             </span>
             <span className="flex justify-between mb-5">
               <h2 className="font-semibold mr-40">Nom du père :</h2>
