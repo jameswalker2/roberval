@@ -313,11 +313,13 @@ export function Income() {
               <option value="" className="text-gray-300">
                 Recherche par role
               </option>
-              {collectionOptionsSorted.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
+              {collectionOptionsSorted
+                .filter((income) => income.type !== "Frais Scolaire")
+                .map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
             </select>
           </div>
           {/**/}
@@ -339,7 +341,7 @@ export function Income() {
                       </tr>
                     </thead>
                     {paginatedIncome
-                      // .filter((income) => income.type !== "Frais Scolaire")
+                      .filter((income) => income.type !== "Frais Scolaire")
                       .map((income) => (
                         <tbody key={income.id}>
                           <tr>

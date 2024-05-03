@@ -1,97 +1,90 @@
 import { Modal } from "antd";
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../Config/SupabaseConfig.jsx";
-import "./AddPaie.scss";
+import "./AddPay.scss";
 import { NavBar } from "./Navbar/NavBar.jsx";
 
-export function GeneratedPaiement() {
+export function GeneratedPayroll() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [balanceStudent, setBalanceStudent] = useState(null);
+  const [selectedStaffs, setSelectedStaffs] = useState(null);
   const [amount, setAmount] = useState("");
-  const [bourse, setBourse] = useState("");
   const [balance, setBalance] = useState("");
   const [statut, setStatut] = useState("");
 
   const handleSearch = async () => {
     try {
       const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .textSearch("firstName", searchQuery);
+        .from("staffs")
+        .select()
+        .textSearch("name", searchQuery);
 
       if (error) {
         throw error;
       } else {
-        const formattedData = data.map((student) => ({
-          ...student,
-          selected: false,
-        }));
-        setSearchResults(formattedData);
+        setSearchResults(data);
       }
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const toggleSelectStudentID = (studentId) => {
-    const updatedStudents = searchResults.map((student) => {
-      if (student.id === studentId) {
-        return { ...student, selected: !student.selected };
+  const toggleSelectStaffID = (staffID) => {
+    const updatedStaffs = searchResults.map((staff) => {
+      if (staff.id === staffID) {
+        return { ...staff, selected: !staff.selected };
       }
-      return { ...student, selected: false };
+      return { ...staff, selected: false };
     });
-    setSearchResults(updatedStudents);
-    setSelectedStudent(studentId);
+    setSearchResults(updatedStaffs);
+    setSelectedStaffs(staffID);
   };
 
-  const toggleSelectStudentClasse = (studentClasse) => {
-    const updatedStudents = searchResults.map((student) => {
-      if (student.id === studentClasse) {
-        return { ...student, selected: !student.selected };
+  const toggleSelectStaffsRole = (staffRole) => {
+    const updatedStudents = searchResults.map((staff) => {
+      if (staff.id === staffRole) {
+        return { ...staff, selected: !staff.selected };
       }
-      return { ...student, selected: false };
+      return { ...staff, selected: false };
     });
     setSearchResults(updatedStudents);
-    setSelectedStudent(studentClasse);
-    setBalanceStudent(studentClasse);
+    setSelectedStaffs(staffRole);
   };
-  const handleCollectFees = async (e) => {
-    e.preventDefault();
-    const selectedStudentObj = searchResults.find(
-      (student) => student.id === selectedStudent,
+
+  const handleTransferData = async (e) => {
+    const selectedStaffsObj = searchResults.find(
+      (student) => student.id === selectedStaffs,
     );
+    e.preventDefault();
 
     try {
-      const { students_id } = selectedStudentObj;
-      const { error: error1 } = await supabase
-        .from("generated_paiement")
-        .insert([
-          {
-            amount,
-            bourse,
-            balance: balance,
-            statut,
-            student_id: students_id,
-          },
-        ]);
+      const { staff_id, role } = selectedStaffsObj;
+      const { error1 } = await supabase.from("generated_payroll").insert([
+        {
+          staffs_id: staff_id,
+          amount,
+          balance: testAmount,
+          statut,
+          role,
+        },
+      ]);
 
       if (error1) {
         throw error1;
       }
 
-      const { error: error2 } = await supabase.from("history_paiement").insert([
+      const { error2 } = await supabase.from("history_payroll").insert([
         {
+          generated_staff_id: staff_id,
           amount,
-          bourse,
-          balance: balance,
+          balance,
           statut,
-          generated_id: students_id,
+          role,
         },
       ]);
 
@@ -99,95 +92,43 @@ export function GeneratedPaiement() {
         throw error2;
       }
 
-      const { error: error3 } = await supabase.from("income").insert([
+      const { error3 } = await supabase.from("expense").insert([
         {
+          expenseID: staff_id,
           amount,
-          incomeID: students_id,
-          type: "Frais Scolaire",
-          what: "Frais Scolaire",
+          type: "Avance Salaire",
+          what: "Avance Salaire",
         },
       ]);
 
       if (error3) {
         throw error3;
+      } else {
+        Modal.success({
+          title: "Succès !",
+          content: "Paiement généré avec succès !",
+          okButtonProps: { type: "default" },
+        });
+        setSearchResults([]);
+        setTimeout(() => {
+          navigate("/payroll");
+        }, 1000);
       }
-
-      setSearchResults([]);
-      Modal.success({
-        title: "Succès !",
-        content: "Paiement généré avec succès !",
-        okButtonProps: { type: "default" },
-      });
-      setTimeout(() => {
-        navigate("/paiement");
-      }, 1000);
-      setSearchQuery("");
-      setBalance("");
-      setAmount("");
-      setBourse("");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
+    setSearchQuery("");
   };
-  useEffect(() => {
-    calculateBalance();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amount, bourse, balanceStudent]);
 
-  const calculateBalance = () => {
-    if (!balanceStudent) return;
-
-    let getAmount = 0;
-
-    switch (balanceStudent) {
-      case "PRESCOLAIRE 1":
-      case "PRESCOLAIRE 2":
-      case "PRESCOLAIRE 3":
-        getAmount = 6500;
-        break;
-      case "1 AF":
-      case "2 AF":
-      case "3 AF":
-        getAmount = 4500;
-        break;
-      case "4 AF":
-      case "5 AF":
-      case "6 AF":
-        getAmount = 5000;
-        break;
-      case "7 AF":
-      case "8 AF":
-        getAmount = 6500;
-        break;
-      case "9 AF":
-        getAmount = 7000;
-        break;
-      case "NS I":
-        getAmount = 8000;
-        break;
-      case "NS II":
-      case "NS III":
-        getAmount = 8500;
-        break;
-      case "NS IV":
-        getAmount = 10000;
-        break;
-      default:
-        getAmount = 0;
-        break;
-    }
-
-    let reduceBalance = getAmount - amount;
-    let ifBourse = reduceBalance - bourse;
-    setBalance(ifBourse);
-  };
+  let testAmount = balance - amount;
 
   return (
     <>
       <NavBar />
+      <Toaster position="top-right" />
       <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
         <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
-          <NavLink to={"/paiement"}>
+          <NavLink to={"/payroll"}>
             <BiArrowBack className="h-8 w-8 p-1 text-primaryColor hover:bg-slate-100 rounded-full" />
           </NavLink>
           <ul>
@@ -197,31 +138,28 @@ export function GeneratedPaiement() {
               </NavLink>
             </li>
             <li>
-              <NavLink className="text-supportingColor1" to={"/paiement"}>
-                Paiement
+              <NavLink className="text-supportingColor1" to={"/payroll"}>
+                Payroll
               </NavLink>
             </li>
             <li>
-              <NavLink
-                className="text-supportingColor1"
-                to={"/GeneratedPaiement"}>
-                Ajouter un paiement
+              <NavLink className="text-supportingColor1" to={"/addpay"}>
+                Ajouter un nouveau payroll
               </NavLink>
             </li>
           </ul>
         </div>
 
         <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
-          <div className="mb-5">
+          <div className="mb-5 font-medium">
             <h2>Selectionner les critères</h2>
           </div>
           <div className="flex flex-wrap justify-center">
             <input
               type="text"
               className="input w-96 bg-slate-100 border-primaryColor border-2"
-              value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Rechercher avec le prénom de l'étudiant..."
+              placeholder="Rechercher avec le prénom"
             />
             <button
               className="btn ml-52 bg-primaryColor text-white border-none 
@@ -238,36 +176,38 @@ export function GeneratedPaiement() {
             <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
               <h2 className="mb-5 font-medium">Résultat de la recherche</h2>
               <table className="table">
-                <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
+                <thead
+                  className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10"
+                  key="thead">
                   <tr>
                     <th>ID</th>
-                    <th>Classe</th>
                     <th>Nom</th>
                     <th>Prénom</th>
-                    <th>Mère</th>
-                    <th>Père</th>
-                    <th>Phone</th>
+                    <th>Adresse</th>
+                    <th>Role</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
                     <th></th>
                   </tr>
                 </thead>
-                {searchResults.map((student) => (
-                  <tbody key={student.students_id}>
+                {searchResults.map((staff) => (
+                  <tbody key={staff.staffs_id}>
                     <tr>
-                      <td>{student.id}</td>
-                      <td>{student.classe}</td>
-                      <td>{student.firstName}</td>
-                      <td>{student.lastName}</td>
-                      <td>{student.lastMother}</td>
-                      <td>{student.lastFather}</td>
-                      <td>{student.phone}</td>
+                      <td>{staff.id}</td>
+                      <td>{staff.name}</td>
+                      <td>{staff.lastName}</td>
+                      <td>{staff.adress}</td>
+                      <td>{staff.role}</td>
+                      <td>{staff.phone}</td>
+                      <td>{staff.email}</td>
                       <td>
                         <input
                           type="checkbox"
                           className="checkbox border-2 border-primaryColor"
-                          checked={student.selected}
+                          checked={staff.selected}
                           onChange={() => {
-                            toggleSelectStudentClasse(student.classe);
-                            toggleSelectStudentID(student.id);
+                            toggleSelectStaffsRole(staff.role);
+                            toggleSelectStaffID(staff.id);
                           }}
                         />
                       </td>
@@ -279,10 +219,10 @@ export function GeneratedPaiement() {
           )}
         </div>
 
-        {searchResults.some((student) => student.selected) && (
+        {searchResults.some((staff) => staff.selected) > 0 && (
           <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
             <h2 className="font-medium">Information pour générer</h2>
-            <form onSubmit={handleCollectFees}>
+            <form onSubmit={handleTransferData}>
               <div className="flex flex-wrap items-center p-10">
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
@@ -292,30 +232,8 @@ export function GeneratedPaiement() {
                   </div>
                   <input
                     type="text"
-                    onChange={(e) => {
-                      calculateBalance();
-                      setAmount(e.target.value);
-                    }}
-                    placeholder="Montant Annuel"
-                    className="input bg-slate-100 border-primaryColor border-2"
-                  />
-                  <div className="label">
-                    <span className="label-text-alt"></span>
-                  </div>
-                </label>
-                <label className="form-control w-full max-w-xs mr-5 mb-2">
-                  <div className="label">
-                    <span className="label-text text-supportingColor1">
-                      Bourse
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      calculateBalance();
-                      setBourse(e.target.value);
-                    }}
-                    placeholder="Montant Annuel"
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="Montant Avancée"
                     className="input bg-slate-100 border-primaryColor border-2"
                   />
                   <div className="label">
@@ -332,14 +250,13 @@ export function GeneratedPaiement() {
                     type="text"
                     value={balance}
                     onChange={(e) => setBalance(e.target.value)}
-                    placeholder={balance}
+                    placeholder="Balance"
                     className="input bg-slate-100 border-primaryColor border-2"
                   />
                   <div className="label">
                     <span className="label-text-alt"></span>
                   </div>
                 </label>
-
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
@@ -350,7 +267,7 @@ export function GeneratedPaiement() {
                     onChange={(e) => setStatut(e.target.value)}
                     name="stat"
                     className="select w-full max-w-xs bg-slate-100 border-primaryColor border-2">
-                    <option value="0" className="text-gray-400">
+                    <option value={"0"} className="text-gray-400">
                       Statut
                     </option>
                     <option value="Non Payé">Non Payé</option>
@@ -361,12 +278,12 @@ export function GeneratedPaiement() {
                     <span className="label-text-alt"></span>
                   </div>
                 </label>
-                <div className="ml-[%]">
+                <div className="mr-[10.5%]">
                   <button
                     className="btn bg-primaryColor text-white border-none 
                   hover:bg-slate-100 hover:text-primaryColor font-normal"
                     type="submit">
-                    Générer le paiement
+                    Générer le nouveau paiement
                   </button>
                 </div>
               </div>

@@ -1,9 +1,10 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Button, DatePicker, Empty, Modal } from "antd";
+import { Button, DatePicker, Empty, Modal, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const expensePerPage = 20;
 export function Expense() {
   const [expenses, setExpenses] = useState([]);
   const [searchExpense, setSearchExpense] = useState("");
@@ -13,6 +14,9 @@ export function Expense() {
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
   const [show, setShow] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expenseType, setExpenseType] = useState([]);
 
   useEffect(() => {
     const fetchExpense = async () => {
@@ -24,6 +28,7 @@ export function Expense() {
 
         if (data) {
           setExpenses(data);
+          setExpenseType([...new Set(data.map((expense) => expense.type))]);
         }
       } catch (error) {
         console.log(error);
@@ -95,6 +100,19 @@ export function Expense() {
       console.log(error.message);
     }
   };
+
+  const collectionOptionsSorted = expenseType.map((category) => ({
+    value: category,
+    label: category,
+  }));
+
+  const filterStaffs = selectedExpense
+    ? expenses.filter((expense) => expense.type === selectedExpense)
+    : expenses;
+
+  const startIndex = (currentPage - 1) * expensePerPage;
+  const endIndex = startIndex + expensePerPage;
+  const paginatedExpense = filterStaffs.slice(startIndex, endIndex);
 
   useEffect(() => {
     const expenseChannel = supabase
@@ -274,54 +292,67 @@ export function Expense() {
             <h2 className="text-supportingColor1 font-medium ">
               Liste de dépenses
             </h2>
-            <input
-              type="search"
-              className="input bg-white border-2 border-primaryColor focus:file-input-primary  h-9 w-96 max-w-xs ml-60"
-              onChange={(e) => setSearchExpense(e.target.value)}
-              placeholder="Recherche rapide"
-            />
+            <select
+              onChange={(e) => setSelectedExpense(e.target.value)}
+              className="select max-w-xs w-96 mr-0 bg-white border-primaryColor border-2 text-supportingColor1">
+              <option value="" className="text-gray-300">
+                Recherche par role
+              </option>
+              {collectionOptionsSorted
+                .filter((expense) => expense.type !== "Avance Salaire")
+                .map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+            </select>
           </div>
           <div>
             <div className="overflow-x-auto">
-              {expenses.length > 0 ? (
-                <table className="table">
-                  <thead className="text-supportingColor1">
-                    <tr>
-                      <th>ID</th>
-                      <th>Nom</th>
-                      <th>Type de dépense</th>
-                      <th>Mode de Paiement</th>
-                      <th>Date</th>
-                      <th>Montant</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  {expenses
-                    .filter((expense) =>
-                      expense.name
-                        .toLowerCase()
-                        .includes(searchExpense.toLowerCase()),
-                    )
-                    .map((expense) => (
-                      <tbody key={expense.id}>
-                        <tr>
-                          <th>0{expense.id}</th>
-                          <td>{expense.name}</td>
-                          <td>{expense.type}</td>
-                          <td>{expense.mode}</td>
-                          <td>{expense.date}</td>
-                          <td>{expense.amount}</td>
-                          <td>
-                            <Button
-                              onClick={() => handleDeleteExpense(expense.id)}
-                              className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100">
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    ))}
-                </table>
+              {paginatedExpense.length > 0 ? (
+                <div>
+                  <table className="table">
+                    <thead className="text-supportingColor1">
+                      <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Type de dépense</th>
+                        <th>Mode de Paiement</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    {paginatedExpense
+                      .filter((expense) => expense.type !== "Avance Salaire")
+                      .map((expense) => (
+                        <tbody key={expense.id}>
+                          <tr>
+                            <th>0{expense.id}</th>
+                            <td>{expense.name}</td>
+                            <td>{expense.type}</td>
+                            <td>{expense.mode}</td>
+                            <td>{expense.date}</td>
+                            <td>{expense.amount}</td>
+                            <td>
+                              <Button
+                                onClick={() => handleDeleteExpense(expense.id)}
+                                className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100">
+                                Delete
+                              </Button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      ))}
+                  </table>
+                  <Pagination
+                    current={currentPage}
+                    pageSize={expensePerPage}
+                    total={expenses.length}
+                    onChange={(page) => setCurrentPage(page)}
+                    className="text-center mt-10"
+                  />
+                </div>
               ) : (
                 <Empty description={"Aucune donnée disponible"} />
               )}
