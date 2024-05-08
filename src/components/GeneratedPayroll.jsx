@@ -68,7 +68,7 @@ export function GeneratedPayroll() {
         {
           staffs_id: staff_id,
           amount,
-          balance: testAmount,
+          balance: balance,
           statut,
           role,
         },
@@ -119,8 +119,6 @@ export function GeneratedPayroll() {
     }
     setSearchQuery("");
   };
-
-  let testAmount = balance - amount;
 
   return (
     <>

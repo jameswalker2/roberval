@@ -53,14 +53,13 @@ export function Payroll() {
         .single();
 
       if (error) {
-        console.log(error.message);
         Modal.error({
           title: "Erreur !",
           content: "Vous n'êtes pas autorisé à effectuer cette opération",
           okButtonProps: { type: "default" },
         });
       } else {
-        console.log("Ok");
+        closeIsModalShow();
       }
     } catch (error) {
       console.log(error.message);
@@ -272,10 +271,8 @@ export function Payroll() {
                           <button
                             onClick={() => {
                               if (staff) {
-                                setSelectStaffs(staff);
                                 openIsModalShow();
-                              } else {
-                                console.log("Erreur technique !");
+                                setSelectStaffs(staff);
                               }
                             }}
                             className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-primaryColor

@@ -44,8 +44,6 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
     getHistoryPaiement();
   }, [paiementId]);
 
-  console.log(deleteId);
-
   return (
     <>
       <Modal open={onOpen} width={1000} onCancel={onClose} footer={null}>

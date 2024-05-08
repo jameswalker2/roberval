@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+import { supabase } from "@/Config/SupabaseConfig";
 import { Modal } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -7,35 +9,39 @@ import { NavLink } from "react-router-dom";
 function DetailsPage({ show, close, selectedStaff, deleteID }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [role, setRole] = useState("");
   const [id, setID] = useState("");
-  const [balance, setBalance] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
-  const [mode, setMode] = useState("");
+  const [getId, setGetId] = useState("");
+  const [payrollHistory, setPayrollHistory] = useState([]);
 
   useEffect(() => {
     if (selectedStaff) {
-      // eslint-disable-next-line react/prop-types
       setFirstName(selectedStaff.staffs.name);
-      // eslint-disable-next-line react/prop-types
       setLastName(selectedStaff.staffs.lastName);
-      // eslint-disable-next-line react/prop-types
-      setRole(selectedStaff.role);
-      // eslint-disable-next-line react/prop-types
-      setID(selectedStaff.id);
-      // eslint-disable-next-line react/prop-types
-      setBalance(selectedStaff.balance);
-      // eslint-disable-next-line react/prop-types
-      setAmount(selectedStaff.amount);
-      // eslint-disable-next-line react/prop-types
-      setDate(selectedStaff.date);
-      // eslint-disable-next-line react/prop-types
-      setMode(selectedStaff.mode);
+      setID(selectedStaff.staffs_id);
+      setGetId(selectedStaff.id);
     }
   }, [selectedStaff]);
 
-  console.log(selectedStaff);
+  useEffect(() => {
+    const getHistoryPaiement = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("history_payroll")
+          .select(`*, generated_staff_id ( *, staffs (*))`)
+          .eq("generated_staff_id", selectedStaff.staffs_id);
+
+        if (error) {
+          throw error;
+        } else {
+          setPayrollHistory(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getHistoryPaiement();
+  }, [selectedStaff]);
 
   return (
     <>
@@ -61,20 +67,26 @@ function DetailsPage({ show, close, selectedStaff, deleteID }) {
                 <th>Type de paiment</th>
               </tr>
             </thead>
-            <tbody className="font-semibold bg-white">
-              <tr>
-                <td>0{id}</td>
-                <td>{role}</td>
-                <td>$ {amount}</td>
-                <td>$ {balance}</td>
-                {date === null ? (
-                  <td>Non généré</td>
-                ) : (
-                  <td>{moment(date).format("DD/MM/YYYY")}</td>
-                )}
-                {mode === null ? <td>Non généré</td> : <td>{mode}</td>}
-              </tr>
-            </tbody>
+            {payrollHistory.map((payroll) => (
+              <tbody className="font-semibold bg-white" key={payroll.id}>
+                <tr>
+                  <td>0{payroll.id}</td>
+                  <td>{payroll.role}</td>
+                  <td>$ {payroll.amount}</td>
+                  <td>$ {payroll.balance}</td>
+                  {payroll.date === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>{moment(payroll.date).format("DD/MM/YYYY")}</td>
+                  )}
+                  {payroll.mode === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>{payroll.mode}</td>
+                  )}
+                </tr>
+              </tbody>
+            ))}
           </table>
         </div>
 
@@ -88,8 +100,7 @@ function DetailsPage({ show, close, selectedStaff, deleteID }) {
           </NavLink>
           <button
             onClick={() => {
-              deleteID(id);
-              close;
+              deleteID(getId);
             }}
             className="btn bg-supportingColor3 border-none ml-10 text-white 
 						hover:bg-slate-100 hover:text-supportingColor3">

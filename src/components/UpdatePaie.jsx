@@ -37,6 +37,8 @@ export function UpdatePaie() {
         .eq("student_id", id)
         .single();
 
+      console.log(id);
+
       if (data) {
         setName(data.students.firstName);
         setLastName(data.students.lastName);
@@ -88,7 +90,7 @@ export function UpdatePaie() {
       const { error2 } = await supabase
         .from("income")
         .update({ amount: montantTotal })
-        .eq("nameID", id)
+        .eq("incomeID", id)
         .select("id");
 
       if (error2) {
@@ -162,13 +164,15 @@ export function UpdatePaie() {
             <div className="bg-gray-300 w-40 h-40 mb-3 rounded-lg">
               <User size={160} strokeWidth={1} />
             </div>
-            <div className="">
+
+            <div>
               <h2 className="font-medium text-xl">
                 {name} {lastName}
               </h2>
               <h3 className="font-medium text-primaryColor">{classe}</h3>
             </div>
           </div>
+
           <div className="ml-40">
             <span className="flex justify-between mb-5">
               <h2 className="font-semibold mr-40">ID inscription :</h2>
@@ -308,6 +312,7 @@ export function UpdatePaie() {
                     <span className="label-text text-supportingColor1">
                       La date du paiement ?
                     </span>
+                    L
                   </div>
                   <DatePicker
                     value={date}
