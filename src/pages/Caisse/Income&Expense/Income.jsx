@@ -22,11 +22,14 @@ export function Income() {
   useEffect(() => {
     const fetchIncome = async () => {
       try {
-        const { data } = await supabase.from("income").select("*");
+        const { data } = await supabase
+          .from("income")
+          .select(`*, generated_paiement (*)`);
         // .textSearch(searchIncome);
 
         if (data) {
           setIncomes(data);
+          console.log(data);
           setIncomesType([...new Set(data.map((income) => income.type))]);
         }
       } catch (error) {
@@ -225,10 +228,15 @@ export function Income() {
                       <option value="" className="text-gray-300">
                         Type
                       </option>
-                      <option value="Donnation">Donnation</option>
+                      <option value="Donnation">Frais d&apos;examen</option>
+                      <option value="Donnation">Frais relevée de notes</option>
+                      <option value="Donnation">Frais de tissus</option>
+                      <option value="Donnation">Frais de maillot</option>
+                      <option value="Donnation">Frais de tenue de sport</option>
                       <option value="Activité Scolaire">
-                        Activité Scolaire
+                        Activité scolaire
                       </option>
+                      <option value="Donnation">Donation</option>
                       <option value="Autres">Autres</option>
                     </select>
                   </label>
@@ -313,13 +321,11 @@ export function Income() {
               <option value="" className="text-gray-300">
                 Recherche par role
               </option>
-              {collectionOptionsSorted
-                .filter((income) => income.type !== "Frais Scolaire")
-                .map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+              {collectionOptionsSorted.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
           {/**/}
@@ -341,7 +347,7 @@ export function Income() {
                       </tr>
                     </thead>
                     {paginatedIncome
-                      .filter((income) => income.type !== "Frais Scolaire")
+                      // .filter((income) =>   income.type !== "Frais Scolaire")
                       .map((income) => (
                         <tbody key={income.id}>
                           <tr>

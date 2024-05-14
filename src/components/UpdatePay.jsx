@@ -23,9 +23,9 @@ export function UpdatePay() {
   const [address, setAddress] = useState("");
   const [birth, setBirth] = useState("");
   const [phone, setPhone] = useState("");
-  const [created_at, setCreated_at] = useState("");
+  // const [created_at, setCreated_at] = useState("");
   const [nouveauMontant, setNouveauMontant] = useState(0);
-  const [getID, setGetID] = useState("");
+  // const [getID, setGetID] = useState("");
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -45,11 +45,11 @@ export function UpdatePay() {
         setUpdateBalance(data.balance);
         setUpdateVersement(data.versement);
         setUpdateStatut(data.statut);
-        setCreated_at(data.created_at);
+        // setCreated_at(data.created_at);
         setUpdateMode(data.mode);
         setAddress(data.staffs.adress);
         setBirth(data.staffs.birth);
-        setGetID(data);
+        // setGetID(data);
       } else {
         navigate("/payroll", { replace: true });
         console.log(error);
@@ -82,7 +82,7 @@ export function UpdatePay() {
 
       const { error2 } = await supabase
         .from("expense")
-        .update({ amount: montantTotal })
+        .update({ amount: montantTotal, date: date })
         .eq("expenseID", id)
         .select("id");
 
@@ -109,6 +109,12 @@ export function UpdatePay() {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (error) {
+      Modal.error({
+        title: "Erreur ! Essayer à nouveau",
+        okButtonProps: {
+          type: "default",
+        },
+      });
       console.log(error);
     }
   };

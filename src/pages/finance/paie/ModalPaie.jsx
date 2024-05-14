@@ -63,6 +63,7 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                 <th>ID paiement</th>
                 <th>Valeur Avancée</th>
                 <th>Bourse</th>
+                <th>Exonération</th>
                 <th>Balance</th>
                 <th>Date de paiement</th>
                 <th>Type de paiement</th>
@@ -74,7 +75,16 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                 <tr>
                   <td>{paiement.id}</td>
                   <td>$ {paiement.amount}</td>
-                  <td>$ {paiement.bourse}</td>
+                  {paiement.bourse === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>$ {paiement.bourse}</td>
+                  )}
+                  {paiement.exo === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>$ {paiement.exo}</td>
+                  )}
                   <td>$ {paiement.balance}</td>
 
                   {paiement.date === null ? (

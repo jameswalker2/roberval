@@ -1,4 +1,5 @@
 import { Modal } from "antd";
+import dayjs from "dayjs";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -63,7 +64,7 @@ export function GeneratedPayroll() {
     e.preventDefault();
 
     try {
-      const { staff_id, role } = selectedStaffsObj;
+      const { staff_id, role, created_at, name, lastName } = selectedStaffsObj;
       const { error1 } = await supabase.from("generated_payroll").insert([
         {
           staffs_id: staff_id,
@@ -94,10 +95,12 @@ export function GeneratedPayroll() {
 
       const { error3 } = await supabase.from("expense").insert([
         {
+          name: `${name} ${lastName}`,
           expenseID: staff_id,
           amount,
           type: "Avance Salaire",
           what: "Avance Salaire",
+          date: dayjs(created_at).format("YYYY MM DD"),
         },
       ]);
 
@@ -115,7 +118,13 @@ export function GeneratedPayroll() {
         }, 1000);
       }
     } catch (error) {
-      console.log(error.message);
+      Modal.error({
+        title: "Erreur ! Essayer à nouveau",
+        okButtonProps: {
+          type: "default",
+        },
+      });
+      console.log(error);
     }
     setSearchQuery("");
   };

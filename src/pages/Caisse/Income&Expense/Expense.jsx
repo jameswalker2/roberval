@@ -13,6 +13,7 @@ export function Expense() {
   const [mode, setMode] = useState("");
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
+  const [what, setWhat] = useState("");
   const [show, setShow] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +49,7 @@ export function Expense() {
         mode,
         date,
         amount,
+        what,
       },
     ]);
 
@@ -226,9 +228,19 @@ export function Expense() {
                       <option value="Fournitures scolaire">
                         Fournitures scolaire
                       </option>
-                      <option value="Matérielles de travail">
-                        Matérielles de travail
+                      <option value="Fournitures de bureau">
+                        Fournitures de bureau
                       </option>
+                      <option value="Matérielles scolaire">
+                        Matérielles scolaire
+                      </option>
+                      <option value="Article de toilette">
+                        Article de toilette
+                      </option>
+                      <option value="Prelèvement">Prelèvement</option>
+                      <option value="Prêt">Prêt</option>
+                      <option value="Réparation">Réparation</option>
+                      <option value="Donnation">Donation</option>
                       <option value="Autres">Autres</option>
                     </select>
                   </label>
@@ -275,12 +287,27 @@ export function Expense() {
                       className="input bg-slate-100 border-primaryColor border-2"
                     />
                   </label>
-                  <button
-                    type="submit"
-                    className="btn bg-primaryColor text-white border-none
-                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
-                    Soumettre
-                  </button>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Description
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setWhat(e.target.value)}
+                      type="text"
+                      placeholder="Description"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs ml-[90%]">
+                    <button
+                      type="submit"
+                      className="btn bg-primaryColor text-white border-none
+                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9">
+                      Soumettre
+                    </button>
+                  </label>
                 </div>
               </form>
             </div>

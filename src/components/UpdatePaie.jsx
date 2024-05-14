@@ -24,8 +24,10 @@ export function UpdatePaie() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
-  const [bourse, setBourse] = useState("");
+  const [bourse, setBourse] = useState(0);
   const [nouveauMontant, setNouveauMontant] = useState(0);
+  const [exo, setExo] = useState(0);
+  const [lastBourse, setLastBourse] = useState("");
   const [getId, setGetId] = useState("");
   const [ID, setID] = useState("");
 
@@ -36,8 +38,6 @@ export function UpdatePaie() {
         .select(`*, students (*)`)
         .eq("student_id", id)
         .single();
-
-      console.log(id);
 
       if (data) {
         setName(data.students.firstName);
@@ -55,7 +55,7 @@ export function UpdatePaie() {
         setUpdateStatut(data.statut);
         setUpdateMode(data.mode);
         setGetId(data.student_id);
-        setBourse(data.bourse);
+        setLastBourse(data.bourse);
         setID(data.id);
       } else {
         navigate("/paiement", { replace: true });
@@ -74,11 +74,13 @@ export function UpdatePaie() {
         .from("generated_paiement")
         .update({
           amount: montantTotal,
-          balance: testAmount,
+          balance: newExo,
           versement,
           statut,
           mode,
           date,
+          bourse: last,
+          exo: exo,
         })
         .eq("student_id", id)
         .select("id");
@@ -89,7 +91,7 @@ export function UpdatePaie() {
 
       const { error2 } = await supabase
         .from("income")
-        .update({ amount: montantTotal })
+        .update({ amount: montantTotal, date: date })
         .eq("incomeID", id)
         .select("id");
 
@@ -101,13 +103,14 @@ export function UpdatePaie() {
         .from("history_paiement")
         .insert({
           amount: nouveauMontant,
-          balance: testAmount,
+          balance: newExo,
           versement,
           statut,
           mode,
           date,
           generated_id: getId,
-          bourse,
+          bourse: last,
+          exo: exo,
         })
         .eq("id", id)
         .select("id");
@@ -119,8 +122,17 @@ export function UpdatePaie() {
           content: "Paiement ajouter avec success !",
           okButtonProps: { type: "default" },
         });
+        setTimeout(() => {
+          navigate("/paiement");
+        }, 1000);
       }
     } catch (error) {
+      Modal.error({
+        title: "Erreur ! Essayer à nouveau",
+        okButtonProps: {
+          type: "default",
+        },
+      });
       console.log(error);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -129,8 +141,17 @@ export function UpdatePaie() {
   const handleNouveauMontantChange = (e) => {
     setNouveauMontant(parseFloat(e.target.value) || 0);
   };
+  const handleBourse = (e) => {
+    setBourse(parseFloat(e.target.value) || 0);
+  };
+  const handleExo = (e) => {
+    setExo(parseFloat(e.target.value) || 0);
+  };
 
-  let testAmount = balance - nouveauMontant;
+  let newAmount = balance - nouveauMontant;
+  let newBourse = newAmount - bourse;
+  let newExo = newBourse - exo;
+  let last = bourse || lastBourse;
 
   let montantTotal = amount + nouveauMontant;
 
@@ -233,12 +254,48 @@ export function UpdatePaie() {
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">
+                      Bourse
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Montant Avancé"
+                    value={last}
+                    onChange={handleBourse}
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Exonération
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Montant Avancé"
+                    value={exo}
+                    onChange={handleExo}
+                    className="input bg-slate-100 border-primaryColor border-2"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
                       Balance
                     </span>
                   </div>
                   <input
                     type="text"
-                    value={testAmount}
+                    value={newExo}
                     placeholder="Balance"
                     onChange={(e) => setUpdateBalance(e.target.value)}
                     className="input bg-slate-100 border-primaryColor border-2"
@@ -312,7 +369,6 @@ export function UpdatePaie() {
                     <span className="label-text text-supportingColor1">
                       La date du paiement ?
                     </span>
-                    L
                   </div>
                   <DatePicker
                     value={date}

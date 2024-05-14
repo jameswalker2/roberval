@@ -267,8 +267,9 @@ export function Paiement() {
                     <th>Classe</th>
                     <th>Nom Complet</th>
                     <th>Date de création</th>
-                    <th>Montant Avancée</th>
+                    <th>Avance</th>
                     <th>Bourse</th>
+                    <th>Exonération</th>
                     <th>Balance</th>
                     <th>Statut</th>
                     <th>Action</th>
@@ -298,6 +299,7 @@ export function Paiement() {
                         </td>
                         <td>{student.amount}</td>
                         <td>{student.bourse}</td>
+                        <td>{student.exo}</td>
                         <td>{student.balance}</td>
                         <td>
                           <p
