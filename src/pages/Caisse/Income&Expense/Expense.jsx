@@ -7,7 +7,6 @@ import { NavLink } from "react-router-dom";
 const expensePerPage = 20;
 export function Expense() {
   const [expenses, setExpenses] = useState([]);
-  const [searchExpense, setSearchExpense] = useState("");
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [mode, setMode] = useState("");
@@ -22,10 +21,9 @@ export function Expense() {
   useEffect(() => {
     const fetchExpense = async () => {
       try {
-        const { data } = await supabase
-          .from("expense")
-          .select("*")
-          .textSearch(searchExpense);
+        const { data } = await supabase.from("expense").select("*");
+        // .order("created_at", { ascending: false });
+        // .textSearch(searchExpense);
 
         if (data) {
           setExpenses(data);
@@ -36,8 +34,8 @@ export function Expense() {
       }
     };
 
-    return () => fetchExpense();
-  }, [searchExpense]);
+    fetchExpense();
+  }, []);
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
@@ -159,7 +157,7 @@ export function Expense() {
             "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
             "text-supportingColor1 bg-white rounded-lg shadow-sm"
           }>
-          <h1 className="font-semibold text-2xl">Revenu</h1>
+          <h1 className="font-semibold text-2xl">Dépense</h1>
           <ul>
             <li>
               <NavLink className="text-supportingColor1" to={"/dashboard"}>
@@ -173,7 +171,7 @@ export function Expense() {
             </li>
             <li>
               <NavLink className="text-supportingColor1" to={"/income"}>
-                Revenu
+                Dépense
               </NavLink>
             </li>
           </ul>
@@ -347,30 +345,30 @@ export function Expense() {
                         <th>Mode de Paiement</th>
                         <th>Date</th>
                         <th>Montant</th>
+                        <th>Description</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
-                    {paginatedExpense
-                      .filter((expense) => expense.type !== "Avance Salaire")
-                      .map((expense) => (
-                        <tbody key={expense.id}>
-                          <tr>
-                            <th>0{expense.id}</th>
-                            <td>{expense.name}</td>
-                            <td>{expense.type}</td>
-                            <td>{expense.mode}</td>
-                            <td>{expense.date}</td>
-                            <td>{expense.amount}</td>
-                            <td>
-                              <Button
-                                onClick={() => handleDeleteExpense(expense.id)}
-                                className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100">
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      ))}
+                    {paginatedExpense.map((expense) => (
+                      <tbody key={expense.id}>
+                        <tr>
+                          <th>0{expense.id}</th>
+                          <td>{expense.name}</td>
+                          <td>{expense.type}</td>
+                          <td>{expense.mode}</td>
+                          <td>{expense.date}</td>
+                          <td>{expense.amount}</td>
+                          <td>{expense.what}</td>
+                          <td>
+                            <Button
+                              onClick={() => handleDeleteExpense(expense.id)}
+                              className="btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100">
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
                   </table>
                   <Pagination
                     current={currentPage}

@@ -29,7 +29,6 @@ export function Income() {
 
         if (data) {
           setIncomes(data);
-          console.log(data);
           setIncomesType([...new Set(data.map((income) => income.type))]);
         }
       } catch (error) {
@@ -37,7 +36,7 @@ export function Income() {
       }
     };
 
-    return () => fetchIncome();
+    fetchIncome();
   }, []);
 
   const handleAddIncome = async (e) => {
@@ -83,7 +82,7 @@ export function Income() {
 
   const handleDeleteIncome = async (incomeId) => {
     try {
-      const { error, data } = await supabase
+      const { error } = await supabase
         .from("income")
         .delete()
         .eq("id", incomeId)
@@ -98,8 +97,6 @@ export function Income() {
             type: "default",
           },
         });
-      } else {
-        console.log(data);
       }
     } catch (error) {
       console.log(error.message);
@@ -346,32 +343,30 @@ export function Income() {
                         <th>Actions</th>
                       </tr>
                     </thead>
-                    {paginatedIncome
-                      // .filter((income) =>   income.type !== "Frais Scolaire")
-                      .map((income) => (
-                        <tbody key={income.id}>
-                          <tr>
-                            <th>0{income.id}</th>
-                            <td>{income.name}</td>
-                            <td>{income.type}</td>
-                            <td>{income.mode}</td>
-                            <td>{income.date}</td>
-                            <td>{income.amount}</td>
-                            <td>{income.what}</td>
-                            <td>
-                              <Button
-                                onClick={() => handleDeleteIncome(income.id)}
-                                type="submit"
-                                className={
-                                  "btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 " +
-                                  "hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
-                                }>
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      ))}
+                    {paginatedIncome.map((income) => (
+                      <tbody key={income.id}>
+                        <tr>
+                          <th>0{income.id}</th>
+                          <td>{income.name}</td>
+                          <td>{income.type}</td>
+                          <td>{income.mode}</td>
+                          <td>{income.date}</td>
+                          <td>{income.amount}</td>
+                          <td>{income.what}</td>
+                          <td>
+                            <Button
+                              onClick={() => handleDeleteIncome(income.id)}
+                              type="submit"
+                              className={
+                                "btn btn-xs text-xs h-10 w-20 border-none text-white bg-supportingColor3 " +
+                                "hover:bg-slate-100 hover:text-supportingColor3 active:bg-slate-100"
+                              }>
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
                   </table>
                   <Pagination
                     current={currentPage}
