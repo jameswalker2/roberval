@@ -1,7 +1,9 @@
 import { Empty, Pagination } from "antd";
 import dayjs from "dayjs";
-import { UserPlus } from "lucide-react";
-import { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { Download, UserPlus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../Config/SupabaseConfig.jsx";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
@@ -10,6 +12,8 @@ import "./Eleves.scss";
 const studentsPerPage = 20;
 
 export function Eleves() {
+  const tableRef = useRef(null);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [allResults, setAllResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -107,11 +111,46 @@ export function Eleves() {
     )
     .slice(startIndex, endIndex);
 
+  const generatePDF = () => {
+    const input = tableRef.current;
+    html2canvas(input, {
+      useCORS: true,
+      scale: 2,
+      backgroundColor: null,
+    })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "pt", "a4");
+        const imgWidth = 595.28;
+        const pageHeight = 841.89;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save("students.pdf");
+      })
+      .catch((err) => {
+        console.error("Error generating PDF:", err);
+      });
+  };
+
   return (
     <>
       <NavBar />
       <div className="h-screen overflow-scroll pl-64 py-5 bg-primaryColor bg-opacity-10">
-        <div className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm">
+        <div
+          className="text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 text-supportingColor1 
+        bg-white rounded-lg shadow-sm">
           <h1 className="font-semibold text-2xl">Eleves</h1>
           <ul>
             <li>
@@ -164,18 +203,33 @@ export function Eleves() {
 
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm ">
           <div className="mb-5">
-            <h2 className="font-medium text-supportingColor1">
-              Liste des élèves
-            </h2>
-            <p className="text-primaryColor text-sm">
-              Total de{" "}
-              <span className="font-semibold">{filterStudents.length}</span> sur{" "}
-              <span className="font-semibold">{allResults.length}</span> lignes
-            </p>
+            <div className="flex items-center justify-between">
+              <h2 className="font-medium text-supportingColor1">
+                Liste des élèves
+                <div>
+                  <p className="text-primaryColor font-semibold ">
+                    Total:{" "}
+                    <span className="font-medium">{filterStudents.length}</span>
+                  </p>
+                </div>
+              </h2>
+              <div>
+                <button
+                  onClick={generatePDF}
+                  className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                  <Download strokeWidth={1.45} />
+                  Exporter au format PDF
+                </button>
+              </div>
+            </div>
           </div>
           {paginatedStudents.length > 0 ? (
-            <div>
-              <table className="table table-xs md:table-fixed	">
+            <div ref={tableRef}>
+              <table
+                ref={tableRef}
+                id="table-to-pdf"
+                className="table table-xs md:table-fixed	"
+                style={{ borderCollapse: "collapse", width: "100%" }}>
                 <thead
                   key="thead"
                   className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10 ">
@@ -196,7 +250,7 @@ export function Eleves() {
                     key={student.id}
                     className="text-supportingColor1 font-semibold">
                     <tr>
-                      <td>0{student.id}</td>
+                      <td className="font-bold">0{student.id}</td>
                       <td>{student.firstName}</td>
                       <td>{student.lastName}</td>
                       <td>{dayjs(student.birth).format("DD MMMM YYYY")}</td>

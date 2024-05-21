@@ -1,7 +1,7 @@
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
 import "@/pages/Staffs/Modal.scss";
 import { Empty, Modal, Pagination } from "antd";
-import { CopyPlus } from "lucide-react";
+import { CopyPlus, Download } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { supabase } from "../../Config/SupabaseConfig.jsx";
@@ -198,16 +198,24 @@ export function Staffs() {
         />
 
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-          <div className="mb-5">
+          <div className="flex items-center justify-between mb-5">
             <h2 className="font-medium text-supportingColor1">
               Liste des membres
+              <div>
+                <p className="text-primaryColor font-semibold ">
+                  Total:{" "}
+                  <span className="font-medium">{filterStaffs.length}</span>
+                </p>
+              </div>
             </h2>
-            <p className="text-primaryColor text-sm">
-              Total de{" "}
-              <span className="font-semibold">{filterStaffs.length}</span> sur{" "}
-              <span className="font-semibold">{resultsStaffs.length}</span>{" "}
-              lignes
-            </p>
+            <div>
+              <button
+                // onClick={generatePDF}
+                className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                <Download strokeWidth={1.45} />
+                Exporter au format PDF
+              </button>
+            </div>
           </div>
           {paginatedStaffs.length > 0 ? (
             <div>
@@ -237,7 +245,7 @@ export function Staffs() {
                   .map((staff) => (
                     <tbody key={staff.id} className="font-semibold">
                       <tr>
-                        <td>0{staff.id}</td>
+                        <td className="font-bold">0{staff.id}</td>
                         <td>{staff.name}</td>
                         <td>{staff.lastName}</td>
                         <td>{staff.role}</td>

@@ -1,7 +1,7 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
 import { Empty, Modal, Pagination } from "antd";
-import { FilePlus2 } from "lucide-react";
+import { Download, FilePlus2 } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -250,13 +250,24 @@ export function Paiement() {
           </div>
         </div>
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
-          <div className="mb-5">
-            <h2 className=" font-medium">Liste paiement générer</h2>
-            <p className="text-primaryColor text-sm">
-              Total de{" "}
-              <span className="font-semibold">{filterPaie.length}</span> sur{" "}
-              <span className="font-semibold">{studentsP.length}</span> lignes
-            </p>
+          <div className="flex items-center justify-between mb-5">
+            <h2 className=" font-medium">
+              Liste paiement générer
+              <div>
+                <p className="text-primaryColor font-semibold ">
+                  Total:{" "}
+                  <span className="font-medium">{filterPaie.length}</span>
+                </p>
+              </div>
+            </h2>
+            <div>
+              <button
+                // onClick={generatePDF}
+                className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                <Download strokeWidth={1.45} />
+                Exporter au format Excel
+              </button>
+            </div>
           </div>
           {paginatedPaie.length > 0 ? (
             <div>
@@ -288,7 +299,7 @@ export function Paiement() {
                   .map((student) => (
                     <tbody key={student.student_id} className="scroll">
                       <tr>
-                        <td>0{student.students.id}</td>
+                        <td className="font-bold">0{student.students.id}</td>
                         <td>{student.students.classe}</td>
                         <td>
                           {student.students.firstName}{" "}

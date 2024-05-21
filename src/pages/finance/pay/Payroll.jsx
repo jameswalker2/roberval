@@ -1,7 +1,7 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
 import { Empty, Modal, Pagination } from "antd";
-import { FilePlus2 } from "lucide-react";
+import { Download, FilePlus2 } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -31,7 +31,6 @@ export function Payroll() {
 
         if (data) {
           setStaffs(data);
-          console.log(data);
           setRole([...new Set(data.map((staff) => staff.role))]);
           setPayroll([...new Set(data.map((payroll) => payroll.statut))]);
         } else {
@@ -219,6 +218,25 @@ export function Payroll() {
         </div>
 
         <div className="overflow-y-hidden overflow-x-auto w-[95%] h-auto mt-10 rounded-lg bg-white p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-medium">
+              Liste payroll générer
+              <div>
+                <p className="text-primaryColor font-semibold ">
+                  Total:{" "}
+                  <span className="font-medium">{filterPayroll.length}</span>
+                </p>
+              </div>
+            </h2>
+            <div>
+              <button
+                // onClick={generatePDF}
+                className="btn font-normal bg-primaryColor border-none text-white hover:text-primaryColor hover:bg-slate-100">
+                <Download strokeWidth={1.45} />
+                Exporter au format Excel
+              </button>
+            </div>
+          </div>
           {paginatedPayroll.length > 0 ? (
             <div>
               <table className="table">
@@ -241,7 +259,7 @@ export function Payroll() {
                 {paginatedPayroll.map((staff) => (
                   <tbody key={staff.id} className="">
                     <tr>
-                      <td>0{staff.id}</td>
+                      <td className="font-bold">0{staff.id}</td>
                       <td>
                         {staff.staffs.name} {staff.staffs.lastName}
                       </td>
@@ -294,7 +312,7 @@ export function Payroll() {
               />
             </div>
           ) : (
-            <Empty description={"Aucune paiement générer"} />
+            <Empty description={"Aucune payroll générer"} />
           )}
         </div>
         <DetailsPage

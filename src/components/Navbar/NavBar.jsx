@@ -152,7 +152,7 @@ export function NavBar() {
                       : ""
                   }`}>
                   <BarChartBig />
-                  Profit & Perte
+                  Rapport
                 </Link>
               </li>
             </ul>
