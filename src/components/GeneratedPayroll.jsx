@@ -109,7 +109,7 @@ export function GeneratedPayroll() {
       } else {
         Modal.success({
           title: "Succès !",
-          content: "Paiement généré avec succès !",
+          content: "Payroll généré avec succès !",
           okButtonProps: { type: "default" },
         });
         setSearchResults([]);
@@ -283,14 +283,14 @@ export function GeneratedPayroll() {
                   </select>
                   <div className="label">
                     <span className="label-text-alt"></span>
-                  </div>
+                  </div> 
                 </label>
                 <div className="mr-[10.5%]">
                   <button
                     className="btn bg-primaryColor text-white border-none 
                   hover:bg-slate-100 hover:text-primaryColor font-normal"
                     type="submit">
-                    Générer le nouveau paiement
+                    Générer le nouveau payroll
                   </button>
                 </div>
               </div>

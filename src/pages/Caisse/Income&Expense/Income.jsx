@@ -225,11 +225,17 @@ export function Income() {
                       <option value="" className="text-gray-300">
                         Type
                       </option>
-                      <option value="Donnation">Frais d&apos;examen</option>
-                      <option value="Donnation">Frais relevée de notes</option>
-                      <option value="Donnation">Frais de tissus</option>
-                      <option value="Donnation">Frais de maillot</option>
-                      <option value="Donnation">Frais de tenue de sport</option>
+                      <option value="Frais d'examen">
+                        Frais d&apos;examen
+                      </option>
+                      <option value="Frais relevée de notes">
+                        Frais relevée de notes
+                      </option>
+                      <option value="Frais de tissus">Frais de tissus</option>
+                      <option value="Frais de maillot">Frais de maillot</option>
+                      <option value="Frais de tenue de sport">
+                        Frais de tenue de sport
+                      </option>
                       <option value="Activité Scolaire">
                         Activité scolaire
                       </option>
