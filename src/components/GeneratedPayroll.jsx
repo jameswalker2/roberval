@@ -1,28 +1,29 @@
+import { Modal } from "antd";
+import dayjs from "dayjs";
 import { Search } from "lucide-react";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../Config/SupabaseConfig.jsx";
 import "./AddPay.scss";
 import { NavBar } from "./Navbar/NavBar.jsx";
 
-export function AddPay() {
+export function GeneratedPayroll() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedStaffs, setSelectedStaffs] = useState(null);
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState("");
   const [statut, setStatut] = useState("");
-  const [date, setDate] = useState(null);
-  const [mode, setMode] = useState(null);
 
   const handleSearch = async () => {
     try {
       const { data, error } = await supabase
         .from("staffs")
         .select()
-        .textSearch("lastName", searchQuery);
+        .textSearch("name", searchQuery);
 
       if (error) {
         throw error;
@@ -34,43 +35,99 @@ export function AddPay() {
     }
   };
 
+  const toggleSelectStaffID = (staffID) => {
+    const updatedStaffs = searchResults.map((staff) => {
+      if (staff.id === staffID) {
+        return { ...staff, selected: !staff.selected };
+      }
+      return { ...staff, selected: false };
+    });
+    setSearchResults(updatedStaffs);
+    setSelectedStaffs(staffID);
+  };
+
+  const toggleSelectStaffsRole = (staffRole) => {
+    const updatedStudents = searchResults.map((staff) => {
+      if (staff.id === staffRole) {
+        return { ...staff, selected: !staff.selected };
+      }
+      return { ...staff, selected: false };
+    });
+    setSearchResults(updatedStudents);
+    setSelectedStaffs(staffRole);
+  };
+
   const handleTransferData = async (e) => {
+    const selectedStaffsObj = searchResults.find(
+      (student) => student.id === selectedStaffs,
+    );
     e.preventDefault();
 
     try {
-      for (const row of searchResults) {
-        const { lastName, role, name, phone } = row;
+      const { staff_id, role, created_at, name, lastName } = selectedStaffsObj;
+      const { error1 } = await supabase.from("generated_payroll").insert([
+        {
+          staffs_id: staff_id,
+          amount,
+          balance: balance,
+          statut,
+          role,
+        },
+      ]);
 
-        const { error } = await supabase.from("pay").insert([
-          {
-            name,
-            lastName,
-            phone,
-            amount,
-            balance: testAmount,
-            statut,
-            role,
-            date,
-            mode,
-          },
-        ]);
-        if (error) {
-          throw error;
-        } else {
-          toast.success("Payroll générer avec succès !");
-          setSearchResults([]);
-          setTimeout(() => {
-            navigate("/payroll");
-          }, 1000);
-        }
+      if (error1) {
+        throw error1;
+      }
+
+      const { error2 } = await supabase.from("history_payroll").insert([
+        {
+          generated_staff_id: staff_id,
+          amount,
+          balance,
+          statut,
+          role,
+        },
+      ]);
+
+      if (error2) {
+        throw error2;
+      }
+
+      const { error3 } = await supabase.from("expense").insert([
+        {
+          name: `${name} ${lastName}`,
+          expenseID: staff_id,
+          amount,
+          type: "Avance Salaire",
+          what: "Avance Salaire",
+          date: dayjs(created_at).format("YYYY MM DD"),
+        },
+      ]);
+
+      if (error3) {
+        throw error3;
+      } else {
+        Modal.success({
+          title: "Succès !",
+          content: "Payroll généré avec succès !",
+          okButtonProps: { type: "default" },
+        });
+        setSearchResults([]);
+        setTimeout(() => {
+          navigate("/payroll");
+        }, 1000);
       }
     } catch (error) {
-      console.log(error.message);
+      Modal.error({
+        title: "Erreur ! Essayer à nouveau",
+        okButtonProps: {
+          type: "default",
+        },
+      });
+      console.log(error);
     }
     setSearchQuery("");
   };
-
-  let testAmount = balance - amount;
 
   return (
     <>
@@ -137,18 +194,30 @@ export function AddPay() {
                     <th>Role</th>
                     <th>Téléphone</th>
                     <th>Email</th>
+                    <th></th>
                   </tr>
                 </thead>
                 {searchResults.map((staff) => (
                   <tbody key={staff.staffs_id}>
                     <tr>
-                      <td>0{staff.id}</td>
+                      <td>{staff.id}</td>
                       <td>{staff.name}</td>
                       <td>{staff.lastName}</td>
                       <td>{staff.adress}</td>
                       <td>{staff.role}</td>
                       <td>{staff.phone}</td>
                       <td>{staff.email}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          className="checkbox border-2 border-primaryColor"
+                          checked={staff.selected}
+                          onChange={() => {
+                            toggleSelectStaffsRole(staff.role);
+                            toggleSelectStaffID(staff.id);
+                          }}
+                        />
+                      </td>
                     </tr>
                   </tbody>
                 ))}
@@ -157,7 +226,7 @@ export function AddPay() {
           )}
         </div>
 
-        {searchResults.length > 0 && (
+        {searchResults.some((staff) => staff.selected) > 0 && (
           <div className="w-[95%] p-4 rounded-lg bg-white mt-10 shadow-sm">
             <h2 className="font-medium">Information pour générer</h2>
             <form onSubmit={handleTransferData}>
@@ -214,14 +283,14 @@ export function AddPay() {
                   </select>
                   <div className="label">
                     <span className="label-text-alt"></span>
-                  </div>
+                  </div> 
                 </label>
                 <div className="mr-[10.5%]">
                   <button
                     className="btn bg-primaryColor text-white border-none 
                   hover:bg-slate-100 hover:text-primaryColor font-normal"
                     type="submit">
-                    Générer le nouveau paiement
+                    Générer le nouveau payroll
                   </button>
                 </div>
               </div>

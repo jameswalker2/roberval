@@ -1,11 +1,24 @@
-import { Card } from "antd";
-import { Circle } from "lucide-react";
+import { Card, Tooltip } from "antd";
+import { Circle, FileText, Sheet } from "lucide-react";
+import { useState } from "react";
 import { NavBar } from "../../components/Navbar/NavBar.jsx";
 import CardLink from "./CardLink.jsx";
-import ChartsIncome from "./ChartsIncome.jsx";
+import Charts from "./Charts.jsx";
 import "./Dashboard.scss";
 
 export function Dashboard() {
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [submittedExcel, setSubmittedExcel] = useState(false);
+  const [submittedPdf, setSubmittedPdf] = useState(false);
+
+  setTimeout(() => {
+    setSubmittedExcel(false);
+    setSubmittedPdf(false);
+  }, 0);
+
+  const handleYearChange = (year) => {
+    setSelectedYear(year);
+  };
   return (
     <>
       <NavBar />
@@ -20,8 +33,8 @@ export function Dashboard() {
 
         <div className="flex flex-wrap mt-10">
           <Card className={"w-[95%] h-auto p-0 m-0"}>
-            <div className="flex flex-auto ">
-              <div className="flex flex-auto mb-10">
+            <div className="flex justify-between mb-10">
+              <div className="flex">
                 <h4 className="text-supportingColor1 font-medium flex items-center ">
                   <Circle className="text-supportingColor2 bg-supportingColor2 rounded-full w-2 h-2 mr-2" />
                   Revenu
@@ -31,34 +44,38 @@ export function Dashboard() {
                   Dépense
                 </h4>
               </div>
-              <div>
+              <div className="flex items">
+                <Tooltip title="Excel">
+                  <button
+                    onClick={() => setSubmittedExcel(true)}
+                    className="text-primaryColor mr-4">
+                    <Sheet strokeWidth={1.25} />
+                  </button>
+                </Tooltip>
+                <Tooltip title="Pdf">
+                  <button
+                    onClick={() => setSubmittedPdf(true)}
+                    className="text-primaryColor mr-4">
+                    <FileText strokeWidth={1.25} />
+                  </button>
+                </Tooltip>
+
                 <select
-                  className="w-20 h-6 rounded-full px-2 bg-white border-primaryColor border-2"
-                  name=""
-                  id="">
-                  <option value="">2023</option>
-                  <option value="">2024</option>
+                  value={selectedYear}
+                  onChange={(e) => handleYearChange(e.target.value)}
+                  className="w-auto h-6 rounded-lg px-2 bg-white border-primaryColor border-2">
+                  <option value="2023">Année 2023</option>
+                  <option value="2024">Année 2024</option>
+                  <option value="2025">Année 2025</option>
                 </select>
               </div>
             </div>
-            <ChartsIncome />
+            <Charts
+              selectedYear={selectedYear}
+              clickExcel={submittedExcel}
+              clickPdf={submittedPdf}
+            />
           </Card>
-          {/* <CaisseLink /> */}
-          <div className="w-[47%] h-16 p-4 mr-3 text-supportingColor1 bg-white rounded-lg shadow-sm mt-10">
-            <div className="mb-10">
-              <h4>Notification</h4>
-            </div>
-            <div className="flex">
-              <div>avatar</div>
-              <div></div>
-            </div>
-          </div>
-
-          <div className="w-[47%] h-16 p-4 text-supportingColor1 bg-white rounded-lg shadow-sm mt-10">
-            <div>
-              <h4>Notifications</h4>
-            </div>
-          </div>
         </div>
       </div>
     </>

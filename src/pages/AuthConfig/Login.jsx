@@ -56,7 +56,7 @@ export function Login() {
                     <h1 className="text-[30px] capitalize font-bold ">
                       Se connecter
                     </h1>
-                    <h2 className="text-md mb-20  font-normal">
+                    <h2 className="text-md sm:  mb-20  font-normal">
                       Entrez votre email et votre mot de passe
                     </h2>
                     <div className="form-control w-full max-w-xs mb-5">

@@ -1,19 +1,22 @@
 import { Modal } from "antd";
+import dayjs from "dayjs";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../Config/SupabaseConfig.jsx";
 import "./AddPaie.scss";
 import { NavBar } from "./Navbar/NavBar.jsx";
 
 export function GeneratedPaiement() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [balanceStudent, setBalanceStudent] = useState(null);
-  const [amount, setAmount] = useState("");
-  const [bourse, setBourse] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [bourse, setBourse] = useState(0);
+  const [exo, setExo] = useState(0);
   const [balance, setBalance] = useState("");
   const [statut, setStatut] = useState("");
 
@@ -67,13 +70,15 @@ export function GeneratedPaiement() {
     );
 
     try {
-      const { students_id } = selectedStudentObj;
+      const { students_id, created_at, firstName, lastName } =
+        selectedStudentObj;
       const { error: error1 } = await supabase
         .from("generated_paiement")
         .insert([
           {
             amount,
-            bourse,
+            bourse: bourse,
+            exo: exo,
             balance: balance,
             statut,
             student_id: students_id,
@@ -98,24 +103,48 @@ export function GeneratedPaiement() {
         throw error2;
       }
 
+      const { error: error3 } = await supabase.from("income").insert([
+        {
+          name: `${firstName} ${lastName}`,
+          amount,
+          incomeID: students_id,
+          type: "Frais Scolaire",
+          what: "Frais Scolaire",
+          date: dayjs(created_at).format("YYYY MM DD"),
+        },
+      ]);
+
+      if (error3) {
+        throw error3;
+      }
+
       setSearchResults([]);
       Modal.success({
         title: "Succès !",
         content: "Paiement généré avec succès !",
         okButtonProps: { type: "default" },
       });
+      setTimeout(() => {
+        navigate("/paiement");
+      }, 1000);
       setSearchQuery("");
       setBalance("");
       setAmount("");
       setBourse("");
     } catch (error) {
+      Modal.error({
+        title: "Erreur ! Essayer à nouveau",
+        okButtonProps: {
+          type: "default",
+        },
+      });
       console.log(error);
     }
   };
   useEffect(() => {
     calculateBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amount, bourse, balanceStudent]);
+  }, [amount, bourse, exo, balanceStudent]);
 
   const calculateBalance = () => {
     if (!balanceStudent) return;
@@ -161,9 +190,11 @@ export function GeneratedPaiement() {
     }
 
     let reduceBalance = getAmount - amount;
-    let ifBourse = reduceBalance - bourse;
+    let ifExo = reduceBalance - bourse;
+    let ifBourse = ifExo - exo;
     setBalance(ifBourse);
   };
+  console.log(amount);
 
   return (
     <>
@@ -275,9 +306,10 @@ export function GeneratedPaiement() {
                   </div>
                   <input
                     type="text"
+                    value={amount}
                     onChange={(e) => {
                       calculateBalance();
-                      setAmount(e.target.value);
+                      setAmount(parseFloat(e.target.value) || 0);
                     }}
                     placeholder="Montant Annuel"
                     className="input bg-slate-100 border-primaryColor border-2"
@@ -294,9 +326,10 @@ export function GeneratedPaiement() {
                   </div>
                   <input
                     type="text"
+                    value={bourse}
                     onChange={(e) => {
                       calculateBalance();
-                      setBourse(e.target.value);
+                      setBourse(parseFloat(e.target.value) || 0);
                     }}
                     placeholder="Montant Annuel"
                     className="input bg-slate-100 border-primaryColor border-2"
@@ -305,6 +338,27 @@ export function GeneratedPaiement() {
                     <span className="label-text-alt"></span>
                   </div>
                 </label>
+                <label className="form-control w-full max-w-xs mr-5 mb-2">
+                  <div className="label">
+                    <span className="label-text text-supportingColor1">
+                      Exonération
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={exo}
+                    onChange={(e) => {
+                      calculateBalance();
+                      setExo(parseFloat(e.target.value) || 0);
+                    }}
+                    placeholder="Exonération"
+                    className="input bg-slate-100 border-primaryColor border-2 "
+                  />
+                  <div className="label">
+                    <span className="label-text-alt"></span>
+                  </div>
+                </label>
+
                 <label className="form-control w-full max-w-xs mr-5 mb-2">
                   <div className="label">
                     <span className="label-text text-supportingColor1">

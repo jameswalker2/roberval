@@ -1,4 +1,6 @@
-import { Avatar, Modal } from "antd";
+/* eslint-disable react/prop-types */
+import { supabase } from "@/Config/SupabaseConfig";
+import { Modal } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -7,81 +9,84 @@ import { NavLink } from "react-router-dom";
 function DetailsPage({ show, close, selectedStaff, deleteID }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [role, setRole] = useState("");
   const [id, setID] = useState("");
-  const [created_at, setCreated_at] = useState("");
-  const [balance, setBalance] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
-  const [mode, setMode] = useState("");
+  const [getId, setGetId] = useState("");
+  const [payrollHistory, setPayrollHistory] = useState([]);
 
   useEffect(() => {
     if (selectedStaff) {
-      // eslint-disable-next-line react/prop-types
-      setFirstName(selectedStaff.name);
-      // eslint-disable-next-line react/prop-types
-      setLastName(selectedStaff.lastName);
-      // eslint-disable-next-line react/prop-types
-      setRole(selectedStaff.role);
-      // eslint-disable-next-line react/prop-types
-      setID(selectedStaff.id);
-      // eslint-disable-next-line react/prop-types
-      setCreated_at(selectedStaff.created_at);
-      // eslint-disable-next-line react/prop-types
-      setBalance(selectedStaff.balance);
-      // eslint-disable-next-line react/prop-types
-      setAmount(selectedStaff.amount);
-      // eslint-disable-next-line react/prop-types
-      setDate(selectedStaff.date);
-      // eslint-disable-next-line react/prop-types
-      setMode(selectedStaff.mode);
+      setFirstName(selectedStaff.staffs.name);
+      setLastName(selectedStaff.staffs.lastName);
+      setID(selectedStaff.staffs_id);
+      setGetId(selectedStaff.id);
     }
   }, [selectedStaff]);
 
-  const generateBackgroundColor = () => {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    return `#${randomColor}`;
-  };
+  useEffect(() => {
+    const getHistoryPaiement = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("history_payroll")
+          .select(`*, generated_staff_id ( *, staffs (*))`)
+          .eq("generated_staff_id", selectedStaff.staffs_id);
+
+        if (error) {
+          throw error;
+        } else {
+          setPayrollHistory(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getHistoryPaiement();
+  }, [selectedStaff]);
 
   return (
     <>
       <Modal open={show} width={1000} onCancel={close} footer={null}>
         <div className={"mb-10"}>
-          <h2 className={"font-medium text-xl"}>Procéder au paiement</h2>
+          <h2 className={"font-medium"}>
+            Procéder au payroll de{" "}
+            <span className="text-primaryColor font-semibold">
+              {firstName} {lastName}
+            </span>
+          </h2>
         </div>
 
         <div className="overflow-x-auto mt-10 rounded-lg border-4 border-primaryColor border-opacity-10 shadow-sm">
           <table className="table table-xs ">
             <thead className="text-supportingColor1 text-sm bg-primaryColor bg-opacity-10">
               <tr>
-                <th className={"flex items-center"}>Nom Complet</th>
-                <th>Date de création</th>
-                <th>Balance</th>
+                <th>ID payroll</th>
+                <th>Role</th>
                 <th>Valeur Avancée</th>
+                <th>Balance</th>
                 <th>Date de payroll</th>
                 <th>Type de paiment</th>
               </tr>
             </thead>
-            <tbody className="font-semibold bg-white">
-              <tr>
-                <td className={"flex items-center"}>
-                  <Avatar
-                    style={{
-                      backgroundColor: generateBackgroundColor(),
-                      verticalAlign: "middle",
-                      marginRight: 5,
-                    }}>
-                    {firstName.charAt(0).toUpperCase()}
-                  </Avatar>
-                  {firstName} {lastName}
-                </td>
-                <td>{moment(created_at).format("DD/MM/YYYY")}</td>
-                <td>$ {balance}</td>
-                <td>$ {amount}</td>
-                <td>{date}</td>
-                <td>{mode}</td>
-              </tr>
-            </tbody>
+            {payrollHistory.map((payroll) => (
+              <tbody className="font-semibold bg-white" key={payroll.id}>
+                <tr>
+                  <td>0{payroll.id}</td>
+                  <td>{payroll.role}</td>
+                  <td>$ {payroll.amount}</td>
+                  <td>$ {payroll.balance}</td>
+                  {payroll.date === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>{moment(payroll.date).format("DD/MM/YYYY")}</td>
+                  )}
+                  {payroll.mode === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>{payroll.mode}</td>
+                  )}
+                </tr>
+              </tbody>
+            ))}
           </table>
         </div>
 
@@ -95,8 +100,7 @@ function DetailsPage({ show, close, selectedStaff, deleteID }) {
           </NavLink>
           <button
             onClick={() => {
-              deleteID(id);
-              close;
+              deleteID(getId);
             }}
             className="btn bg-supportingColor3 border-none ml-10 text-white 
 						hover:bg-slate-100 hover:text-supportingColor3">

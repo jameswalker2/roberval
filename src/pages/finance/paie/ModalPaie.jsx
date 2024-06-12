@@ -8,13 +8,15 @@ import { NavLink } from "react-router-dom";
 function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
   const [paiementHistory, setPaiementHistory] = useState([]);
   const [id, setId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const [name, setName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [statut, setStatut] = useState(null);
 
   useEffect(() => {
     if (paiementId) {
-      setId(paiementId.id);
+      setId(paiementId.students.students_id);
+      setDeleteId(paiementId.id);
       setName(paiementId.students.firstName);
       setLastName(paiementId.students.lastName);
       setStatut(paiementId.statut);
@@ -61,6 +63,7 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                 <th>ID paiement</th>
                 <th>Valeur Avancée</th>
                 <th>Bourse</th>
+                <th>Exonération</th>
                 <th>Balance</th>
                 <th>Date de paiement</th>
                 <th>Type de paiement</th>
@@ -72,7 +75,16 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
                 <tr>
                   <td>{paiement.id}</td>
                   <td>$ {paiement.amount}</td>
-                  <td>$ {paiement.bourse}</td>
+                  {paiement.bourse === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>$ {paiement.bourse}</td>
+                  )}
+                  {paiement.exo === null ? (
+                    <td>Non généré</td>
+                  ) : (
+                    <td>$ {paiement.exo}</td>
+                  )}
                   <td>$ {paiement.balance}</td>
 
                   {paiement.date === null ? (
@@ -111,7 +123,7 @@ function ModalPaie({ paiementId, onOpen, onClose, deletePaieID }) {
             </NavLink>
           )}
           <button
-            onClick={() => deletePaieID(id)}
+            onClick={() => deletePaieID(deleteId)}
             className="btn bg-supportingColor3 border-none ml-10 text-white 
 						hover:bg-slate-100 hover:text-supportingColor3">
             Delete

@@ -1,37 +1,41 @@
 import { supabase } from "@/Config/SupabaseConfig.jsx";
 import { NavBar } from "@/components/Navbar/NavBar.jsx";
-import { Button, DatePicker, Empty, Modal } from "antd";
+import { Button, DatePicker, Empty, Modal, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const expensePerPage = 20;
 export function Expense() {
   const [expenses, setExpenses] = useState([]);
-  const [searchExpense, setSearchExpense] = useState("");
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [mode, setMode] = useState("");
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
+  const [what, setWhat] = useState("");
   const [show, setShow] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expenseType, setExpenseType] = useState([]);
 
   useEffect(() => {
     const fetchExpense = async () => {
       try {
-        const { data } = await supabase
-          .from("expense")
-          .select("*")
-          .textSearch(searchExpense);
+        const { data } = await supabase.from("expense").select("*");
+        // .order("created_at", { ascending: false });
+        // .textSearch(searchExpense);
 
         if (data) {
           setExpenses(data);
+          setExpenseType([...new Set(data.map((expense) => expense.type))]);
         }
       } catch (error) {
         console.log(error);
       }
     };
 
-    return () => fetchExpense();
-  }, [searchExpense]);
+    fetchExpense();
+  }, []);
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
@@ -43,6 +47,7 @@ export function Expense() {
         mode,
         date,
         amount,
+        what,
       },
     ]);
 
@@ -96,6 +101,19 @@ export function Expense() {
     }
   };
 
+  const collectionOptionsSorted = expenseType.map((category) => ({
+    value: category,
+    label: category,
+  }));
+
+  const filterStaffs = selectedExpense
+    ? expenses.filter((expense) => expense.type === selectedExpense)
+    : expenses;
+
+  const startIndex = (currentPage - 1) * expensePerPage;
+  const endIndex = startIndex + expensePerPage;
+  const paginatedExpense = filterStaffs.slice(startIndex, endIndex);
+
   useEffect(() => {
     const expenseChannel = supabase
       .channel("custom-all-channel")
@@ -139,7 +157,7 @@ export function Expense() {
             "text-sm breadcrumbs flex items-center justify-between w-[95%] h-16 p-4 " +
             "text-supportingColor1 bg-white rounded-lg shadow-sm"
           }>
-          <h1 className="font-semibold text-2xl">Revenu</h1>
+          <h1 className="font-semibold text-2xl">Dépense</h1>
           <ul>
             <li>
               <NavLink className="text-supportingColor1" to={"/dashboard"}>
@@ -153,7 +171,7 @@ export function Expense() {
             </li>
             <li>
               <NavLink className="text-supportingColor1" to={"/income"}>
-                Revenu
+                Dépense
               </NavLink>
             </li>
           </ul>
@@ -208,9 +226,19 @@ export function Expense() {
                       <option value="Fournitures scolaire">
                         Fournitures scolaire
                       </option>
-                      <option value="Matérielles de travail">
-                        Matérielles de travail
+                      <option value="Fournitures de bureau">
+                        Fournitures de bureau
                       </option>
+                      <option value="Matérielles scolaire">
+                        Matérielles scolaire
+                      </option>
+                      <option value="Article de toilette">
+                        Article de toilette
+                      </option>
+                      <option value="Prelèvement">Prelèvement</option>
+                      <option value="Prêt">Prêt</option>
+                      <option value="Réparation">Réparation</option>
+                      <option value="Donnation">Donation</option>
                       <option value="Autres">Autres</option>
                     </select>
                   </label>
@@ -257,12 +285,27 @@ export function Expense() {
                       className="input bg-slate-100 border-primaryColor border-2"
                     />
                   </label>
-                  <button
-                    type="submit"
-                    className="btn bg-primaryColor text-white border-none
-                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9 ml-52">
-                    Soumettre
-                  </button>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                      <span className="label-text text-supportingColor1">
+                        Description
+                      </span>
+                    </div>
+                    <input
+                      onChange={(e) => setWhat(e.target.value)}
+                      type="text"
+                      placeholder="Description"
+                      className="input bg-slate-100 border-primaryColor border-2"
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs ml-[90%]">
+                    <button
+                      type="submit"
+                      className="btn bg-primaryColor text-white border-none
+                  hover:bg-slate-100 hover:text-primaryColor active:bg-slate-100 w-28 mt-9">
+                      Soumettre
+                    </button>
+                  </label>
                 </div>
               </form>
             </div>
@@ -274,35 +317,39 @@ export function Expense() {
             <h2 className="text-supportingColor1 font-medium ">
               Liste de dépenses
             </h2>
-            <input
-              type="search"
-              className="input bg-white border-2 border-primaryColor focus:file-input-primary  h-9 w-96 max-w-xs ml-60"
-              onChange={(e) => setSearchExpense(e.target.value)}
-              placeholder="Recherche rapide"
-            />
+            <select
+              onChange={(e) => setSelectedExpense(e.target.value)}
+              className="select max-w-xs w-96 mr-0 bg-white border-primaryColor border-2 text-supportingColor1">
+              <option value="" className="text-gray-300">
+                Recherche par role
+              </option>
+              {collectionOptionsSorted
+                .filter((expense) => expense.type !== "Avance Salaire")
+                .map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+            </select>
           </div>
           <div>
             <div className="overflow-x-auto">
-              {expenses.length > 0 ? (
-                <table className="table">
-                  <thead className="text-supportingColor1">
-                    <tr>
-                      <th>ID</th>
-                      <th>Nom</th>
-                      <th>Type de dépense</th>
-                      <th>Mode de Paiement</th>
-                      <th>Date</th>
-                      <th>Montant</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  {expenses
-                    .filter((expense) =>
-                      expense.name
-                        .toLowerCase()
-                        .includes(searchExpense.toLowerCase()),
-                    )
-                    .map((expense) => (
+              {paginatedExpense.length > 0 ? (
+                <div>
+                  <table className="table">
+                    <thead className="text-supportingColor1">
+                      <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Type de dépense</th>
+                        <th>Mode de Paiement</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    {paginatedExpense.map((expense) => (
                       <tbody key={expense.id}>
                         <tr>
                           <th>0{expense.id}</th>
@@ -311,6 +358,7 @@ export function Expense() {
                           <td>{expense.mode}</td>
                           <td>{expense.date}</td>
                           <td>{expense.amount}</td>
+                          <td>{expense.what}</td>
                           <td>
                             <Button
                               onClick={() => handleDeleteExpense(expense.id)}
@@ -321,7 +369,15 @@ export function Expense() {
                         </tr>
                       </tbody>
                     ))}
-                </table>
+                  </table>
+                  <Pagination
+                    current={currentPage}
+                    pageSize={expensePerPage}
+                    total={expenses.length}
+                    onChange={(page) => setCurrentPage(page)}
+                    className="text-center mt-10"
+                  />
+                </div>
               ) : (
                 <Empty description={"Aucune donnée disponible"} />
               )}
